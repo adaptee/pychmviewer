@@ -140,6 +140,9 @@ class PyChmTopicsView(QtGui.QWidget,Ui_TabContents):
                 if (indent-maxindent)>1:
                     j=maxindent
                     while j<indent:
+                        if len(lastchild)<=j+1:
+                            lastchild.append(None)
+                            rootentry.append(None)
                         lastchild[j+1]=lastchild[j]
                         rootentry[j+1]=rootentry[j]
                         j+=1
