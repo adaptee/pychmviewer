@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/john/git/pychmviewer/window_main.ui'
 #
-# Created: Tue Jun  2 22:39:36 2009
+# Created: Wed Jun  3 03:39:22 2009
 #      by: PyQt4 UI code generator 4.4.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -168,9 +168,13 @@ class Ui_MainWindow(object):
         self.nav_actionHome.setObjectName("nav_actionHome")
         self.actionAbout = QtGui.QAction(MainWindow)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionextract = QtGui.QAction(MainWindow)
+        self.actionextract.setObjectName("actionextract")
         self.menu_Settings.addAction(self.settings_SettingsAction)
         self.menu_File.addAction(self.file_Open_action)
         self.menu_File.addAction(self.file_Print_action)
+        self.menu_File.addSeparator()
+        self.menu_File.addAction(self.actionextract)
         self.menu_View.addAction(self.view_Increase_font_size_action)
         self.menu_View.addAction(self.view_Decrease_font_size_action)
         self.menu_View.addAction(self.view_norm_font_size_action)
@@ -291,6 +295,7 @@ class Ui_MainWindow(object):
         self.nav_actionHome.setToolTip(QtGui.QApplication.translate("MainWindow", "Navigate home", None, QtGui.QApplication.UnicodeUTF8))
         self.nav_actionHome.setWhatsThis(QtGui.QApplication.translate("MainWindow", "Navigate to the document Home page, as specified in the document.", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "about", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionextract.setText(QtGui.QApplication.translate("MainWindow", "Extract file", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc

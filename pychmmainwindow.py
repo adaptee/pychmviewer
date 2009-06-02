@@ -20,10 +20,12 @@ import globalvalue
 from htmldlg import HtmlDlg
 import pychmwebview
 import os
+import sys
 from encodinglist import encodings
 from settingdlg import SettingDlg
 from PyQt4 import QtWebKit
 from about import aboutdlg
+from extract_chm import getfilelist
 
 class PyChmMainWindow(QtGui.QMainWindow,Ui_MainWindow):
     def __init__(self,parent=None):
@@ -87,6 +89,8 @@ class PyChmMainWindow(QtGui.QMainWindow,Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'),self.onSetting)
         self.connect(self.actionAbout,
                 QtCore.SIGNAL('triggered(bool)'),self.onAbout)
+        self.connect(self.actionextract,
+                QtCore.SIGNAL('triggered(bool)'),self.onExtractChm)
         self.addEncoding()
         self.inital()
         self.setWebFont()
@@ -245,6 +249,50 @@ class PyChmMainWindow(QtGui.QMainWindow,Ui_MainWindow):
     def closeEvent(self,e):
         self.WebViewsWidget.savealltab(self.conf.lastconfdb)
         e.accept()
+
+    def onExtractChm(self):
+        od=QtGui.QFileDialog.getExistingDirectory(self,
+                'select a directory to store files',
+                '',
+                QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
+        if len(od)==0:
+            return
+        ok,filelist=getfilelist(globalvalue.chmpath)
+        if not ok:
+            return
+        prgrs=QtGui.QProgressDialog(u'Extract chm file',u'Abort',
+               0, len(filelist),self)
+        prgrs.forceShow()
+        od=unicode(od).encode(sys.getfilesystemencoding())
+        for i,opath in enumerate(filelist):
+            prgrs.setValue(i)
+            if i%5==0:
+                if prgrs.wasCanceled():
+                    break
+            fpath=opath.decode('utf-8').encode(sys.getfilesystemencoding())
+            if fpath[0]!='/':
+                fpath='/'+fpath
+            fpath=os.path.normpath(fpath)
+            fpath=fpath[1:]
+            fpath=os.path.join(od,fpath)
+            fdir,file=os.path.split(fpath)
+            try:
+                os.makedirs(fdir)
+            except:
+                pass
+            s=globalvalue.chmFile.GetFileAsStrByUrl(opath.decode('utf-8'))
+            if s==None:
+                #print 'extract',opath,'failed'
+                continue
+            try:
+                file=open(fpath,'wb')
+                file.write(s)
+                file.flush()
+                file.close()
+                print 'extract:',opath.decode('utf-8')
+            except:
+                print 'cannot open',fpath
+        prgrs.setValue(len(filelist))
 
 if __name__ == "__main__":
     import sys
