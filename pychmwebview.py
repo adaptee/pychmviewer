@@ -18,6 +18,7 @@ from PyQt4.QtWebKit import QWebView,QWebPage
 import sys
 import os.path
 from content_type import content_type
+import cStringIO as StringIO
 
 urldecode=urllib.unquote_plus
 class PyChmNetReply(QNetworkReply):
@@ -29,31 +30,25 @@ class PyChmNetReply(QNetworkReply):
         self.m_data=self.loadResource(url)
         if self.m_data!=None:
             self.m_length=len(self.m_data)
+            self.m_data=StringIO.StringIO(self.m_data)
         else:
             self.m_length=0
-            self.m_data=''
+            self.m_data=StringIO.StringIO('')
+        self.left=self.m_length
         self.setHeader(QNetworkRequest.ContentLengthHeader,QVariant(QtCore.QByteArray.number(self.m_length)))
 #        QTimer.singleShot(0,self,QtCore.SIGNAL('metaDataChanged()'))
         QTimer.singleShot(0,self,QtCore.SIGNAL('readyRead()'))
 
     def bytesAvailable(self):
-        if self.m_data!=None:
-            return len(self.m_data)+QNetworkReply.bytesAvailable(self)
-        return QNetworkReply.bytesAvailable(self)
+        return self.left+QNetworkReply.bytesAvailable(self)
 
     def abort(self):
         pass
 
     def readData(self,maxlen):
-        if len(self.m_data) < maxlen:
-            leng=len(self.m_data)
-        else:
-            leng=maxlen
-        data=None
-        if leng:
-            data=self.m_data[0:leng]
-            self.m_data=self.m_data[leng:]
-        if len(self.m_data)==0:
+        data=self.m_data.read(maxlen)
+        self.left=self.m_length-self.m_data.tell()
+        if self.left==0:
             QTimer.singleShot(0,self,QtCore.SIGNAL('finished()'))
         return data
 
