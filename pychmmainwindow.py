@@ -106,6 +106,7 @@ class PyChmMainWindow(QtGui.QMainWindow,Ui_MainWindow):
             globalvalue.globalcfg.fontfamily=unicode(dlg.fontfamily)
             globalvalue.globalcfg.fontsize=dlg.fontsize
             globalvalue.globalcfg.openremote=dlg.openremote
+            globalvalue.globalcfg.searchext=dlg.searchext
             globalvalue.globalcfg.savecfg()
             self.setWebFont()
             for v in self.WebViewsWidget.windows:
@@ -178,7 +179,7 @@ class PyChmMainWindow(QtGui.QMainWindow,Ui_MainWindow):
                 self.onEncodingChg)
 
     def onEncodingChg(self,action):
-        pychmwebview.encoding=action.encoding
+        globalvalue.encoding=action.encoding
         for v in self.WebViewsWidget.windows:
             v.reload()
 

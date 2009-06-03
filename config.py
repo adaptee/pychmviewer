@@ -37,11 +37,24 @@ class GlobalConfig(object):
             self.fontfamily=None
             self.fontsize=None
             self.__lastdir=home
-
+            self.sengine_own=True
+        if not cfg.has_section('searchext'):
+            self.searchext={'html':True,'htm':True,'js':False,'txt':False,'css':False}
+        else:
+            self.searchext={}
+            for a,b in cfg.items('searchext'):
+                if b.lower()=='false':
+                    self.searchext[a]=False
+                else:
+                    self.searchext[a]=True
         try:
             self.loadlasttime=cfg.getboolean('userconfig','loadlasttime')
         except:
             self.lastlasttime=True
+        try:
+            self.sengine_own=cfg.getboolean('userconfig','default_search_engine')
+        except:
+            self.sengine_own=True
         try:
             self.openremote=cfg.getboolean('userconfig','openremote')
         except:
@@ -71,6 +84,10 @@ class GlobalConfig(object):
         if self.fontsize:
             cfg.set('userconfig','fontsize',str(self.fontsize))
         cfg.set('userconfig','lastdir',self.__lastdir)
+        cfg.set('userconfig','default_search_engine',self.sengine_own)
+        cfg.add_section('searchext')
+        for a,b in self.searchext.iteritems():
+            cfg.set('searchext',a,str(b))
         try:
             os.mkdir(cfghome,0700)
         except exceptions.OSError:

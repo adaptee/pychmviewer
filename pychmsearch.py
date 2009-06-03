@@ -11,6 +11,9 @@ from Ui_tab_search import Ui_TabSearch
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 import globalvalue
+import re
+from extract_chm import getfilelist 
+detenc=re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]',re.I)
 
 class PyChmSearchView(QtGui.QWidget,Ui_TabSearch):
     def __init__(self,parent=None):
@@ -25,12 +28,68 @@ class PyChmSearchView(QtGui.QWidget,Ui_TabSearch):
         self.tree.clear()
         self.searchBox.lineEdit().clear()
 
-    def onReturnPressed(self):
-        if not globalvalue.chmFile.IsSearchable():
+    def mySearch(self,rexp):
+        ok,filelist=getfilelist(globalvalue.chmpath)
+        if not ok:
             return
+        extlist=[]
+        for a,b in globalvalue.globalcfg.searchext.iteritems():
+            if b:
+                extlist.append(a)
+        sflist=self.__filt(filelist,extlist)
+        prgrs=QtGui.QProgressDialog(u'Searching ...',u'Abort',
+               0, len(sflist),self)
+        prgrs.forceShow()
+        rt=[]
+        for i,f in enumerate(sflist):
+            prgrs.setValue(i)
+            if i%5==0:
+                if prgrs.wasCanceled():
+                    break
+            fctt=globalvalue.chmFile.GetFileAsStrByUrl(f.decode('utf-8','ignore'))
+            if not fctt:
+                continue
+            rrt=detenc.search(fctt)
+            if rrt:
+                enc=rrt.group(1)
+            elif globalvalue.encoding:
+                enc=globalvalue.encoding
+            else:
+                enc='utf-8'
+            rc=re.compile(unicode(rexp).encode(enc))
+            ttt=rc.search(fctt)
+            if ttt:
+                rt.append((f.decode('utf-8','ignore'),ttt.group(0).decode(enc,'ignore')))
+        self.tree.clear()
+        for url,name in rt:
+            item=QTreeWidgetItem(self.tree)            
+            item.url=url
+            item.setText(0,name)
+            item.setText(1,url)
+        self.tree.update()
+        prgrs.setValue(len(sflist))
+
+
+
+    def __filt(self,filelist,extlist):
+        rt=[]
+        for fp in filelist:
+            ok=False
+            for ext in extlist:
+                if fp.lower().endswith(ext.lower()):
+                    ok=True
+            rt.append(fp)
+        return rt
+
+    def onReturnPressed(self):
         text=self.searchBox.lineEdit().text()
         text=unicode(text).strip()
         if text==u'':
+            return
+        if globalvalue.globalcfg.sengine_own:
+            self.mySearch(text)
+            return
+        if not globalvalue.chmFile.IsSearchable():
             return
         self.tree.clear()
         rt=globalvalue.chmFile.Search(text)

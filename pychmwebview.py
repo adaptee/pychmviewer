@@ -20,7 +20,6 @@ import os.path
 from content_type import content_type
 
 urldecode=urllib.unquote_plus
-encoding=None
 class PyChmNetReply(QNetworkReply):
     def __init__(self,request,url,parent=None,qwebview=None):
         QNetworkReply.__init__(self,parent)
@@ -88,8 +87,8 @@ class PyChmNetReply(QNetworkReply):
         if len(ext)>0:
             ext=ext[1:]
         ctt_type=content_type.get(ext,'binary/octet')
-        if ctt_type.lower().startswith('text') and encoding!=None:
-            ctt_type+='; charset='+ encoding
+        if ctt_type.lower().startswith('text') and globalvalue.encoding!=None:
+            ctt_type+='; charset='+ globalvalue.encoding
         self.setHeader(QNetworkRequest.ContentTypeHeader,QVariant(ctt_type))
 
 

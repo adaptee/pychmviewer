@@ -88,7 +88,7 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
             if url!=None:
                 self.emit(QtCore.SIGNAL('openUrl'),url)
                 return url
-
+            
     def loaddata(self,data):
         '''
         load data for index tree.

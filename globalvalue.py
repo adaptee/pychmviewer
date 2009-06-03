@@ -12,5 +12,6 @@ chmpath=None
 mainWindow=None
 currentwebview=None
 tabs=None
+encoding=None
 from config import GlobalConfig
 globalcfg=GlobalConfig()
