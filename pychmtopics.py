@@ -29,7 +29,7 @@ class PyChmTopicsView(QtGui.QWidget,Ui_TabContents):
 #            rt=self.omap.get(key,None)
 #            if rt!=None:
 #                return rt 
-            if key!=None and key[0]!=u'/':
+            if key!=None and key!=u'' and key[0]!=u'/':
                 key=u'/'+key
             try:
                 pos=key.index(u'#')
@@ -42,7 +42,7 @@ class PyChmTopicsView(QtGui.QWidget,Ui_TabContents):
 #            rt=self.omap.get(key,None)
 #            if rt!=None:
 #                return rt
-            if key!=None and key[0]!=u'/':
+            if key!=None and key!=u'' and key[0]!=u'/':
                 key=u'/'+key
             try:
                 pos=key.index(u'#')
@@ -53,7 +53,7 @@ class PyChmTopicsView(QtGui.QWidget,Ui_TabContents):
             
         def __setitem__(self,key,value):
 #            self.omap[key]=value
-            if key!=None and key[0]!=u'/':
+            if key!=None and key!=u'' and key[0]!=u'/':
                 key=u'/'+key
             try:
                 pos=key.index(u'#')
