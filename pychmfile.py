@@ -77,6 +77,9 @@ class PyChmFile(object):
         if self.__indextbl!=None:
             return self.__indextbl
         #parse indextree
+        if self.__chm.index==None:
+            self.__indextbl=[]
+            return []
         idxurl=self.__chm.index.decode(self.__code)
         idxctt=self.GetFileAsStrByUrl(idxurl)
         if not idxctt:
@@ -90,6 +93,9 @@ class PyChmFile(object):
         if self.__contenttbl!=None:
             return self.__contenttbl
         # parse topictree
+        if self.__chm.topics==None:
+            self.__contenttbl=[]
+            return []
         tpurl=self.__chm.topics.decode(self.__code)
         tpctt=self.GetFileAsStrByUrl(tpurl)
         if not tpctt:
