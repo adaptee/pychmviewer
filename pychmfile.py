@@ -85,7 +85,8 @@ class PyChmFile(object):
         if not idxctt:
             idxctt=self.__chm.GetIndex()
         if idxctt:
-            self.__parseIndexTable(idxctt.decode(self.__code))
+            print self.__code
+            self.__parseIndexTable(idxctt.decode(self.__code, 'ignore'))
         return self.__indextbl
     index=property(__getIdxTbl,None,None,"parsed indextree, list of TableEntry")
 
@@ -235,6 +236,9 @@ class PyChmFile(object):
         tp=TblParser()
         tp.feed(idx)
         self.__indextbl=tp.EntryList
+        def tbl_cmp(one, other):
+            return cmp(one.key, other.key)
+        self.__indextbl.sort(tbl_cmp)
         
 class TblParser(HTMLParser):
     def __init__(self):

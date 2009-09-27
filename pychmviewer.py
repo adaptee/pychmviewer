@@ -25,7 +25,7 @@ if not ok:
     if globalvalue.chmpath!=None:
         print 'open chm file',globalvalue.chmpath,'failed'
     file=QtGui.QFileDialog.getOpenFileName(None, u'choose file',globalvalue.globalcfg.lastdir,
-            u'CHM files (*.chm)')
+            u'CHM files (*.chm *.CHM)')
     globalvalue.chmpath=os.path.abspath(unicode(file))
     globalvalue.chmFile=PyChmFile()
     ok=globalvalue.chmFile.loadFile(globalvalue.chmpath)
