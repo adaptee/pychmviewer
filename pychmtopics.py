@@ -123,6 +123,7 @@ class PyChmTopicsView(QtGui.QWidget,Ui_TabContents):
         if self.dataloaded:
             return
         if data==None:
+            self.tree.clear()
             return
         self.dataloaded=True
         self.urlmap=PyChmTopicsView.__UrlDict()

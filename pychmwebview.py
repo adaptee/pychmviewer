@@ -199,7 +199,13 @@ class PyChmWebView(QWebView):
             self.keepnewtaburl=link
             m.addAction(u'在新标签页打开',self.openinnewtab)
             m.exec_(e.globalPos())
+        if not self.selectedText().isEmpty():
+            m.addAction(u'复制', self.copyToClipboard)
+            m.exec_(e.globalPos())
 
+    def copyToClipboard(self):       
+        QtGui.QApplication.clipboard().setText(self.selectedText())
+        
     def mousePressEvent(self,e):
         '''
         inner method

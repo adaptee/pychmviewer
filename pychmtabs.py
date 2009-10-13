@@ -64,6 +64,11 @@ class PyChmTabs(QtGui.QWidget,Ui_TabbedBrowser):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0,len(self.editFind.text()))
+        if e.matches(QtGui.QKeySequence.Copy):
+            selectedText = self.tabWidget.currentWidget().selectedText()
+            if not selectedText.isEmpty():
+                QtGui.QApplication.clipboard().setText(selectedText)
+
 
     def onFindReturnPressed(self):
         self.find()
