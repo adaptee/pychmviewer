@@ -5,11 +5,11 @@
 # email: zorrohunter@gmail.com
 # Created Time: 2009年06月01日 星期一 16时43分26秒
 # File Name: pychmviewer.py
-# Description: 
+# Description:
 #########################################################################
 
 import sys,os
-import globalvalue 
+import globalvalue
 from pychmfile import PyChmFile
 from PyQt4 import QtCore, QtGui
 from pychmmainwindow import PyChmMainWindow
@@ -31,9 +31,9 @@ if not ok:
     ok=globalvalue.chmFile.loadFile(globalvalue.chmpath)
     if not ok:
         sys.exit(0)
-pixmap=QPixmap(os.path.join(sys.path[0],'splash.png'))
-splash=QSplashScreen(pixmap)
-splash.show()
+#pixmap=QPixmap(os.path.join(sys.path[0],'splash.png'))
+#splash=QSplashScreen(pixmap)
+#splash.show()
 mw=PyChmMainWindow()
 mw.show()
 splash.finish(mw)
