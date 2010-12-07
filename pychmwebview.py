@@ -5,66 +5,70 @@
 # email: zorrohunter@gmail.com
 # Created Time: 2009年05月26日 星期二 01时17分03秒
 # File Name: pychmwebview.py
-# Description: 
+# Description:
 #########################################################################
-from PyQt4.QtNetwork import QNetworkReply,QNetworkRequest,QNetworkAccessManager
-from PyQt4.QtCore import QTimer,QLatin1String,QUrl,QVariant
-from PyQt4 import QtCore,QtGui
-from PyQt4.QtCore import QIODevice,Qt
-import urltools
-import globalvalue
-import urllib
-from PyQt4.QtWebKit import QWebView,QWebPage
+
 import sys
 import os.path
-from content_type import content_type
+import urllib
 import cStringIO as StringIO
 
-urldecode=urllib.unquote_plus
+from PyQt4 import QtCore, QtGui
+from PyQt4.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
+from PyQt4.QtWebKit import QWebView, QWebPage
+from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
+from PyQt4.QtCore import QIODevice, Qt
+
+import urltools
+import globalvalue
+from content_type import content_type
+
+urldecode = urllib.unquote_plus
+
 class PyChmNetReply(QNetworkReply):
-    def __init__(self,request,url,parent=None,qwebview=None):
+    def __init__(self,request, url,parent=None, qwebview=None):
         QNetworkReply.__init__(self,parent)
-        self.qwebview=qwebview
+        self.qwebview = qwebview
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
-        self.m_data=self.loadResource(url)
-        if self.m_data!=None:
-            self.m_length=len(self.m_data)
-            self.m_data=StringIO.StringIO(self.m_data)
+        self.m_data = self.loadResource(url)
+        if self.m_data != None:
+            self.m_length = len(self.m_data)
+            self.m_data = StringIO.StringIO(self.m_data)
         else:
-            self.m_length=0
-            self.m_data=StringIO.StringIO('')
-        self.left=self.m_length
+            self.m_length = 0
+            self.m_data = StringIO.StringIO('')
+        self.left = self.m_length
         self.setHeader(QNetworkRequest.ContentLengthHeader,QVariant(QtCore.QByteArray.number(self.m_length)))
 #        QTimer.singleShot(0,self,QtCore.SIGNAL('metaDataChanged()'))
         QTimer.singleShot(0,self,QtCore.SIGNAL('readyRead()'))
 
     def bytesAvailable(self):
-        return self.left+QNetworkReply.bytesAvailable(self)
+        return self.left + QNetworkReply.bytesAvailable(self)
 
     def abort(self):
         pass
 
-    def readData(self,maxlen):
-        data=self.m_data.read(maxlen)
-        self.left=self.m_length-self.m_data.tell()
-        if self.left==0:
+    def readData(self, maxlen):
+        data = self.m_data.read(maxlen)
+        self.left = self.m_length-self.m_data.tell()
+        if self.left == 0:
             QTimer.singleShot(0,self,QtCore.SIGNAL('finished()'))
         return data
 
     def loadResource(self,url):
-        chm=globalvalue.chmFile
+        chm = globalvalue.chmFile
         if not chm:
             return ''
-        path=unicode(url.path())
+        path = unicode(url.path())
         try:
-            pos=path.index(u'#')
-            path=path[0:pos]
+            pos = path.index(u'#')
+            path = path[0:pos]
         except:
             pass
-        path=urldecode(path)
-        data=chm.GetFileAsStrByUrl(path)
-        if data==None:
+        path = urldecode(path)
+        data = chm.GetFileAsStrByUrl(path)
+        if data is None:
             self.setError(404,'')
             return None
         self.setContentTypeHeader(path)
@@ -90,10 +94,10 @@ class PyChmNetReply(QNetworkReply):
 class PyChmNetworkAccessManager(QNetworkAccessManager):
     def __init__(self,parent):
         QNetworkAccessManager.__init__(self,parent)
-        self.qwebview=parent
+        self.qwebview = parent
 
     def createRequest(self,op,request,outgoingdata):
-        scheme=request.url().scheme()
+        scheme = request.url().scheme()
 #        print unicode(request.url().path())
         if scheme==QLatin1String('ms-its'):
             return PyChmNetReply(request,request.url(),self.qwebview,self.qwebview)
@@ -111,20 +115,20 @@ class PyChmWebView(QWebView):
         '''
         QWebView.__init__(self,parent)
         self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
-        self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks) 
+        self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
         #self.setUrl(QtCore.QUrl('http://www.baidu.com'))
-        self.connect(self,QtCore.SIGNAL('linkClicked(const QUrl&)'),self.onLinkClicked)
+        self.connect(self,QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
 #        self.connect(self.zob,QtCore.SIGNAL('clicked()'),self.zoomout)
 #        self.connect(self.zib,QtCore.SIGNAL('clicked()'),self.zoomin)
 #        self.connect(self.normb,QtCore.SIGNAL('clicked()'),self.normsize)
 #        self.connect(self.bb,QtCore.SIGNAL('clicked()'),self.back)
 #        self.connect(self.fb,QtCore.SIGNAL('clicked()'),self.forward)
-        self.connect(self,QtCore.SIGNAL('loadFinished(bool)'),self.onLoadFinished)
-        self.zoom=1.0
+        self.connect(self,QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
+        self.zoom = 1.0
         self.setTextSizeMultiplier(1.0)
         self.reload()
-        self.openedpg=None
-        self.scrolltopos=0
+        self.openedpg = None
+        self.scrolltopos = 0
 
     def zoomout(self):
         '''
@@ -137,27 +141,27 @@ class PyChmWebView(QWebView):
         '''
         zoom in the fontsize
         '''
-        self.zoom*=1.2
+        self.zoom *= 1.2
         self.setTextSizeMultiplier(self.zoom)
 
     def normsize(self):
         '''
         to make the font size normal
         '''
-        self.zoom=1.0
+        self.zoom = 1.0
         self.setTextSizeMultiplier(self.zoom)
 
-    def find(self,text,backward=False,casesens=False):
+    def find(self, text, backward=False, casesens=False):
         '''
         text: the search text
         backward:bool
         '''
-        flags=QWebPage.FindWrapsAroundDocument
+        flags = QWebPage.FindWrapsAroundDocument
         if backward:
-            flags|=QWebPage.FindBackward
+            flags |= QWebPage.FindBackward
         if casesens:
-            flags|=QWebPage.FindCaseSensitively
-        self.findText(text,flags) 
+            flags |= QWebPage.FindCaseSensitively
+        self.findText(text,flags)
 
     def onLoadFinished(self,ok):
         '''
@@ -177,10 +181,10 @@ class PyChmWebView(QWebView):
             print 'file not found'
 
     def printPage(self):
-        printer=QtGui.QPrinter(QtGui.QPrinter.HighResolution)
-        dlg=QtGui.QPrintDialog(printer,self)
+        printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
+        dlg = QtGui.QPrintDialog(printer,self)
         if dlg.exec_()!=QtGui.QDialog.Accepted:
-            return 
+            return
         self.print_(printer)
 
     def back(self):
@@ -193,8 +197,8 @@ class PyChmWebView(QWebView):
         '''
         inner method
         '''
-        m=QtGui.QMenu(self)
-        link=self.anchorAt(e.pos())
+        m = QtGui.QMenu(self)
+        link = self.anchorAt(e.pos())
         if link!=None:
             self.keepnewtaburl=link
             m.addAction(u'在新标签页打开',self.openinnewtab)
@@ -203,9 +207,9 @@ class PyChmWebView(QWebView):
             m.addAction(u'复制', self.copyToClipboard)
             m.exec_(e.globalPos())
 
-    def copyToClipboard(self):       
+    def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())
-        
+
     def mousePressEvent(self,e):
         '''
         inner method
@@ -329,12 +333,12 @@ class PyChmWebView(QWebView):
             if url[0]!=u'/':
                 url=u'/'+url
             url=os.path.normpath(url)
-        
+
         if not url.lower().startswith(u'ms-its://'):
             url=u'ms-its://'+url
         #self.setUrl(QtCore.QUrl(url))
         self.load(QtCore.QUrl(url))
-        #set title on tab 
+        #set title on tab
         globalvalue.tabs.setTabName(self)
         self.openedpg=url[9:]
         return True
@@ -351,7 +355,7 @@ class PyChmWebView(QWebView):
         '''
         self.scrolltopos=pos
         self.page().currentFrame().setScrollBarValue(Qt.Vertical,pos)
-    
+
     def canback(self):
         return self.history().canGoBack()
 
@@ -361,11 +365,11 @@ class PyChmWebView(QWebView):
 if __name__=='__main__':
     app = QtGui.QApplication(sys.argv)
     from pychmfile import PyChmFile
-    globalvalue.chmFile=PyChmFile()
-    globalvalue.chmpath=u'python261.chm'
+    globalvalue.chmFile = PyChmFile()
+    globalvalue.chmpath = u'python261.chm'
     globalvalue.chmFile.loadFile(globalvalue.chmpath)
     Form = PyChmWebView()
-#    Form.code='gbk'
+#    Form.code = 'gbk'
     Form.openPage(globalvalue.chmFile.HomeUrl)
     Form.show()
     sys.exit(app.exec_())
