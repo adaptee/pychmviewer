@@ -234,20 +234,20 @@ class PyChmFile(object):
 
     def __parseContentTable(self, ctt):
         assert isinstance(ctt, unicode)
-        tp = TblParser()
+        tp = TableParser()
         tp.feed(ctt)
         self.__content_table = tp.EntryList
 
     def __parseIndexTable(self, idx):
         assert isinstance(idx, unicode)
-        tp  =  TblParser()
+        tp  =  TableParser()
         tp.feed(idx)
         self.__index_table = tp.EntryList
         def tbl_cmp(one, other):
             return cmp(one.key, other.key)
         self.__index_table.sort(tbl_cmp)
 
-class TblParser(HTMLParser):
+class TableParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.entrylist = []
