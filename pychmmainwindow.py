@@ -11,21 +11,22 @@
 import os
 import sys
 
-from Ui_window_main import Ui_MainWindow
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QAction, QMenu
+from PyQt4 import QtWebKit
+
+import globalvalue
+#import pychmwebview
+from Ui_window_main import Ui_MainWindow
 from pychmindex import PyChmIdxView
 from pychmtopics import PyChmTopicsView
 from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
 from config import PyChmConfig
 from pychmfile import PyChmFile
-import globalvalue
 from htmldlg import HtmlDlg
-import pychmwebview
 from encodinglist import encodings
 from settingdlg import SettingDlg
-from PyQt4 import QtWebKit
 from about import aboutdlg
 from extract_chm import getfilelist
 
@@ -33,35 +34,46 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
+
         self.actionIndex = self.dockIndex.toggleViewAction()
         self.actionIndex.setCheckable(True)
         self.actionIndex.setChecked(True)
         self.menu_Windows.addAction(self.actionIndex)
+
         self.actionTopics = self.dockTopics.toggleViewAction()
         self.actionTopics.setCheckable(True)
         self.actionTopics.setChecked(True)
         self.menu_Windows.addAction(self.actionTopics)
+
         self.actionSearch = self.dockSearch.toggleViewAction()
         self.actionSearch.setCheckable(True)
         self.actionSearch.setChecked(True)
         self.menu_Windows.addAction(self.actionSearch)
+
         self.actionBookmark = self.dockBookmark.toggleViewAction()
         self.actionBookmark.setCheckable(True)
         self.actionBookmark.setChecked(True)
         self.menu_Windows.addAction(self.actionBookmark)
+
         globalvalue.tabs = self.WebViewsWidget
         globalvalue.mainWindow = self
+
         self.tabifyDockWidget(self.dockIndex, self.dockTopics)
         self.tabifyDockWidget(self.dockIndex, self.dockSearch)
         self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
+
         self.indexview = PyChmIdxView(self.dockIndex)
         self.dockIndex.setWidget(self.indexview)
+
         self.topicsview = PyChmTopicsView(self.dockTopics)
         self.dockTopics.setWidget(self.topicsview)
+
         self.searchview = PyChmSearchView(self.dockSearch)
         self.dockSearch.setWidget(self.searchview)
+
         self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
+
         self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
         self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
         self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
@@ -93,6 +105,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'), self.onAbout)
         self.connect(self.actionextract,
                 QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
+
         self.addEncoding()
         self.inital()
         self.setWebFont()
@@ -161,13 +174,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def addEncoding(self):
         encmenu = QMenu(self)
         self.genc = QtGui.QActionGroup(self)
+
         action = QAction(self)
         action.setText(u'auto')
         action.encoding = None
         action.setCheckable(True)
         action.setChecked(True)
+
         self.genc.addAction(action)
         encmenu.addAction(action)
+
         for a, b in encodings:
             action = QAction(self)
             action.setText(a+'-*- '+b)
@@ -192,7 +208,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
         self.WebViewsWidget.closeAll()
-        if len(self.conf.lastconfdb)!=0 and globalvalue.globalcfg.loadlasttime:
+        if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
             ok = self.WebViewsWidget.loadfromdb(self.conf.lastconfdb)
         if not ok:
             self.WebViewsWidget.onOpenatNewTab(globalvalue.chmFile.HomeUrl)
@@ -202,7 +218,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.setWindowTitle(globalvalue.chmFile.Title+u' PyChmViewer')
 
     def openFile(self):
-        file=QtGui.QFileDialog.getOpenFileName(None, u'choose file',globalvalue.globalcfg.lastdir,
+        file = QtGui.QFileDialog.getOpenFileName(None, u'choose file',globalvalue.globalcfg.lastdir,
                 u'CHM files (*.chm)')
         chmpath = unicode(file)
         chmFile = PyChmFile()
@@ -260,13 +276,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
         if len(od) == 0:
             return
-        ok,filelist=getfilelist(globalvalue.chmpath)
+        ok,filelist = getfilelist(globalvalue.chmpath)
         if not ok:
             return
-        prgrs=QtGui.QProgressDialog(u'Extract chm file',u'Abort',
+        prgrs = QtGui.QProgressDialog(u'Extract chm file',u'Abort',
                0, len(filelist),self)
         prgrs.forceShow()
-        od=unicode(od).encode(sys.getfilesystemencoding())
+        od = unicode(od).encode(sys.getfilesystemencoding())
         for i,opath in enumerate(filelist):
             prgrs.setValue(i)
             if i%5 == 0:
@@ -281,10 +297,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             fdir, file = os.path.split(fpath)
             try:
                 os.makedirs(fdir)
-            except:
+            except StandardError:
                 pass
             s = globalvalue.chmFile.GetFileAsStrByUrl(opath.decode('utf-8'))
-            if s == None:
+            if s is None:
                 #print 'extract',opath,'failed'
                 continue
             try:
@@ -292,14 +308,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 file.write(s)
                 file.flush()
                 file.close()
-                print 'extract:', opath.decode('utf-8')
-            except:
-                print 'cannot open', fpath
+                print ("extract: %s" % opath.decode('utf-8') )
+            except StandardError:
+                print ("cannot open %s" % fpath)
         prgrs.setValue(len(filelist))
 
 if __name__  ==  "__main__":
     app = QtGui.QApplication(sys.argv)
-    mainwin =PyChmMainWindow()
+    mainwin = PyChmMainWindow()
     mainwin.show()
     sys.exit(app.exec_())
 
