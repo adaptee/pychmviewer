@@ -82,10 +82,10 @@ class PyChmFile(object):
     chmencoding = property(__getChmEncoding, None, None, 'encoding from LCID')
 
     def __getIdxTbl(self):
-        if self.__indextbl is not None:
+        if self.__indextbl :
             return self.__indextbl
         #parse indextree
-        if self.__chm.index == None:
+        if self.__chm.index is None:
             self.__indextbl = []
             return []
         idxurl = self.__chm.index.decode(self.__code)
@@ -99,10 +99,10 @@ class PyChmFile(object):
     index = property(__getIdxTbl, None, None, "parsed indextree, list of TableEntry")
 
     def __getCttTbl(self):
-        if self.__contenttbl is not None:
+        if self.__contenttbl :
             return self.__contenttbl
         # parse topictree
-        if self.__chm.topics == None:
+        if self.__chm.topics is None:
             self.__contenttbl = []
             return []
         tpurl = self.__chm.topics.decode(self.__code)
@@ -125,7 +125,7 @@ class PyChmFile(object):
 
     def __hascontenttable(self):
         self.__getCttTbl()
-        return self.__contenttbl is not None and len(self.__contenttbl) != 0
+        #return self.__contenttbl is not None and len(self.__contenttbl) != 0
     HasTopic = property(__hascontenttable)
 
     def __hasindextable(self):
@@ -324,11 +324,12 @@ class TblParser(HTMLParser):
             islocal   = False
             iskeyword = False
             for k, v in attrs:
-                if v.lower() == u'keyword':
+                v = v.lower()
+                if v == u'keyword':
                     iskeyword = True
-                elif v.lower() == u'name':
+                elif v == u'name':
                     isname = True
-                elif v.lower() == u'local':
+                elif v == u'local':
                     islocal = True
             if isname:
                 for k, v in attrs:
