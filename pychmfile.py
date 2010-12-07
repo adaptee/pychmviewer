@@ -41,7 +41,7 @@ class PyChmFile(object):
         self.__chm        = None
         self.__title      = u''
         self.__homeurl    = u''
-        self.__contenttbl = None
+        self.__content_table = None
         self.__indextbl   = None
 
     def loadFile(self, filename):
@@ -62,7 +62,7 @@ class PyChmFile(object):
             return False
 
         self.__title = u''
-        self.__contenttbl = None
+        self.__content_table = None
         self.__indextbl = None
         self.__chm.GetWindowsInfo()
         self.__code = self.__chm.GetLCID()[0]
@@ -99,11 +99,11 @@ class PyChmFile(object):
     index = property(__getIdxTbl, None, None, "parsed indextree, list of TableEntry")
 
     def __getCttTbl(self):
-        if self.__contenttbl :
-            return self.__contenttbl
+        if self.__content_table :
+            return self.__content_table
         # parse topictree
         if self.__chm.topics is None:
-            self.__contenttbl = []
+            self.__content_table = []
             return []
         tpurl = self.__chm.topics.decode(self.__code)
         tpctt = self.GetFileAsStrByUrl(tpurl)
@@ -111,7 +111,7 @@ class PyChmFile(object):
             tpctt = self.__chm.GetTopicsTree()
         if tpctt:
             self.__parseContentTable(tpctt.decode(self.__code) )
-        return self.__contenttbl
+        return self.__content_table
     topic = property(__getCttTbl, None, None, "parsed topictree, list of TableEntry")
 
 
@@ -125,7 +125,7 @@ class PyChmFile(object):
 
     def __hascontenttable(self):
         self.__getCttTbl()
-        #return self.__contenttbl is not None and len(self.__contenttbl) != 0
+        #return self.__content_table is not None and len(self.__content_table) != 0
     HasTopic = property(__hascontenttable)
 
     def __hasindextable(self):
@@ -236,7 +236,7 @@ class PyChmFile(object):
         assert isinstance(ctt, unicode)
         tp = TblParser()
         tp.feed(ctt)
-        self.__contenttbl = tp.EntryList
+        self.__content_table = tp.EntryList
 
     def __parseIndexTable(self, idx):
         assert isinstance(idx, unicode)
