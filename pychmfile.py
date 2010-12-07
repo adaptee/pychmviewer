@@ -42,7 +42,7 @@ class PyChmFile(object):
         self.__title      = u''
         self.__homeurl    = u''
         self.__content_table = None
-        self.__indextbl   = None
+        self.__index_table   = None
 
     def loadFile(self, filename):
         '''
@@ -63,7 +63,7 @@ class PyChmFile(object):
 
         self.__title = u''
         self.__content_table = None
-        self.__indextbl = None
+        self.__index_table = None
         self.__chm.GetWindowsInfo()
         self.__code = self.__chm.GetLCID()[0]
         self.__homeurl = self.__chm.home.decode(self.__code)
@@ -82,11 +82,11 @@ class PyChmFile(object):
     chmencoding = property(__getChmEncoding, None, None, 'encoding from LCID')
 
     def __getIdxTbl(self):
-        if self.__indextbl :
-            return self.__indextbl
+        if self.__index_table :
+            return self.__index_table
         #parse indextree
         if self.__chm.index is None:
-            self.__indextbl = []
+            self.__index_table = []
             return []
         idxurl = self.__chm.index.decode(self.__code)
         idxctt = self.GetFileAsStrByUrl(idxurl)
@@ -95,7 +95,7 @@ class PyChmFile(object):
         if idxctt:
             print (self.__code)
             self.__parseIndexTable(idxctt.decode(self.__code, 'ignore'))
-        return self.__indextbl
+        return self.__index_table
     index = property(__getIdxTbl, None, None, "parsed indextree, list of TableEntry")
 
     def __getCttTbl(self):
@@ -130,7 +130,7 @@ class PyChmFile(object):
 
     def __hasindextable(self):
         self.__getIdxTbl()
-        return self.__indextbl is not None and len(self.__indextbl) != 0
+        return self.__index_table is not None and len(self.__index_table) != 0
     HasIndex = property(__hasindextable)
 
     def IsSearchable(self):
@@ -242,10 +242,10 @@ class PyChmFile(object):
         assert isinstance(idx, unicode)
         tp  =  TblParser()
         tp.feed(idx)
-        self.__indextbl = tp.EntryList
+        self.__index_table = tp.EntryList
         def tbl_cmp(one, other):
             return cmp(one.key, other.key)
-        self.__indextbl.sort(tbl_cmp)
+        self.__index_table.sort(tbl_cmp)
 
 class TblParser(HTMLParser):
     def __init__(self):
