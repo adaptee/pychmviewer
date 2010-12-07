@@ -8,33 +8,44 @@
 # Description:
 #########################################################################
 
-import sys,os
+import os
+import sys
+
+from PyQt4 import QtGui
+
 import globalvalue
 from pychmfile import PyChmFile
-from PyQt4 import QtCore, QtGui
 from pychmmainwindow import PyChmMainWindow
-from PyQt4.QtGui import QPixmap,QSplashScreen
 
-ok=False
-app = QtGui.QApplication(sys.argv)
-if len(sys.argv)>=2:
-    globalvalue.chmpath=os.path.abspath(sys.argv[1].decode(sys.getfilesystemencoding()))
-    globalvalue.chmFile=PyChmFile()
-    ok=globalvalue.chmFile.loadFile(globalvalue.chmpath)
-if not ok:
-    if globalvalue.chmpath!=None:
-        print 'open chm file',globalvalue.chmpath,'failed'
-    file=QtGui.QFileDialog.getOpenFileName(None, u'choose file',globalvalue.globalcfg.lastdir,
-            u'CHM files (*.chm *.CHM)')
-    globalvalue.chmpath=os.path.abspath(unicode(file))
-    globalvalue.chmFile=PyChmFile()
-    ok=globalvalue.chmFile.loadFile(globalvalue.chmpath)
+if __name__ == "__main__":
+
+    filesystem_encoding = sys.getfilesystemencoding()
+
+    ok = False
+    app = QtGui.QApplication(sys.argv)
+
+    if len(sys.argv)>=2:
+        globalvalue.chmpath = os.path.abspath(sys.argv[1].decode(filesystem_encoding))
+        globalvalue.chmFile = PyChmFile()
+        ok = globalvalue.chmFile.loadFile(globalvalue.chmpath)
+
     if not ok:
-        sys.exit(0)
-#pixmap=QPixmap(os.path.join(sys.path[0],'splash.png'))
-#splash=QSplashScreen(pixmap)
-#splash.show()
-mw=PyChmMainWindow()
-mw.show()
-splash.finish(mw)
-sys.exit(app.exec_())
+        if globalvalue.chmpath :
+            print (u"Failed open chm file: %s" % globalvalue.chmpath )
+
+        choice = QtGui.QFileDialog.getOpenFileName(
+                                                None,
+                                                u'choose file',
+                                                globalvalue.globalcfg.lastdir,
+                                                u'CHM files (*.chm *.CHM)',
+                                                   )
+        globalvalue.chmpath = os.path.abspath(unicode(choice))
+        globalvalue.chmFile = PyChmFile()
+
+        ok = globalvalue.chmFile.loadFile(globalvalue.chmpath)
+        if not ok:
+            sys.exit(1)
+
+    mainwin = PyChmMainWindow()
+    mainwin.show()
+    sys.exit(app.exec_())
