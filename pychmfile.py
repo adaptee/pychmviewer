@@ -21,6 +21,38 @@ except ImportError :
     print ("Can't find pychm.chm.CHMFile, use CHMFile instead")
     has_pychm = False
 
+def remove_comment(text):
+    if not text:
+        return text
+
+    pos = text.find(u'#')
+    if pos != -1:
+        return text[0:pos]
+    else:
+        return text
+
+def normalize_url(url):
+    if not url:
+        return url
+
+    url = remove_comment(url)
+
+    pattern = re.compile(u"^(\\w+):\\/\\/")
+    if pattern.match(url):
+        return u''
+
+    if url[0:13].lower() == u"javascript://":
+        return u''
+
+    pattern = re.compile(u"^ms-its:(.*)::(.*)$", re.I)
+    if pattern.match(url):
+        return u''
+
+    if url[0] != u'/':
+        url = u'/' + url
+
+    return os.path.normpath(url)
+
 
 class TableEntry(object):
     def __init__(self):
@@ -67,7 +99,7 @@ class PyChmFile(object):
         self.__chm.GetWindowsInfo()
         self.__code = self.__chm.GetLCID()[0]
         self.__homeurl = self.__chm.home.decode(self.__code)
-        self.__homeurl = self.__normurl(self.__homeurl)
+        self.__homeurl = normalize_url(self.__homeurl)
 
         if self.__code is None or self.__code == '':
             self.__code = "utf-8"
@@ -174,28 +206,6 @@ class PyChmFile(object):
                 srt.append(entry)
             return srt
 
-
-    def __normurl(self, url):
-        if url is None or len(url) == 0:
-            return url
-        try:
-            pos = url.index(u'#')
-            url = url[0:pos]
-        except:
-            pass
-        r = re.compile(u"^(\\w+):\\/\\/")
-        if r.match(url):
-            return u''
-        if url[0:13].lower() == u"javascript://":
-            return u''
-        r = re.compile(u"^ms-its:(.*)::(.*)$", re.I)
-        if r.match(url):
-            return u''
-        if url[0] != u'/':
-            url = u'/'+url
-        url = os.path.normpath(url)
-        return url
-
     def CheckUrl(self, url):
         '''
         url: unicode
@@ -203,7 +213,7 @@ class PyChmFile(object):
         return bool
         '''
         assert isinstance(url, unicode)
-        url = self.__normurl(url)
+        url = normalize_url(url)
         if url == u'':
             return False
         url = url.encode('utf-8')
@@ -220,7 +230,7 @@ class PyChmFile(object):
         if failed, return None
         '''
         assert isinstance(url, unicode)
-        url = self.__normurl(url)
+        url = normalize_url(url)
         if url == u'':
             return None
         url = url.encode('utf-8')
