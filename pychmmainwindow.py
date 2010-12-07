@@ -16,7 +16,6 @@ from PyQt4.QtGui import QAction, QMenu
 from PyQt4 import QtWebKit
 
 import globalvalue
-#import pychmwebview
 from Ui_window_main import Ui_MainWindow
 from pychmindex import PyChmIdxView
 from pychmtopics import PyChmTopicsView
