@@ -5,12 +5,13 @@
 # email: zorrohunter@gmail.com
 # Created Time: 2009年05月30日 星期六 03时26分16秒
 # File Name: pychmindex.py
-# Description: 
+# Description:
 #########################################################################
-from Ui_tab_index import Ui_TabIndex
 from PyQt4.QtGui import QTreeWidgetItem
 from PyQt4 import QtCore, QtGui
+
 from pychmselecttopic import PyChmSlctTopicDlg
+from Ui_tab_index import Ui_TabIndex
 import globalvalue
 
 class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
@@ -26,7 +27,7 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'),self.onDoubleClicked)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'),self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'),self.onReturnPressed)
-        if globalvalue.chmFile==None or self.dataloaded:
+        if globalvalue.chmFile == None or self.dataloaded:
             return
         if globalvalue.chmFile.HasIndex:
             self.loaddata(globalvalue.chmFile.index)
@@ -57,9 +58,9 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         '''
         if self.lastitem!=None:
             item=self.lastitem
-            if len(item.entry.urls)==1:
+            if len(item.entry.urls) == 1:
                 self.emit(QtCore.SIGNAL('openUrl'),item.entry.urls[0][1])
-                return 
+                return
             elif len(item.entry.urls)>1:
                 dlg=PyChmSlctTopicDlg(globalvalue.mainWindow)
                 titles=[a for a,b in item.entry.urls]
@@ -73,13 +74,13 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         '''
         inner method for openurl
         '''
-        if item==None:
+        if item == None:
             return
         if item.isExpanded():
             item.setExpanded(False)
-        if len(item.entry.urls)==1:
+        if len(item.entry.urls) == 1:
             self.emit(QtCore.SIGNAL('openUrl'),item.entry.urls[0][1])
-            return 
+            return
         elif len(item.entry.urls)>1:
             dlg=PyChmSlctTopicDlg(globalvalue.mainWindow)
             titles=[a for a,b in item.entry.urls]
@@ -88,7 +89,7 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
             if url!=None:
                 self.emit(QtCore.SIGNAL('openUrl'),url)
                 return url
-            
+
     def loaddata(self,data):
         '''
         load data for index tree.
@@ -96,52 +97,52 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         '''
         if self.dataloaded:
             return
-        if data==None:
+        if data is None:
             return
-        self.dataloaded=True
+        self.dataloaded = True
         self.tree.clear()
-        lastchild=[]
-        rootentry=[]
+        lastchild = []
+        rootentry = []
         for i in xrange(len(data)):
-            indent=data[i].indent
+            indent = data[i].indent
             if indent >=len(rootentry):
-                maxindent=len(rootentry)-1
+                maxindent = len(rootentry)-1
                 lastchild.append(None)
                 rootentry.append(None)
-                if indent>0 and maxindent <0:
+                if indent > 0 and maxindent < 0:
                     print 'error, first entry isn\'t the root entry'
-                if (indent-maxindent)>1:
-                    j=maxindent
+                if (indent-maxindent) > 1:
+                    j = maxindent
                     while j<indent:
                         if len(lastchild)<=j+1:
                             lastchild.append(None)
                             rootentry.append(None)
-                        lastchild[j+1]=lastchild[j]
-                        rootentry[j+1]=rootentry[j]
-                        j+=1
-                lastchild[indent]=None
-                rootentry[indent]=None
-            if indent==0:
-                item=QTreeWidgetItem(self.tree,lastchild[indent])
-                item.entry=data[i]
+                        lastchild[j+1] = lastchild[j]
+                        rootentry[j+1] = rootentry[j]
+                        j += 1
+                lastchild[indent] = None
+                rootentry[indent] = None
+            if indent == 0:
+                item = QTreeWidgetItem(self.tree,lastchild[indent])
+                item.entry = data[i]
                 item.setText(0,data[i].key)
             else:
-                if rootentry[indent-1]==None:
+                if rootentry[indent-1] == None:
                     print 'error no root entry'
                 item=QTreeWidgetItem(rootentry[indent-1],lastchild[indent])
                 item.entry=data[i]
                 item.setText(0,data[i].key)
             item.setExpanded(True)
-            lastchild[indent]=item
-            rootentry[indent]=item
+            lastchild[indent] = item
+            rootentry[indent] = item
         self.tree.update()
 
 
-if __name__ == "__main__":
+if __name__  ==  "__main__":
     import sys
     from pychmfile import PyChmFile
-    globalvalue.chmpath=u'sb.chm'
-    globalvalue.chmFile=PyChmFile()
+    globalvalue.chmpath = u'sb.chm'
+    globalvalue.chmFile = PyChmFile()
     globalvalue.chmFile.loadFile(globalvalue.chmpath)
     app = QtGui.QApplication(sys.argv)
     IDX = PyChmIdxView()
