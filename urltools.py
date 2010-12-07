@@ -5,7 +5,7 @@
 # email: zorrohunter@gmail.com
 # Created Time: 2009年05月26日 星期二 03时15分00秒
 # File Name: urltools.py
-# Description: 
+# Description:
 #########################################################################
 import os.path
 import re
@@ -17,17 +17,21 @@ def isRemoteURL(url):
     return : tuple, first is bool to tell if it's remote
              second is remote protocol(unicode)
     '''
-    assert isinstance(url,unicode)
-    urireg=re.compile(u"^(\\w+):\\/\\/",re.I)
+    assert isinstance(url, unicode)
+
     if url.lower().startswith(u"mailto"):
-        protocol=u'mailto'
-        return (True,protocol)
-    rt=urireg.search(url)
-    if rt:
-        proto=rt.group(1).lower()
-        if proto==u'http' or proto==u'ftp' or proto==u'news':
-            return (True,proto)
-    return (False,u'')
+        protocol = u'mailto'
+        return (True, protocol)
+
+    pattern = re.compile(u"^(\\w+):\\/\\/", re.I)
+    match = pattern.search(url)
+
+    if match:
+        proto = match.group(1).lower()
+	if proto in ( u"http", u"ftp", u"news", ) :
+            return (True, proto)
+
+    return (False, u'')
 
 
 def isjsurl(url):
@@ -35,8 +39,9 @@ def isjsurl(url):
     check if url is a js url
     url: unicode
     '''
-    assert isinstance(url,unicode)
-    url=url.lower()
+    assert isinstance(url, unicode)
+
+    url = url.lower()
     return url.startswith(u"javascript://")
 
 def isnewchmurl(url):
@@ -47,14 +52,15 @@ def isnewchmurl(url):
             second item is chm file,
             third item is page.
     '''
-    assert isinstance(url,unicode)
-    urireg=re.compile(u'^ms-its:(.*)::(.*)$',re.I)
-    sr=urireg.search(url)
-    if sr:
-        chmfile=sr.group(1)
-        page=sr.group(2)
-        return (True,chmfile,page)
-    return (False,None,None)
+    assert isinstance(url, unicode)
+
+    pattern = re.compile(u'^ms-its:(.*)::(.*)$', re.I)
+    match = pattern.search(url)
+    if match:
+        chmfile = match.group(1)
+        page = match.group(2)
+        return (True, chmfile, page)
+    return (False, None, None)
 
 def getaburlifneed(url):
     '''
@@ -62,10 +68,11 @@ def getaburlifneed(url):
     return: unicode. if need(not romote,js,newchm url),return
             a clean absolute url;else, return url passed in.
     '''
-    assert isinstance(url,unicode)
+    assert isinstance(url, unicode)
+
     if ( not isRemoteURL(url)[0] ) and ( not isjsurl(url) )  and ( not isnewchmurl(url)[0] ):
-        url=os.path.normpath(url)
-        if url[0]!=u'/':
-            url=u'/'+url
+        url = os.path.normpath(url)
+        if url[0] != u'/':
+            url = u'/' + url
     return url
 
