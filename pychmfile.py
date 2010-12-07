@@ -125,7 +125,7 @@ class PyChmFile(object):
 
     def __hascontenttable(self):
         self.__getCttTbl()
-        #return self.__content_table is not None and len(self.__content_table) != 0
+        return self.__content_table is not None and len(self.__content_table) != 0
     HasTopic = property(__hascontenttable)
 
     def __hasindextable(self):
