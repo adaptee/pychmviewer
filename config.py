@@ -117,17 +117,18 @@ class PyChmConfig(object):
         assert isinstance(chmpath, unicode)
 
         self.md5 = md5sum(chmpath)
-        self.cfghome = os.path.join(home, '.pychmviewer')
+        self.cfghome = cfghome
 
-        try:
-            os.mkdir(self.cfghome, 0700)
-        except OSError:
-            pass
+        if not os.path.exists(cfghome):
+            try:
+                os.mkdir(self.cfghome, 0755)
+            except OSError:
+                pass
 
         self.cfghome = os.path.join(self.cfghome, self.md5)
 
         try:
-            os.mkdir(self.cfghome, 0700)
+            os.mkdir(self.cfghome, 0755)
         except OSError:
             pass
 
