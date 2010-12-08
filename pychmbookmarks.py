@@ -26,13 +26,13 @@ class PyChmBookmarkItem(QListWidgetItem):
         self.url  = url
         self.pos  = pos
 
-    def save(self, db):
+    def saveTo(self, db):
         name  = self.name.encode('utf-8')
         value = Pickle.dumps((self.url, self.pos))
         db[name] = value
         db.sync()
 
-    def delfromdb(self, db):
+    def delFrom(self, db):
         name = self.name.encode('utf-8')
         try:
             del db[name]
@@ -90,15 +90,15 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
-        item.save(self.db)
+        item.saveTo(self.db)
 
     def onDelPressed(self):
         '''
         inner method
         '''
         item = self.list.currentItem()
-        if item is not None:
-            item.delfromdb(self.db)
+        if item :
+            item.delFrom(self.db)
             self.list.takeItem(self.list.row(item))
 
     def onEditPressed(self):
@@ -106,12 +106,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         inner method
         '''
         item = self.list.currentItem()
-        if item is not None:
+        if item :
             name, ok = QtGui.QInputDialog.getText(self, u'edit bookmark', u'input the name of this bookmark',
                     QtGui.QLineEdit.Normal, item.name)
             if not ok or len(name) == 0:
                 return
 
+            name = unicode(name)
             item.name = name
             item.setText(name)
 
@@ -140,11 +141,11 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             return
         self.dataloaded = True
         self.list.clear()
-        for k, v in self.db.iteritems():
+        for key, value in self.db.iteritems():
             item = PyChmBookmarkItem(self.list)
-            item.name = k.decode('utf-8')
-            item.setText(k)
-            item.seturlandpos(v)
+            item.name = key.decode('utf-8')
+            item.setText(key)
+            item.seturlandpos(value)
 
     def onItemDoubleClicked(self, item):
         '''
