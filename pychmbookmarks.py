@@ -19,25 +19,20 @@ import globalvalue
 def getCurrentWebView():
     return globalvalue.currentwebview
 
-
 class PyChmBookmarkItem(QListWidgetItem):
     def __init__(self, parent, name=None, url=None, pos=None):
         QListWidgetItem.__init__(self, parent)
         self.name = name
-        self.url = url
-        self.pos = pos
+        self.url  = url
+        self.pos  = pos
 
     def save(self, db):
-        if isinstance(self.name, QString):
-            self.name = unicode(self.name)
-        nm = self.name.encode('utf-8')
-        v = Pickle.dumps((self.url, self.pos))
-        db[nm] = v
+        name  = self.name.encode('utf-8')
+        value = Pickle.dumps((self.url, self.pos))
+        db[name] = value
         db.sync()
 
     def delfromdb(self, db):
-        if isinstance(self.name, QString):
-            self.name = unicode(self.name)
         name = self.name.encode('utf-8')
         try:
             del db[name]
@@ -45,8 +40,8 @@ class PyChmBookmarkItem(QListWidgetItem):
         except:
             pass
 
-    def seturlandpos(self, dbv):
-        self.url, self.pos = Pickle.loads(dbv)
+    def seturlandpos(self, db_value):
+        self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
     def __init__(self, parent=None, db=None):
@@ -90,6 +85,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                     QtGui.QLineEdit.Normal, name)
             if not ok or len(name) == 0:
                 return
+
+        name = unicode(name)
 
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
