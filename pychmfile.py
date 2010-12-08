@@ -105,7 +105,7 @@ class PyChmFile(object):
         return self.__code
     chmencoding = property(__getChmEncoding, None, None, 'encoding from LCID')
 
-    def __getIdxTbl(self):
+    def __getIndexTable(self):
         if self.__index_table :
             return self.__index_table
         #parse indextree
@@ -120,9 +120,9 @@ class PyChmFile(object):
             print (self.__code)
             self.__parseIndexTable(idxctt.decode(self.__code, 'ignore'))
         return self.__index_table
-    index = property(__getIdxTbl, None, None, "parsed indextree, list of TableEntry")
+    index = property(__getIndexTable, None, None, "parsed indextree, list of TableEntry")
 
-    def __getCttTbl(self):
+    def __getContentTable(self):
         if self.__content_table :
             return self.__content_table
         # parse topictree
@@ -136,7 +136,7 @@ class PyChmFile(object):
         if tpctt:
             self.__parseContentTable(tpctt.decode(self.__code) )
         return self.__content_table
-    topic = property(__getCttTbl, None, None, "parsed topictree, list of TableEntry")
+    topic = property(__getContentTable, None, None, "parsed topictree, list of TableEntry")
 
 
     def __gettitle(self):
@@ -148,12 +148,12 @@ class PyChmFile(object):
     HomeUrl = property(__gethomeurl, None, None, "home url of the chm file")
 
     def __hascontenttable(self):
-        self.__getCttTbl()
+        self.__getContentTable()
         return self.__content_table is not None and len(self.__content_table) != 0
     HasTopic = property(__hascontenttable)
 
     def __hasindextable(self):
-        self.__getIdxTbl()
+        self.__getIndexTable()
         return self.__index_table is not None and len(self.__index_table) != 0
     HasIndex = property(__hasindextable)
 
