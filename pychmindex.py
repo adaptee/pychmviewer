@@ -14,7 +14,7 @@ from pychmselecttopic import PyChmSlctTopicDlg
 from Ui_tab_index import Ui_TabIndex
 import globalvalue
 
-class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
+class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
@@ -22,12 +22,12 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         QtGui.QWidget.__init__(self,parent)
         self.setupUi(self)
         self.tree.headerItem().setHidden(True)
-        self.lastitem=None
-        self.dataloaded=False
+        self.lastitem = None
+        self.dataloaded = False
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'),self.onDoubleClicked)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'),self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'),self.onReturnPressed)
-        if globalvalue.chmFile == None or self.dataloaded:
+        if globalvalue.chmFile is None or self.dataloaded:
             return
         if globalvalue.chmFile.HasIndex:
             self.loaddata(globalvalue.chmFile.index)
@@ -37,7 +37,7 @@ class PyChmIdxView(QtGui.QWidget,Ui_TabIndex):
         clear the data in the index view
         '''
         self.tree.clear()
-        self.dataloaded=False
+        self.dataloaded = False
         self.text.clear()
 
     def onTextChanged(self,v):
