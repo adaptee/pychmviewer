@@ -121,10 +121,11 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         '''
         if self.dataloaded:
             return
+
         if not data:
             self.tree.clear()
             return
-        self.dataloaded = True
+
         self.urlmap = PyChmTopicsView.__UrlDict()
         self.tree.clear()
         lastchild = []
@@ -164,6 +165,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             rootentry[indent] = item
         self.tree.update()
 
+        self.dataloaded = True
 
 if __name__  ==  "__main__":
 
