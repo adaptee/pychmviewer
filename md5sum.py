@@ -14,14 +14,14 @@ import hashlib
 def md5sum(filename):
     assert isinstance(filename, unicode)
     filename = filename.encode(sys.getfilesystemencoding())
-    m = hashlib.md5()
-    file = io.FileIO(filename,'rb')
-    bytes = file.read(51200)
-    while bytes != '':
-        m.update(bytes)
-        bytes = file.read(8096)
-    file.close()
-    return m.hexdigest()
+    md5 = hashlib.md5()
+    fileobj = io.FileIO(filename,'rb')
+    binaries = fileobj.read(51200)
+    while binaries != '':
+        md5.update(binaries)
+        binaries = fileobj.read(8096)
+    fileobj.close()
+    return md5.hexdigest()
 
 if __name__ == '__main__':
     filename = sys.argv[1].decode(sys.getfilesystemencoding() )
