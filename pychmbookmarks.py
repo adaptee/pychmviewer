@@ -39,7 +39,7 @@ class PyChmBookmarkItem(QListWidgetItem):
         except StandardError :
             pass
 
-    def seturlandpos(self, db_value):
+    def setUrlandPos(self, db_value):
         self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
@@ -178,7 +178,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             key = key.decode('utf-8')
             item.name = key
             item.setText(key)
-            item.seturlandpos(value)
+            item.setUrlandPos(value)
 
         self.dataloaded = True
 
