@@ -171,32 +171,30 @@ class PyChmFile(object):
         This method will return list of TableEntry,
         item.urls being list of unicode
         '''
+
+        if not self.IsSearchable():
+            return None
+
+        assert isinstance(text, unicode)
+
+        text = text.encode('utf-8') ##not sure##############################
+        rt   = self.__chm.Search(text, wholewords, titleonly)
+        srt  = []
+
         if has_pychm:
-            if not self.IsSearchable():
-                return None
-            assert isinstance(text, unicode)
-            text = text.encode('utf-8') ##not sure##############################
-            rt = self.__chm.Search(text, wholewords, titleonly)
-            srt = []
-            for k, vl in rt.iteritems():
+            for k, v in rt.iteritems():
                 entry = TableEntry()
                 entry.key = k.decode(self.__code)
-                entry.urls = [v.decode(self.__code) for v in vl]
+                entry.urls = [v.decode(self.__code) for v in v]
                 srt.append(entry)
-            return srt
         else:
-            if not self.IsSearchable():
-                return None
-            assert isinstance(text, unicode)
-            text = text.encode('utf-8') ##not sure##############################
-            rt = self.__chm.Search(text, wholewords, titleonly)
-            srt = []
             for k, v in rt[1].items():
                 entry = TableEntry()
                 entry.key = k.decode(self.__code)
                 entry.urls = [v.decode(self.__code),]
                 srt.append(entry)
-            return srt
+
+        return srt
 
     def CheckUrl(self, url):
         '''
