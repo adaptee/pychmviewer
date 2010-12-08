@@ -27,10 +27,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
-        if self.tabWidget.count()>0:
+
+        if self.tabWidget.count() > 0:
             self.tabWidget.removeTab(0)
         self.connect(self.tabWidget,
                 QtCore.SIGNAL('currentChanged(int)'), self.onTabChanged)
+
         self.closeButton = QtGui.QToolButton(self)
         self.closeButton.setCursor(QtCore.Qt.ArrowCursor)
         self.closeButton.setAutoRaise(True)
@@ -41,6 +43,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.closeButton.setEnabled(False)
         self.connect(self.closeButton, QtCore.SIGNAL('clicked()'), self.onCloseCurrentTab)
         self.tabWidget.setCornerWidget(self.closeButton, QtCore.Qt.TopRightCorner)
+
         self.newButton = QtGui.QToolButton(self)
         self.newButton.setCursor(QtCore.Qt.ArrowCursor)
         self.newButton.setAutoRaise(True)
@@ -50,7 +53,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.newButton.setToolTip(u'add page')
         self.connect(self.newButton, QtCore.SIGNAL('clicked()'), self.onOpenNewTab)
         self.tabWidget.setCornerWidget(self.newButton, QtCore.Qt.TopLeftCorner)
+
         self.frameFind.setVisible(False)
+
         self.connect(self.editFind, QtCore.SIGNAL('textEdited(const QString&)'),
                 self.onTextEdited)
         self.connect(self.editFind, QtCore.SIGNAL('returnPressed()'),
@@ -58,14 +63,15 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(self.toolClose, QtCore.SIGNAL('clicked()'), self.frameFind.hide)
         self.connect(self.toolPrevious, QtCore.SIGNAL('clicked()'), self.onFindPrevious)
         self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
+
         self.windows = []
 
-    def keyPressEvent(self, e):
-        if e.matches(QtGui.QKeySequence.Find):
+    def keyPressEvent(self, event):
+        if event.matches(QtGui.QKeySequence.Find):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0, len(self.editFind.text()))
-        if e.matches(QtGui.QKeySequence.Copy):
+        if event.matches(QtGui.QKeySequence.Copy):
             selectedText = self.tabWidget.currentWidget().selectedText()
             if not selectedText.isEmpty():
                 QtGui.QApplication.clipboard().setText(selectedText)
@@ -79,7 +85,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         view = PyChmWebView(self.tabWidget)
         self.editFind.installEventFilter(self)
         self.windows.append(view)
-        self.tabWidget.addTab(view,'')
+        self.tabWidget.addTab(view, '')
 
         if active or len(self.windows) == 1:
             self.tabWidget.setCurrentWidget(view)
@@ -106,7 +112,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if pos != -1:
             del self.windows[pos]
         else:
-            print 'err: unknow webview to close'
+            print ('err: unknow webview to close')
             return
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
         self.updateCloseButton()
@@ -118,7 +124,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.frameFind.show()
 
     def updateCloseButton(self):
-        enable = len(self.windows)>1
+        enable = len(self.windows) > 1
         self.closeButton.setEnabled(enable)
 
     def onOpenatNewTab(self, url):
@@ -134,8 +140,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def closeAll(self):
-        for v in self.windows:
-            self.closeTab(v)
+        for window in self.windows:
+            self.closeTab(window)
 
     def onCloseCurrentTab(self):
         if len(self.windows) == 1:
@@ -166,8 +172,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             title = globalvalue.chmFile.Title
         if title is None or len(title) == 0:
             title = u'no title'
-        if len(title)>15:
-            title = title[0:12]+u'...'
+        if len(title) > 15:
+            title = title[0:12] + u'...'
         self.tabWidget.setTabText(i, title)
 
     def savealltab(self, db):
