@@ -174,7 +174,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.nav_actionForward.setEnabled(False)
 
     def addEncoding(self):
-        encmenu = QMenu(self)
+        encodings_menu = QMenu(self)
         self.genc = QtGui.QActionGroup(self)
 
         action = QAction(self)
@@ -184,7 +184,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         action.setChecked(True)
 
         self.genc.addAction(action)
-        encmenu.addAction(action)
+        encodings_menu.addAction(action)
 
         for language, encoding in encodings:
             action = QAction(self)
@@ -192,13 +192,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             action.encoding = encoding
             action.setCheckable(True)
             self.genc.addAction(action)
-            encmenu.addAction(action)
+            encodings_menu.addAction(action)
 
-        self.view_Set_encoding_action.setMenu(encmenu)
-        self.connect(self.genc,QtCore.SIGNAL('triggered(QAction*)'),
-                self.onEncodingChg)
+        self.view_Set_encoding_action.setMenu(encodings_menu)
+        self.connect(self.genc,
+                     QtCore.SIGNAL('triggered(QAction*)'),
+                     self.onEncodingChanged,
+                    )
 
-    def onEncodingChg(self, action):
+    def onEncodingChanged(self, action):
         globalvalue.encoding = action.encoding
         for window in self.WebViewsWidget.windows:
             window.reload()
