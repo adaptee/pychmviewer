@@ -51,12 +51,32 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
+
         self.db = db
+        self.dataloaded = False
+
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
         self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.onAddPressed)
         self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.onDelPressed)
         self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.onEditPressed)
-        self.dataloaded = False
+
+    def _getNameForBookmark(self,
+                            title=u"add bookmar",
+                            prompt=u"input the name of this bookmark",
+                            default=u"new bookmark",
+                           ):
+
+        name, ok = QtGui.QInputDialog.getText( self,
+                                               title,
+                                               prompt,
+                                               QtGui.QLineEdit.Normal,
+                                               default,
+                                             )
+        if not ok or not name:
+            return u""
+        else:
+            # transform QString into unicode.
+            return unicode(name)
 
     def onAddPressed(self):
         '''
@@ -65,28 +85,23 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         webview = getCurrentWebView()
 
-        url          = webview.openedpg
-        title        = webview.title()
-        pos          = webview.getScrollPos()
+        url   = webview.openedpg
+        title = webview.title()
+        pos   = webview.getScrollPos()
 
         default_name = title or u"new bookmark"
 
-        name, ok = QtGui.QInputDialog.getText(  self,
-                                                u'add bookmark',
-                                                u'input the name of this bookmark',
-                                                QtGui.QLineEdit.Normal,
-                                                default_name,
-                                              )
-        if not ok or not name:
+        name = self._getNameForBookmark(default=default_name)
+        if not name:
             return
 
-        while self.db.has_key(unicode(name).encode('utf-8')):
-            name, ok = QtGui.QInputDialog.getText(self, u'add bookmark', u'the name exists,input another!',
-                    QtGui.QLineEdit.Normal, name)
-            if not ok or len(name) == 0:
-                return
+        while self.db.has_key(name.encode('utf-8')):
 
-        name = unicode(name)
+            prompt = u"Bookmark named as '%s' already exists, choose another name." % name
+            name = self._getNameForBookmark(prompt=prompt,)
+
+            if not name:
+                return
 
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
@@ -107,12 +122,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         item = self.list.currentItem()
         if item :
-            name, ok = QtGui.QInputDialog.getText(self, u'edit bookmark', u'input the name of this bookmark',
-                    QtGui.QLineEdit.Normal, item.name)
-            if not ok or len(name) == 0:
+            name = self._getNameForBookmark( title=u"rename bookmark",
+                                             prompt=u'input the new name',
+                                           )
+
+            if not name :
                 return
 
-            name = unicode(name)
             item.name = name
             item.setText(name)
 
