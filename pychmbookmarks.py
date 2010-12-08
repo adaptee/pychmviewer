@@ -64,18 +64,21 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         inner method
         '''
         url = globalvalue.currentwebview.openedpg
-        tt = globalvalue.currentwebview.title()
-        if tt is None:
-            tt = u'new bookmark'
+        title = globalvalue.currentwebview.title()
+
+        if title is None:
+            title = u'new bookmark'
         name, ok = QtGui.QInputDialog.getText(self, u'add bookmark', u'input the name of this bookmark',
-                QtGui.QLineEdit.Normal,tt)
+                QtGui.QLineEdit.Normal,title)
         if not ok or len(name) == 0:
             return
+
         while self.db.has_key(unicode(name).encode('utf-8')):
-            name,ok = QtGui.QInputDialog.getText(self, u'add bookmark', u'the name exists,input another!',
+            name, ok = QtGui.QInputDialog.getText(self, u'add bookmark', u'the name exists,input another!',
                     QtGui.QLineEdit.Normal, name)
             if not ok or len(name) == 0:
                 return
+
         pos = globalvalue.currentwebview.getScrollPos()
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
@@ -100,6 +103,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                     QtGui.QLineEdit.Normal, item.name)
             if not ok or len(name) == 0:
                 return
+
             item.name = name
             item.setText(name)
 
