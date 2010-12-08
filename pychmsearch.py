@@ -68,7 +68,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
 
         self.setupUi(self)
         self.searchBox.setFocus()
-        self.connect(self.btnGo, QtCore.SIGNAL('clicked()'), self.search)
+        self.connect(self.go, QtCore.SIGNAL('clicked()'), self.search)
         self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.search)
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
 

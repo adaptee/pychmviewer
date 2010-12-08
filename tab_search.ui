@@ -62,7 +62,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="btnGo">
+      <widget class="QPushButton" name="go">
        <property name="text">
         <string>&amp;Go</string>
        </property>
