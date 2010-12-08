@@ -237,21 +237,29 @@ class PyChmFile(object):
 
         return data[0:length] if length else None
 
-    def __parseContentTable(self, content):
-        assert isinstance(ctt, unicode)
-
+    def __parseTable(self, data):
         parser = TableParser()
-        parser.feed(content)
-        self.__content_table = parser.EntryList
+        parser.feed(data)
+        return parser.EntryList
+
+    def __parseContentTable(self, content):
+        assert isinstance(content, unicode)
+
+        #parser = TableParser()
+        #parser.feed(content)
+        #self.__content_table = parser.EntryList
+
+        self.__content_table = self.__parseTable(content)
 
     def __parseIndexTable(self, index):
 
-        assert isinstance(idx, unicode)
+        assert isinstance(index, unicode)
 
-        parser  =  TableParser()
-        parser.feed(index)
-        self.__index_table = parser.EntryList
+        #parser  =  TableParser()
+        #parser.feed(index)
+        #self.__index_table = parser.EntryList
 
+        self.__index_table = self.__parseTable(index)
         self.__index_table.sort(key=lambda x:x.key)
 
 class TableParser(HTMLParser):
