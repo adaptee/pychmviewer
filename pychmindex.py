@@ -10,9 +10,10 @@
 from PyQt4.QtGui import QTreeWidgetItem
 from PyQt4 import QtCore, QtGui
 
-from pychmselecttopic import PyChmSlctTopicDlg
-from Ui_tab_index import Ui_TabIndex
 import globalvalue
+from pychmselecttopic import PyChmSlctTopicDlg
+from utils import getchmfile, getmainwindow
+from Ui_tab_index import Ui_TabIndex
 
 class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
     '''
