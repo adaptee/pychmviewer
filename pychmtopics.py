@@ -102,7 +102,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             urls = [b for a, b in item.entry.urls]
             url = dlg.getUrl(titles, urls)
 
-            if not url:
+            if url:
                 self.emit(QtCore.SIGNAL('openUrl'), url)
                 return url
 
