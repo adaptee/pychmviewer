@@ -361,13 +361,22 @@ class PyChmWebView(QWebView):
         return self.history().canGoForward()
 
 if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
+
+    import sys
+    import locale
     from pychmfile import PyChmFile
-    globalvalue.chmFile = PyChmFile()
-    globalvalue.chmpath = u'python261.chm'
-    globalvalue.chmFile.loadFile(globalvalue.chmpath)
-    Form = PyChmWebView()
-#    Form.code = 'gbk'
-    Form.openPage(globalvalue.chmFile.HomeUrl)
-    Form.show()
-    sys.exit(app.exec_())
+
+    default_encoding = locale.getdefaultlocale()[1]
+
+    if len(sys.argv) > 1:
+
+        globalvalue.chmpath = sys.argv[1].decode(default_encoding)
+        globalvalue.chmFile = PyChmFile()
+        globalvalue.chmFile.loadFile(globalvalue.chmpath)
+
+        app = QtGui.QApplication(sys.argv)
+        Form = PyChmWebView()
+    #    Form.code = 'gbk'
+        Form.openPage(globalvalue.chmFile.HomeUrl)
+        Form.show()
+        sys.exit(app.exec_())
