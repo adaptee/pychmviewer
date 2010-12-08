@@ -213,14 +213,14 @@ class PyChmFile(object):
         return bool
         '''
         assert isinstance(url, unicode)
+
         url = normalize_url(url)
         if url == u'':
             return False
-        url = url.encode('utf-8')
-        fail, ui = self.__chm.ResolveObject(url)
-        if fail:
-            return False
-        return True
+
+        fail, _ = self.__chm.ResolveObject( url.encode('utf-8') )
+
+        return not bool(fail)
 
 
     def GetFileAsStrByUrl(self, url):
@@ -230,32 +230,35 @@ class PyChmFile(object):
         if failed, return None
         '''
         assert isinstance(url, unicode)
+
         url = normalize_url(url)
         if url == u'':
             return None
-        url = url.encode('utf-8')
-        fail,ui = self.__chm.ResolveObject(url)
+
+        fail, unit_info = self.__chm.ResolveObject( url.encode('utf-8') )
         if fail:
             return None
-        leng,rt = self.__chm.RetrieveObject(ui)
-        if leng == 0:
-            return None
-        return rt[0:leng]
+
+        length, data = self.__chm.RetrieveObject(unit_info)
+
+        return data[0:length] if length else None
 
     def __parseContentTable(self, ctt):
         assert isinstance(ctt, unicode)
-        tp = TableParser()
-        tp.feed(ctt)
-        self.__content_table = tp.EntryList
+
+        parser = TableParser()
+        parser.feed(ctt)
+        self.__content_table = parser.EntryList
 
     def __parseIndexTable(self, idx):
+
         assert isinstance(idx, unicode)
-        tp  =  TableParser()
-        tp.feed(idx)
-        self.__index_table = tp.EntryList
-        def tbl_cmp(one, other):
-            return cmp(one.key, other.key)
-        self.__index_table.sort(tbl_cmp)
+
+        parser  =  TableParser()
+        parser.feed(idx)
+        self.__index_table = parser.EntryList
+
+        self.__index_table.sort(key=lambda x:x.key)
 
 class TableParser(HTMLParser):
     def __init__(self):
