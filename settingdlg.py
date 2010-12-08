@@ -33,19 +33,21 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
         self.loadlasttime = globalvalue.globalcfg.loadlasttime
         self.openremote = globalvalue.globalcfg.openremote
-        s = u'font family: '
+
+        text = u'font family: '
         if globalvalue.globalcfg.fontfamily:
-            s = s+globalvalue.globalcfg.fontfamily
+            text = text + globalvalue.globalcfg.fontfamily
         else:
-            s = s+u'default'
+            text = text + u'default'
         self.fontfamily = globalvalue.globalcfg.fontfamily
-        s = s+u"\nfont size:"
+        text = text + u"\nfont size:"
         if globalvalue.globalcfg.fontsize:
-            s = s + str(globalvalue.globalcfg.fontsize)
+            text = text + str(globalvalue.globalcfg.fontsize)
         else:
-            s = s + u'default'
+            text = text + u'default'
+        self.label.setText(text)
+
         self.fontsize = globalvalue.globalcfg.fontsize
-        self.label.setText(s)
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
         self.connect(self.loadlastCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
@@ -72,7 +74,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
     def onUnSlctExt(self):
         item = self.list_search.currentItem()
-        if item == None:
+        if item is None:
             return
         ext = str(item.text())
         nit = QListWidgetItem(self.list_unsearch)
@@ -112,8 +114,8 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             self.fontsize = font.pixelSize()
             if self.fontsize == -1:
                 self.fontsize = font.pointSize()
-            s = u'font family: '+self.fontfamily+u'\nfont size: '+str(self.fontsize)
-            self.label.setText(s)
+            text = u'font family: ' + self.fontfamily + u'\nfont size: ' + str(self.fontsize)
+            self.label.setText(text)
 
 
 if __name__ == "__main__":
