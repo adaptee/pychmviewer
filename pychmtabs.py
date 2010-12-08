@@ -90,6 +90,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if active or len(self.windows) == 1:
             self.tabWidget.setCurrentWidget(view)
             globalvalue.currentwebview = view #set the current web view, so other part will know
+            # FIXME
+            self.parent().currentwebview = view
         self.connect(view, QtCore.SIGNAL('openUrl'), globalvalue.currentwebview.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenatNewTab)
         if globalvalue.globalcfg.openremote:
