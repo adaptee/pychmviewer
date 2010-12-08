@@ -74,14 +74,17 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         this method is to locate the item who has the given url
         '''
         item = self.urlmap.get(url, None)
-        if item is not None:
-            pareitem = item.parent()
-            while pareitem is not None:
-                pareitem.setExpanded(True)
-                pareitem = pareitem.parent()
+        if item :
+            self._updateParentStatus(item)
             self.tree.setCurrentItem(item)
             self.tree.scrollToItem(item)
 
+
+    def _updateParentStatus(item):
+        parent = item.parent()
+        while parent :
+            parent.setExpanded(True)
+            parent = parent.parent()
 
     def onDoubleClicked(self, item, col):
         '''
