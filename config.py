@@ -10,6 +10,7 @@
 import sys
 import os
 import exceptions
+#FIXME; this module is deprecated and marked to be removal in future
 import bsddb
 from md5sum import md5sum
 from ConfigParser import ConfigParser
