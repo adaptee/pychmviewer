@@ -18,6 +18,22 @@ from extract_chm import getfilelist
 
 detenc = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
+
+def filterByExt(filenames, exts):
+
+    filenames = [ filename.lower() for filename in filenames  ]
+    exts      = [ ext.lower() for ext in exts  ]
+
+    results   = [ ]
+
+    for filename in filenames:
+        for ext in exts:
+            if filename.lower().endswith(ext.lower()):
+                results.append(filename)
+
+    return results
+
+
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -41,7 +57,8 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             if b:
                 extlist.append(a)
 
-        sflist = self.__filt(filelist, extlist)
+        sflist = filterByExt(filelist, extlist)
+
         prgrs = QtGui.QProgressDialog(u'Searching ...', u'Abort',
                0, len(sflist), self)
         prgrs.forceShow()
@@ -73,18 +90,6 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
         prgrs.setValue(len(sflist))
-
-
-
-    def __filt(self, filelist, extlist):
-        rt = []
-        for fp in filelist:
-            ok = False
-            for ext in extlist:
-                if fp.lower().endswith(ext.lower()):
-                    ok = True
-            rt.append(fp)
-        return rt
 
     def onReturnPressed(self):
         text = self.searchBox.lineEdit().text()
