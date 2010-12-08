@@ -91,7 +91,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.tabWidget.setCurrentWidget(view)
             globalvalue.currentwebview = view #set the current web view, so other part will know
             # FIXME
-            self.parent().currentwebview = view
+            #self.parent().currentwebview = view
         self.connect(view, QtCore.SIGNAL('openUrl'), globalvalue.currentwebview.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenatNewTab)
         if globalvalue.globalcfg.openremote:
@@ -207,15 +207,23 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
 if __name__ == '__main__':
+
     import sys
-    app = QtGui.QApplication(sys.argv)
+    import locale
     from pychmfile import PyChmFile
-    globalvalue.chmFile = PyChmFile()
-    globalvalue.chmpath = u'python261.chm'
-    globalvalue.chmFile.loadFile(globalvalue.chmpath)
-    Form  = PyChmTabs()
-    globalvalue.tabs = Form
-    Form.onOpenatNewTab(globalvalue.chmFile.HomeUrl)
-    Form.show()
-    sys.exit(app.exec_())
+
+    default_encoding = locale.getdefaultlocale()[1]
+
+    if len(sys.argv) > 1:
+
+        globalvalue.chmpath = sys.argv[1].decode(default_encoding)
+        globalvalue.chmFile = PyChmFile()
+        globalvalue.chmFile.loadFile(globalvalue.chmpath)
+
+        app = QtGui.QApplication(sys.argv)
+        Form  = PyChmTabs()
+        globalvalue.tabs = Form
+        Form.onOpenatNewTab(globalvalue.chmFile.HomeUrl)
+        Form.show()
+        sys.exit(app.exec_())
 
