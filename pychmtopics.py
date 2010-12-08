@@ -12,14 +12,8 @@ from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
 from pychmselecttopic import PyChmSlctTopicDlg
-from utils import remove_comment
+from utils import remove_comment, getchmfile, getmainwindow
 from Ui_tab_contents import Ui_TabContents
-
-def getchmfile():
-    return globalvalue.chmFile
-
-def getmainwindow():
-    return globalvalue.mainwindow
 
 
 def normalize_key(key):
