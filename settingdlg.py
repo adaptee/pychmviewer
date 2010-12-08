@@ -14,6 +14,16 @@ from PyQt4.QtGui import QListWidgetItem
 import globalvalue
 from Ui_settingdlg import Ui_Dialog
 
+# FIXME; ugly name and location
+def font_info(config):
+    template = u"Font family: %s\nFont size: %s"
+
+    family = config.fontfamily or "default"
+    size   = config.fontsize or "default"
+
+    return template % (family, size)
+
+
 class SettingDlg(QtGui.QDialog, Ui_Dialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
@@ -35,20 +45,12 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.loadlasttime = globalvalue.globalcfg.loadlasttime
         self.openremote = globalvalue.globalcfg.openremote
 
-        text = u'font family: '
-        if globalvalue.globalcfg.fontfamily:
-            text = text + globalvalue.globalcfg.fontfamily
-        else:
-            text = text + u'default'
         self.fontfamily = globalvalue.globalcfg.fontfamily
-        text = text + u"\nfont size:"
-        if globalvalue.globalcfg.fontsize:
-            text = text + str(globalvalue.globalcfg.fontsize)
-        else:
-            text = text + u'default'
+        self.fontsize = globalvalue.globalcfg.fontsize
+
+        text = font_info(globalvalue.globalcfg)
         self.label.setText(text)
 
-        self.fontsize = globalvalue.globalcfg.fontsize
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
         self.connect(self.loadlastCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
