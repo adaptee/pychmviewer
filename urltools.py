@@ -41,8 +41,7 @@ def isjsurl(url):
     '''
     assert isinstance(url, unicode)
 
-    url = url.lower()
-    return url.startswith(u"javascript://")
+    return url.lower().startswith(u"javascript://")
 
 def isnewchmurl(url):
     '''
