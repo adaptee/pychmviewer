@@ -120,10 +120,10 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         inner method
         '''
-        if self.db is None or self.dataloaded:
+        if not self.db or self.dataloaded:
             return
-        self.dataloaded=True
-        self.loaddata()
+
+        self.loadData()
 
     def clearandsetdb(self, db):
         '''
@@ -133,19 +133,23 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.list.clear()
         self.dataloaded = False
 
-    def loaddata(self):
+    def loadData(self):
         '''
-        loaddata from db
+        loadData from db
         '''
         if self.dataloaded:
             return
-        self.dataloaded = True
+
         self.list.clear()
+
         for key, value in self.db.iteritems():
             item = PyChmBookmarkItem(self.list)
-            item.name = key.decode('utf-8')
+            key = key.decode('utf-8')
+            item.name = key
             item.setText(key)
             item.seturlandpos(value)
+
+        self.dataloaded = True
 
     def onItemDoubleClicked(self, item):
         '''
