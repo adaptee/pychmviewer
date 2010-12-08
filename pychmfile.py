@@ -13,6 +13,8 @@ import re
 import os.path
 from HTMLParser import HTMLParser
 
+from utils import remove_comment
+
 try:
     from pychm.chm import CHMFile
     has_pychm = True
@@ -20,16 +22,6 @@ except ImportError :
     from chm.chm import CHMFile
     print ("Can't find pychm.chm.CHMFile, use CHMFile instead")
     has_pychm = False
-
-def remove_comment(text):
-    if not text:
-        return text
-
-    pos = text.find(u'#')
-    if pos != -1:
-        return text[0:pos]
-    else:
-        return text
 
 def normalize_url(url):
     if not url:
