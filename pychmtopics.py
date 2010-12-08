@@ -11,9 +11,15 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from Ui_tab_contents import Ui_TabContents
 from pychmselecttopic import PyChmSlctTopicDlg
 from utils import remove_comment
+from Ui_tab_contents import Ui_TabContents
+
+def getchmfile():
+    return globalvalue.chmFile
+
+def getmainwindow():
+    return globalvalue.mainwindow
 
 
 def normalize_key(key):
@@ -56,10 +62,12 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         self.tree.headerItem().setHidden(True)
         self.dataloaded = False
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
-        if globalvalue.chmFile is None or self.dataloaded:
+
+        chmfile = getchmfile()
+        if not chmfile or self.dataloaded:
             return
-        if globalvalue.chmFile.HasTopic:
-            self.loaddata(globalvalue.chmFile.topic)
+        if chmfile.HasTopic:
+            self.loaddata(chmfile.topic)
 
     def locateUrl(self, url):
         '''
@@ -84,8 +92,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         if len(item.entry.urls) == 1:
             self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
             return
-        elif len(item.entry.urls)>1:
-            dlg = PyChmSlctTopicDlg(globalvalue.mainWindow)
+        elif len(item.entry.urls) > 1:
+            main_window = getmainwindow()
+            dlg = PyChmSlctTopicDlg(main_window)
             titles = [a for a, b in item.entry.urls]
             urls = [b for a, b in item.entry.urls]
             url = dlg.getUrl(titles, urls)
