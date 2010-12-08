@@ -68,7 +68,7 @@ class PyChmNetReply(QNetworkReply):
             pass
         path = urldecode(path)
         data = chm.GetFileAsStrByUrl(path)
-        if data is None:
+        if not data:
             self.setError(404,'')
             return None
         self.setContentTypeHeader(path)

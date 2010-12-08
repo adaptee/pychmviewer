@@ -299,7 +299,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             except StandardError:
                 pass
             s = globalvalue.chmFile.GetFileAsStrByUrl(opath.decode('utf-8'))
-            if s is None:
+            if not s :
                 #print 'extract',opath,'failed'
                 continue
             try:

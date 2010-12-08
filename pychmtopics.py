@@ -79,7 +79,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         '''
         inner method
         '''
-        if item is None:
+        if not item :
             return
         if len(item.entry.urls) == 1:
             self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
@@ -90,7 +90,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             urls = [b for a, b in item.entry.urls]
             url = dlg.getUrl(titles, urls)
 
-            if url is None:
+            if not url:
                 self.emit(QtCore.SIGNAL('openUrl'), url)
                 return url
 
@@ -109,7 +109,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         '''
         if self.dataloaded:
             return
-        if data is None:
+        if not data:
             self.tree.clear()
             return
         self.dataloaded = True
