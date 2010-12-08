@@ -56,7 +56,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         self.tree.headerItem().setHidden(True)
         self.dataloaded = False
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
-        if globalvalue.chmFile == None or self.dataloaded:
+        if globalvalue.chmFile is None or self.dataloaded:
             return
         if globalvalue.chmFile.HasTopic:
             self.loaddata(globalvalue.chmFile.topic)
@@ -109,7 +109,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         '''
         if self.dataloaded:
             return
-        if data == None:
+        if data is None:
             self.tree.clear()
             return
         self.dataloaded = True
@@ -141,7 +141,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
                 item.entry = data[i]
                 item.setText(0, data[i].key)
             else:
-                if rootentry[indent-1] == None:
+                if rootentry[indent-1] is None:
                     print 'error no root entry'
                 item = QTreeWidgetItem(rootentry[indent-1], lastchild[indent])
                 item.entry = data[i]

@@ -107,7 +107,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.tree.update()
 
     def onDoubleClicked(self, item, col):
-        if item == None:
+        if item is None:
             return
         self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
