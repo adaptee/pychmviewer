@@ -97,7 +97,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         if self.dataloaded:
             return
-        if data is None:
+        if not data :
             return
         self.dataloaded = True
         self.tree.clear()

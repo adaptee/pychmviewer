@@ -92,7 +92,7 @@ class PyChmFile(object):
         self.__chm.GetWindowsInfo()
 
         self.__code = self.__chm.GetLCID()[0]
-        if self.__code is None or self.__code == '':
+        if not self.__code :
             self.__code = "utf-8"
 
         self.__homeurl = self.__chm.home.decode(self.__code)
@@ -109,7 +109,7 @@ class PyChmFile(object):
         if self.__index_table :
             return self.__index_table
 
-        if self.__chm.index is None:
+        if not self.__chm.index :
             self.__index_table = []
             return []
 
@@ -128,7 +128,7 @@ class PyChmFile(object):
         if self.__content_table :
             return self.__content_table
 
-        if self.__chm.topics is None:
+        if not self.__chm.topics :
             self.__content_table = []
             return []
 
@@ -302,7 +302,7 @@ class TableParser(HTMLParser):
                 return
 
     def end_object(self):
-        if self.crtentry is None:
+        if not self.crtentry :
             return
         if self.key is not None:
             if not self.root_indent_offset_set:

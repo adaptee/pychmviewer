@@ -168,9 +168,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if i == -1:
             return
         title = view.title()
-        if title is None or len(title) == 0:
+        if not title :
             title = globalvalue.chmFile.Title
-        if title is None or len(title) == 0:
+        if not title :
             title = u'no title'
         if len(title) > 15:
             title = title[0:12] + u'...'

@@ -69,7 +69,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
     def onSlctExt(self):
         item = self.list_unsearch.currentItem()
-        if item is None:
+        if not item :
             return
         ext = str(item.text())
         nit = QListWidgetItem(self.list_search)
@@ -79,7 +79,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
     def onUnSlctExt(self):
         item = self.list_search.currentItem()
-        if item is None:
+        if not item :
             return
         ext = str(item.text())
         nit = QListWidgetItem(self.list_unsearch)
