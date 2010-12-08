@@ -14,17 +14,19 @@ import bsddb
 from md5sum import md5sum
 from ConfigParser import ConfigParser
 
-home = os.environ['HOME']
-cfghome = os.path.join(home, '.pychmviewer')
+home          = os.environ['HOME']
+cfghome       = os.path.join(home, '.pychmviewer')
 globalcfgfile = os.path.join(cfghome, 'config.cfg')
-encoding = sys.getfilesystemencoding()
+encoding      = sys.getfilesystemencoding()
 
 class GlobalConfig(object):
     def __getlastdir(self):
         return self.__lastdir.decode(encoding)
+
     def __setlastdir(self, v):
         assert isinstance(v, unicode)
         self.__lastdir = v.encode(encoding)
+
     lastdir = property(__getlastdir, __setlastdir)
 
     def __init__(self):
@@ -53,31 +55,36 @@ class GlobalConfig(object):
             self.loadlasttime = cfg.getboolean('userconfig', 'loadlasttime')
         except:
             self.lastlasttime = True
+
         try:
             self.sengine_own = cfg.getboolean('userconfig', 'default_search_engine')
         except:
             self.sengine_own = True
+
         try:
             self.openremote = cfg.getboolean('userconfig', 'openremote')
         except:
             self.openremote = True
+
         try:
             self.fontfamily = cfg.get('userconfig','fontfamily').decode('utf-8')
             if self.fontfamily == 'default':
                 self.fontfamily = None
         except:
             self.fontfamily = None
+
         try:
             self.fontsize = cfg.getint('userconfig', 'fontsize')
         except:
             self.fontsize = None
+
         try:
             self.__lastdir = cfg.get('userconfig', 'lastdir')
         except:
             self.__lastdir = home
 
     def savecfg(self):
-        cfg=ConfigParser()
+        cfg = ConfigParser()
         cfg.add_section('userconfig')
         cfg.set('userconfig', 'loadlasttime', str(self.loadlasttime))
         cfg.set('userconfig', 'openremote', str(self.openremote))
@@ -88,32 +95,40 @@ class GlobalConfig(object):
         cfg.set('userconfig', 'lastdir', self.__lastdir)
         cfg.set('userconfig', 'default_search_engine', self.sengine_own)
         cfg.add_section('searchext')
-        for a,b in self.searchext.iteritems():
+
+        for a, b in self.searchext.iteritems():
             cfg.set('searchext', a, str(b))
+
         try:
             os.mkdir(cfghome, 0700)
         except exceptions.OSError:
             pass
-        f=open(globalcfgfile, 'wb')
-        cfg.write(f)
-        f.flush()
-        f.close()
+
+        fileobj = open(globalcfgfile, 'wb')
+        cfg.write(fileobj)
+        fileobj.flush()
+        fileobj.close()
 
 
 class PyChmConfig(object):
     def __init__(self, chmpath):
         assert isinstance(chmpath, unicode)
+
         self.md5 = md5sum(chmpath)
         self.cfghome = os.path.join(home, '.pychmviewer')
+
         try:
             os.mkdir(self.cfghome, 0700)
-        except exceptions.OSError:
+        except OSError:
             pass
+
         self.cfghome = os.path.join(self.cfghome, self.md5)
+
         try:
-            os.mkdir(self.cfghome,0700)
-        except exceptions.OSError:
+            os.mkdir(self.cfghome, 0700)
+        except OSError:
             pass
+
         bookmarkpath = os.path.join(self.cfghome, 'bookmark.db')
         lastconfpath = os.path.join(self.cfghome, 'last.db')
         self.bookmarkdb = bsddb.hashopen(bookmarkpath)
