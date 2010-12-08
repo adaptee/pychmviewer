@@ -29,6 +29,30 @@ from settingdlg import SettingDlg
 from about import aboutdlg
 from extract_chm import getfilelist
 
+
+def setWebFont():
+    config     = globalvalue.globalcfg
+    fontfamily = config.fontfamily
+    fontsize   = config.fontsize
+
+    settings   = QtWebKit.QWebSettings.globalSettings()
+
+    if fontfamily :
+        settings.setFontFamily(QtWebKit.QWebSettings.StandardFont, fontfamily)
+        settings.setFontFamily(QtWebKit.QWebSettings.FixedFont, fontfamily)
+        settings.setFontFamily(QtWebKit.QWebSettings.SerifFont, fontfamily)
+        settings.setFontFamily(QtWebKit.QWebSettings.SansSerifFont, fontfamily)
+        settings.setFontFamily(QtWebKit.QWebSettings.CursiveFont, fontfamily)
+        settings.setFontFamily(QtWebKit.QWebSettings.FantasyFont, fontfamily)
+    if fontsize :
+        settings.setFontSize(QtWebKit.QWebSettings.DefaultFontSize, fontsize)
+        settings.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, fontsize)
+        settings.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, fontsize)
+        settings.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, fontsize)
+#            for window in self.WebViewsWidget.windows:
+#                window.reload()
+
+
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
@@ -107,7 +131,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.addEncoding()
         self.inital()
-        self.setWebFont()
+        setWebFont()
 
     def onAbout(self):
         dlg = aboutdlg(self)
@@ -122,28 +146,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             globalvalue.globalcfg.openremote = dlg.openremote
             globalvalue.globalcfg.searchext = dlg.searchext
             globalvalue.globalcfg.savecfg()
-            self.setWebFont()
+            setWebFont()
             for v in self.WebViewsWidget.windows:
                 v.reload()
-
-
-    def setWebFont(self):
-        st = QtWebKit.QWebSettings.globalSettings()
-        if globalvalue.globalcfg.fontfamily is not None:
-            st.setFontFamily(QtWebKit.QWebSettings.StandardFont, globalvalue.globalcfg.fontfamily)
-            st.setFontFamily(QtWebKit.QWebSettings.FixedFont, globalvalue.globalcfg.fontfamily)
-            st.setFontFamily(QtWebKit.QWebSettings.SerifFont, globalvalue.globalcfg.fontfamily)
-            st.setFontFamily(QtWebKit.QWebSettings.SansSerifFont, globalvalue.globalcfg.fontfamily)
-            st.setFontFamily(QtWebKit.QWebSettings.CursiveFont, globalvalue.globalcfg.fontfamily)
-            st.setFontFamily(QtWebKit.QWebSettings.FantasyFont, globalvalue.globalcfg.fontfamily)
-        if globalvalue.globalcfg.fontsize is not None:
-            st.setFontSize(QtWebKit.QWebSettings.DefaultFontSize, globalvalue.globalcfg.fontsize)
-            st.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, globalvalue.globalcfg.fontsize)
-            st.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, globalvalue.globalcfg.fontsize)
-            st.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, globalvalue.globalcfg.fontsize)
-#            for v in self.WebViewsWidget.windows:
-#                v.reload()
-
 
     def onViewSource(self):
         dlg = HtmlDlg(self)
