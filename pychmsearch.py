@@ -20,6 +20,8 @@ detenc = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
 
 def filterByExt(filenames, exts):
+    if not filenames or not exts:
+        return filenames
 
     filenames = [ filename.lower() for filename in filenames  ]
     exts      = [ ext.lower() for ext in exts  ]
@@ -32,6 +34,19 @@ def filterByExt(filenames, exts):
                 results.append(filename)
 
     return results
+
+def getExtensions():
+    extensions= []
+
+    for a, b in globalvalue.globalcfg.searchext.iteritems():
+        if b:
+            extensions.append(a)
+    return extensions
+
+def getFilenames():
+
+    ok, filenames = getfilelist(globalvalue.chmpath)
+    return filenames if ok else [ ]
 
 
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
@@ -48,16 +63,9 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.searchBox.lineEdit().clear()
 
     def mySearch(self, rexp):
-        ok, filelist = getfilelist(globalvalue.chmpath)
-        if not ok:
+        sflist = filterByExt( getFilenames(), getExtensions() )
+        if not sflist:
             return
-
-        extlist = []
-        for a, b in globalvalue.globalcfg.searchext.iteritems():
-            if b:
-                extlist.append(a)
-
-        sflist = filterByExt(filelist, extlist)
 
         prgrs = QtGui.QProgressDialog(u'Searching ...', u'Abort',
                0, len(sflist), self)
