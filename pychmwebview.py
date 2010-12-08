@@ -32,7 +32,7 @@ class PyChmNetReply(QNetworkReply):
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
         self.m_data = self.loadResource(url)
-        if self.m_data != None:
+        if self.m_data:
             self.m_length = len(self.m_data)
             self.m_data = StringIO.StringIO(self.m_data)
         else:
