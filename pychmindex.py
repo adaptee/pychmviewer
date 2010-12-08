@@ -18,15 +18,15 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
-    def __init__(self,parent=None):
-        QtGui.QWidget.__init__(self,parent)
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.tree.headerItem().setHidden(True)
         self.lastitem = None
         self.dataloaded = False
-        self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'),self.onDoubleClicked)
-        self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'),self.onTextChanged)
-        self.connect(self.text, QtCore.SIGNAL('returnPressed()'),self.onReturnPressed)
+        self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
+        self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
+        self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
         if globalvalue.chmFile is None or self.dataloaded:
             return
         if globalvalue.chmFile.HasIndex:
@@ -40,37 +40,37 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         self.dataloaded = False
         self.text.clear()
 
-    def onTextChanged(self,v):
+    def onTextChanged(self, v):
         '''
         inner method for search item
         '''
-        items=self.tree.findItems(v,QtCore.Qt.MatchStartsWith)
-        if len(items)!=0:
+        items = self.tree.findItems(v, QtCore.Qt.MatchStartsWith)
+        if items:
             self.tree.setCurrentItem(items[0])
             self.tree.scrollToItem(items[0])
-            self.lastitem=items[0]
+            self.lastitem = items[0]
         else:
-            self.lastitem=None
+            self.lastitem = None
 
     def onReturnPressed(self):
         '''
         inner method for openurl
         '''
-        if self.lastitem!=None:
-            item=self.lastitem
+        if self.lastitem :
+            item = self.lastitem
             if len(item.entry.urls) == 1:
-                self.emit(QtCore.SIGNAL('openUrl'),item.entry.urls[0][1])
+                self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
                 return
             elif len(item.entry.urls)>1:
-                dlg=PyChmSlctTopicDlg(globalvalue.mainWindow)
-                titles=[a for a,b in item.entry.urls]
-                urls=[b for a,b in item.entry.urls]
-                url=dlg.getUrl(titles,urls)
-                if url!=None:
-                    self.emit(QtCore.SIGNAL('openUrl'),url)
+                dlg = PyChmSlctTopicDlg(globalvalue.mainWindow)
+                titles = [a for a, b in item.entry.urls]
+                urls = [b for a, b in item.entry.urls]
+                url = dlg.getUrl(titles, urls)
+                if url :
+                    self.emit(QtCore.SIGNAL('openUrl'), url)
                     return url
 
-    def onDoubleClicked(self,item,col):
+    def onDoubleClicked(self, item, col):
         '''
         inner method for openurl
         '''
@@ -79,18 +79,18 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         if item.isExpanded():
             item.setExpanded(False)
         if len(item.entry.urls) == 1:
-            self.emit(QtCore.SIGNAL('openUrl'),item.entry.urls[0][1])
+            self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
             return
         elif len(item.entry.urls)>1:
-            dlg=PyChmSlctTopicDlg(globalvalue.mainWindow)
-            titles=[a for a,b in item.entry.urls]
-            urls=[b for a,b in item.entry.urls]
-            url=dlg.getUrl(titles,urls)
-            if url!=None:
-                self.emit(QtCore.SIGNAL('openUrl'),url)
+            dlg = PyChmSlctTopicDlg(globalvalue.mainWindow)
+            titles = [a for a, b in item.entry.urls]
+            urls = [b for a, b in item.entry.urls]
+            url = dlg.getUrl(titles, urls)
+            if url:
+                self.emit(QtCore.SIGNAL('openUrl'), url)
                 return url
 
-    def loaddata(self,data):
+    def loaddata(self, data):
         '''
         load data for index tree.
         data is list of TableEntry(define in pychmfile.py
@@ -105,7 +105,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         rootentry = []
         for i in xrange(len(data)):
             indent = data[i].indent
-            if indent >=len(rootentry):
+            if indent >= len(rootentry):
                 maxindent = len(rootentry)-1
                 lastchild.append(None)
                 rootentry.append(None)
@@ -113,7 +113,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
                     print 'error, first entry isn\'t the root entry'
                 if (indent-maxindent) > 1:
                     j = maxindent
-                    while j<indent:
+                    while j < indent:
                         if len(lastchild)<=j+1:
                             lastchild.append(None)
                             rootentry.append(None)
@@ -123,15 +123,15 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
                 lastchild[indent] = None
                 rootentry[indent] = None
             if indent == 0:
-                item = QTreeWidgetItem(self.tree,lastchild[indent])
+                item = QTreeWidgetItem(self.tree, lastchild[indent])
                 item.entry = data[i]
-                item.setText(0,data[i].key)
+                item.setText(0, data[i].key)
             else:
                 if rootentry[indent-1] == None:
                     print 'error no root entry'
-                item=QTreeWidgetItem(rootentry[indent-1],lastchild[indent])
-                item.entry=data[i]
-                item.setText(0,data[i].key)
+                item = QTreeWidgetItem(rootentry[indent-1], lastchild[indent])
+                item.entry = data[i]
+                item.setText(0, data[i].key)
             item.setExpanded(True)
             lastchild[indent] = item
             rootentry[indent] = item
