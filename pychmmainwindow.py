@@ -218,7 +218,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.WebViewsWidget.onOpenatNewTab(globalvalue.chmFile.HomeUrl)
         self.indexview.loaddata(globalvalue.chmFile.index)
         self.topicsview.loaddata(globalvalue.chmFile.topic)
-        self.bookmarkview.loaddata()
+        self.bookmarkview.loadData()
         self.setWindowTitle(globalvalue.chmFile.Title+u' PyChmViewer')
 
     def openFile(self):
