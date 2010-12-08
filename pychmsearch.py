@@ -63,41 +63,46 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.searchBox.lineEdit().clear()
 
     def mySearch(self, rexp):
-        sflist = filterByExt( getFilenames(), getExtensions() )
-        if not sflist:
+        filenames = filterByExt( getFilenames(), getExtensions() )
+        if not filenames:
             return
 
-        prgrs = QtGui.QProgressDialog(u'Searching ...', u'Abort',
-               0, len(sflist), self)
-        prgrs.forceShow()
-        rt = []
-        for i, f in enumerate(sflist):
-            prgrs.setValue(i)
-            if i % 5 == 0:
-                if prgrs.wasCanceled():
+        progress = QtGui.QProgressDialog(u'Searching ...', u'Abort',
+               0, len(filenames), self)
+        progress.forceShow()
+
+        results = []
+        for index, filename in enumerate(filenames):
+            progress.setValue(index)
+            if index % 5 == 0 and progress.wasCanceled() :
                     break
-            fctt = globalvalue.chmFile.GetFileAsStrByUrl(f.decode('utf-8', 'ignore'))
-            if not fctt:
+
+            file_content = globalvalue.chmFile.GetFileAsStrByUrl(filename.decode('utf-8', 'ignore'))
+            if not file_content:
                 continue
-            rrt = detenc.search(fctt)
-            if rrt:
-                enc = rrt.group(1)
+
+            match = detenc.search(file_content)
+            if match:
+                encoding = match.group(1)
             elif globalvalue.encoding:
-                enc = globalvalue.encoding
+                encoding = globalvalue.encoding
             else:
-                enc = 'utf-8'
-            rc = re.compile(unicode(rexp).encode(enc))
-            ttt = rc.search(fctt)
-            if ttt:
-                rt.append((f.decode('utf-8', 'ignore'), ttt.group(0).decode(enc, 'ignore')))
+                encoding = 'utf-8'
+
+            rc = re.compile(unicode(rexp).encode(encoding))
+            match = rc.search(file_content)
+            if match:
+                results.append((filename.decode('utf-8', 'ignore'), match.group(0).decode(encoding, 'ignore')))
+
         self.tree.clear()
-        for url, name in rt:
+        for url, name in results:
             item = QTreeWidgetItem(self.tree)
             item.url = url
             item.setText(0, name)
             item.setText(1, url)
         self.tree.update()
-        prgrs.setValue(len(sflist))
+
+        progress.setValue( len(filenames) )
 
     def onReturnPressed(self):
         text = self.searchBox.lineEdit().text()
