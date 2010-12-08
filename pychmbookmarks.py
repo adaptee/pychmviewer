@@ -120,12 +120,11 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         default_name = title or u"new bookmark"
 
         name = self._getNameForBookmark(default=default_name)
-        if not name:
-            return
 
-        item = PyChmBookmarkItem(self.list, name, url, pos)
-        item.setText(name)
-        item.saveTo(self.db)
+        if name:
+            item = PyChmBookmarkItem(self.list, name, url, pos)
+            item.setText(name)
+            item.saveTo(self.db)
 
     def onDelPressed(self):
         '''
@@ -145,11 +144,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             name = self._getNameForBookmark( title=u"rename bookmark",
                                              prompt=u'input new name',
                                            )
-            if not name :
-                return
-
-            item.name = name
-            item.setText(name)
+            if name:
+                item.name = name
+                item.setText(name)
 
     def showEvent(self, event):
         '''
