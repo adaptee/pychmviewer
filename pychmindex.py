@@ -28,10 +28,13 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
-        if globalvalue.chmFile is None or self.dataloaded:
+
+        chmfile = getchmfile()
+
+        if not chmfile or self.dataloaded :
             return
-        if globalvalue.chmFile.hasIndex:
-            self.loaddata(globalvalue.chmFile.index)
+        if chmfile.hasIndex :
+            self.loaddata(chmfile.index)
 
     def clear(self):
         '''
@@ -63,7 +66,8 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
                 self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
                 return
             elif len(item.entry.urls)>1:
-                dlg = PyChmSlctTopicDlg(globalvalue.mainWindow)
+                main_window = getmainwindow()
+                dlg = PyChmSlctTopicDlg(main_window)
                 titles = [a for a, b in item.entry.urls]
                 urls = [b for a, b in item.entry.urls]
                 url = dlg.getUrl(titles, urls)
@@ -83,7 +87,8 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
             self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
             return
         elif len(item.entry.urls)>1:
-            dlg = PyChmSlctTopicDlg(globalvalue.mainWindow)
+            main_window = getmainwindow()
+            dlg = PyChmSlctTopicDlg(main_window)
             titles = [a for a, b in item.entry.urls]
             urls = [b for a, b in item.entry.urls]
             url = dlg.getUrl(titles, urls)
