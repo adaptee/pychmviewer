@@ -49,8 +49,6 @@ def setWebFont():
         settings.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, fontsize)
         settings.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, fontsize)
         settings.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, fontsize)
-#            for window in self.WebViewsWidget.windows:
-#                window.reload()
 
 
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
@@ -147,8 +145,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             globalvalue.globalcfg.searchext = dlg.searchext
             globalvalue.globalcfg.savecfg()
             setWebFont()
-            for v in self.WebViewsWidget.windows:
-                v.reload()
+            for window in self.WebViewsWidget.windows:
+                window.reload()
 
     def onViewSource(self):
         dlg = HtmlDlg(self)
