@@ -29,7 +29,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
         if globalvalue.chmFile is None or self.dataloaded:
             return
-        if globalvalue.chmFile.HasIndex:
+        if globalvalue.chmFile.hasIndex:
             self.loaddata(globalvalue.chmFile.index)
 
     def clear(self):
