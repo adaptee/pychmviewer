@@ -60,11 +60,11 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.onDelPressed)
         self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.onEditPressed)
 
-    def _getNameForBookmark(self,
+    def _getNameFromUser(   self,
                             title=u"add bookmar",
                             prompt=u"input the name of this bookmark",
                             default=u"new bookmark",
-                           ):
+                        ):
 
         name, ok = QtGui.QInputDialog.getText( self,
                                                title,
@@ -77,6 +77,34 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         else:
             # transform QString into unicode.
             return unicode(name)
+
+
+    def _getNameForBookmark(self,
+                            title=u"add bookmar",
+                            prompt=u"input the name of this bookmark",
+                            default=u"new bookmark",
+                           ):
+
+        name = self._getNameFromUser( title=title,
+                                      prompt=prompt,
+                                      default=default,
+                                    )
+        if not name:
+            return u""
+
+        # name confliction is not allowed
+        while self.db.has_key(name.encode('utf-8')):
+
+            title = u"name confliction"
+            prompt = u"Bookmark named as '%s' already exists, choose another name." % name
+            name = self._getNameFromUser( title=title,
+                                          prompt=prompt,
+                                          default=name,
+                                        )
+            if not name:
+                return u""
+
+        return name
 
     def onAddPressed(self):
         '''
@@ -94,14 +122,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         name = self._getNameForBookmark(default=default_name)
         if not name:
             return
-
-        while self.db.has_key(name.encode('utf-8')):
-
-            prompt = u"Bookmark named as '%s' already exists, choose another name." % name
-            name = self._getNameForBookmark(prompt=prompt,)
-
-            if not name:
-                return
 
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
@@ -123,9 +143,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         item = self.list.currentItem()
         if item :
             name = self._getNameForBookmark( title=u"rename bookmark",
-                                             prompt=u'input the new name',
+                                             prompt=u'input new name',
                                            )
-
             if not name :
                 return
 
