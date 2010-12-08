@@ -26,8 +26,8 @@ from content_type import content_type
 urldecode = urllib.unquote_plus
 
 class PyChmNetReply(QNetworkReply):
-    def __init__(self,request, url,parent=None, qwebview=None):
-        QNetworkReply.__init__(self,parent)
+    def __init__(self, request, url, parent=None, qwebview=None):
+        QNetworkReply.__init__(self, parent)
         self.qwebview = qwebview
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
@@ -39,9 +39,9 @@ class PyChmNetReply(QNetworkReply):
             self.m_length = 0
             self.m_data = StringIO.StringIO('')
         self.left = self.m_length
-        self.setHeader(QNetworkRequest.ContentLengthHeader,QVariant(QtCore.QByteArray.number(self.m_length)))
-#        QTimer.singleShot(0,self,QtCore.SIGNAL('metaDataChanged()'))
-        QTimer.singleShot(0,self,QtCore.SIGNAL('readyRead()'))
+        self.setHeader(QNetworkRequest.ContentLengthHeader, QVariant(QtCore.QByteArray.number(self.m_length)))
+#        QTimer.singleShot(0, self, QtCore.SIGNAL('metaDataChanged()'))
+        QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
 
     def bytesAvailable(self):
         return self.left + QNetworkReply.bytesAvailable(self)
@@ -53,10 +53,10 @@ class PyChmNetReply(QNetworkReply):
         data = self.m_data.read(maxlen)
         self.left = self.m_length-self.m_data.tell()
         if self.left == 0:
-            QTimer.singleShot(0,self,QtCore.SIGNAL('finished()'))
+            QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
         return data
 
-    def loadResource(self,url):
+    def loadResource(self, url):
         chm = globalvalue.chmFile
         if not chm:
             return ''
@@ -72,7 +72,7 @@ class PyChmNetReply(QNetworkReply):
             self.setError(404,'')
             return None
         self.setContentTypeHeader(path)
-        #self.setHeader(QNetworkRequest.ContentTypeHeader,QVariant("text/html; charset=UTF-8"))
+        #self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant("text/html; charset=UTF-8"))
 #        ext=os.path.splitext(path)[1].lower()
 #        if len(ext)>0:
 #            ext=ext[1:]
@@ -81,30 +81,30 @@ class PyChmNetReply(QNetworkReply):
 #            print data.decode('gb18030')
         return data
 
-    def setContentTypeHeader(self,path):
-        ext=os.path.splitext(path)[1].lower()
+    def setContentTypeHeader(self, path):
+        ext = os.path.splitext(path)[1].lower()
         if len(ext)>0:
-            ext=ext[1:]
-        ctt_type=content_type.get(ext,'binary/octet')
-        if ctt_type.lower().startswith('text') and globalvalue.encoding!=None:
-            ctt_type+='; charset='+ globalvalue.encoding
-        self.setHeader(QNetworkRequest.ContentTypeHeader,QVariant(ctt_type))
+            ext = ext[1:]
+        ctt_type = content_type.get(ext, 'binary/octet')
+        if ctt_type.lower().startswith('text') and globalvalue.encoding is not None:
+            ctt_type += '; charset=' + globalvalue.encoding
+        self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(ctt_type))
 
 
 class PyChmNetworkAccessManager(QNetworkAccessManager):
-    def __init__(self,parent):
-        QNetworkAccessManager.__init__(self,parent)
+    def __init__(self, parent):
+        QNetworkAccessManager.__init__(self, parent)
         self.qwebview = parent
 
-    def createRequest(self,op,request,outgoingdata):
+    def createRequest(self, op, request, outgoingdata):
         scheme = request.url().scheme()
 #        print unicode(request.url().path())
-        if scheme==QLatin1String('ms-its'):
-            return PyChmNetReply(request,request.url(),self.qwebview,self.qwebview)
-        return QNetworkAccessManager.createRequest(self,op,request,outgoingdata)
+        if scheme == QLatin1String('ms-its'):
+            return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
+        return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
 
 class PyChmWebView(QWebView):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         '''
         zoom: zoom out times
         openedpg: current openedpage
@@ -113,17 +113,17 @@ class PyChmWebView(QWebView):
         signal 'openremoteatnewtab' will be emited(with param url:unicode)
         signal 'openRemoteUrl' will be emited(with param url:unicode)
         '''
-        QWebView.__init__(self,parent)
+        QWebView.__init__(self, parent)
         self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
         #self.setUrl(QtCore.QUrl('http://www.baidu.com'))
-        self.connect(self,QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
-#        self.connect(self.zob,QtCore.SIGNAL('clicked()'),self.zoomout)
-#        self.connect(self.zib,QtCore.SIGNAL('clicked()'),self.zoomin)
-#        self.connect(self.normb,QtCore.SIGNAL('clicked()'),self.normsize)
-#        self.connect(self.bb,QtCore.SIGNAL('clicked()'),self.back)
-#        self.connect(self.fb,QtCore.SIGNAL('clicked()'),self.forward)
-        self.connect(self,QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
+        self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
+#        self.connect(self.zob, QtCore.SIGNAL('clicked()'), self.zoomout)
+#        self.connect(self.zib, QtCore.SIGNAL('clicked()'), self.zoomin)
+#        self.connect(self.normb, QtCore.SIGNAL('clicked()'), self.normsize)
+#        self.connect(self.bb, QtCore.SIGNAL('clicked()'), self.back)
+#        self.connect(self.fb, QtCore.SIGNAL('clicked()'), self.forward)
+        self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
         self.zoom = 1.0
         self.setTextSizeMultiplier(1.0)
         self.reload()
@@ -134,7 +134,7 @@ class PyChmWebView(QWebView):
         '''
         zoom out fontsize
         '''
-        self.zoom/=1.2
+        self.zoom /= 1.2
         self.setTextSizeMultiplier(self.zoom)
 
     def zoomin(self):
@@ -161,16 +161,15 @@ class PyChmWebView(QWebView):
             flags |= QWebPage.FindBackward
         if casesens:
             flags |= QWebPage.FindCaseSensitively
-        self.findText(text,flags)
+        self.findText(text, flags)
 
-    def onLoadFinished(self,ok):
+    def onLoadFinished(self, ok):
         '''
         inner method
         '''
         if ok:
-            pass
-            self.page().currentFrame().setScrollBarValue(Qt.Vertical,self.scrolltopos)
-            self.scrolltopos=0
+            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.scrolltopos)
+            self.scrolltopos = 0
             globalvalue.tabs.setTabName(self)
         else:
 #            mb=QtGui.QMessageBox(self)
@@ -182,7 +181,7 @@ class PyChmWebView(QWebView):
 
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
-        dlg = QtGui.QPrintDialog(printer,self)
+        dlg = QtGui.QPrintDialog(printer, self)
         if dlg.exec_()!=QtGui.QDialog.Accepted:
             return
         self.print_(printer)
@@ -193,107 +192,106 @@ class PyChmWebView(QWebView):
     def forward(self):
         self.history().forward()
 
-    def contextMenuEvent(self,e):
+    def contextMenuEvent(self, event):
         '''
         inner method
         '''
-        m = QtGui.QMenu(self)
-        link = self.anchorAt(e.pos())
-        if link!=None:
-            self.keepnewtaburl=link
-            m.addAction(u'在新标签页打开',self.openinnewtab)
-            m.exec_(e.globalPos())
+        menu = QtGui.QMenu(self)
+        link = self.anchorAt(event.pos())
+        if link is not None:
+            self.keepnewtaburl = link
+            menu.addAction(u'在新标签页打开', self.openinnewtab)
+            menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
-            m.addAction(u'复制', self.copyToClipboard)
-            m.exec_(e.globalPos())
+            menu.addAction(u'复制', self.copyToClipboard)
+            menu.exec_(event.globalPos())
 
     def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())
 
-    def mousePressEvent(self,e):
+    def mousePressEvent(self, event):
         '''
         inner method
         '''
-        if e.button()!=QtCore.Qt.MidButton:
-            QWebView.mousePressEvent(self,e)
+        if event.button() != QtCore.Qt.MidButton:
+            QWebView.mousePressEvent(self, event)
             return
-        link=self.anchorAt(e.pos())
-        self.keepnewtaburl=link
-        if self.keepnewtaburl!=None and len(self.keepnewtaburl)!=0:
-            if self.keepnewtaburl[0:4]=='http':
-                self.emit(QtCore.SIGNAL('openremoteatnewtab'),self.keepnewtaburl)
+        link = self.anchorAt(event.pos())
+        self.keepnewtaburl = link
+        if self.keepnewtaburl is not None and len(self.keepnewtaburl) != 0:
+            if self.keepnewtaburl[0:4] == 'http':
+                self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
                 return
-            self.emit(QtCore.SIGNAL('openatnewtab'),self.keepnewtaburl)
+            self.emit(QtCore.SIGNAL('openatnewtab'), self.keepnewtaburl)
 
 
-    def anchorAt(self,pos):
+    def anchorAt(self, pos):
         '''
         inner method
         '''
-        res=self.page().currentFrame().hitTestContent(pos)
+        res = self.page().currentFrame().hitTestContent(pos)
         if not res.linkUrl().isValid():
             return None
-        qurl=res.linkUrl()
-        if qurl.scheme()=='http' or qurl.scheme()=='https':
+        qurl = res.linkUrl()
+        if qurl.scheme() == 'http' or qurl.scheme()== 'https' :
             return unicode(qurl.toString())
-        if qurl.scheme()!='ms-its':
+        if qurl.scheme() != 'ms-its':
             return None
-        url=unicode(qurl.path())
-        if url==u'/':
-            url=globalvalue.chmFile.HomeUrl
-        isnew,ochm,pg=urltools.isnewchmurl(unicode(qurl.toString()))
+        url = unicode(qurl.path())
+        if url == u'/':
+            url = globalvalue.chmFile.HomeUrl
+        isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
-            ochm=os.path.join(os.path.dirname(globalvalue.chmpath),ochm)
-            if ochm!=globalvalue.chmpath:
-                url=pg
+            ochm = os.path.join(os.path.dirname(globalvalue.chmpath), ochm)
+            if ochm != globalvalue.chmpath:
+                url = pg
             else:
                 return None
-        url=os.path.normpath(url)
+        url = os.path.normpath(url)
         return url
 
     def openinnewtab(self):
         '''
         inner method
         '''
-        if self.keepnewtaburl!=None and len(self.keepnewtaburl)!=0:
-            if self.keepnewtaburl[0:4]=='http':
-                self.emit(QtCore.SIGNAL('openremoteatnewtab'),self.keepnewtaburl)
+        if self.keepnewtaburl is not None and len(self.keepnewtaburl) != 0:
+            if self.keepnewtaburl[0:4] == 'http':
+                self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
                 return
-            self.emit(QtCore.SIGNAL('openatnewtab'),self.keepnewtaburl)
+            self.emit(QtCore.SIGNAL('openatnewtab'), self.keepnewtaburl)
 
-    def onLinkClicked(self,qurl):
+    def onLinkClicked(self, qurl):
         '''
         inner method
         '''
-        if qurl.scheme()=='http' or qurl.scheme()=='https':
+        if qurl.scheme() == 'http' or qurl.scheme() == 'https':
             #self.openPage(unicode(qurl.toString())) #delete this and emit the url #######################################
-            self.emit(QtCore.SIGNAL('openRemoteUrl'),unicode(qurl.toString()))
+            self.emit(QtCore.SIGNAL('openRemoteUrl'), unicode(qurl.toString()))
             return
-        if qurl.scheme()!='ms-its':
+        if qurl.scheme() != 'ms-its':
             return
-        url=unicode(qurl.path())
-        if url==u'/':
-            url=globalvalue.chmFile.HomeUrl
-        isnew,ochm,pg=urltools.isnewchmurl(unicode(qurl.toString()))
+        url = unicode(qurl.path())
+        if url == u'/':
+            url = globalvalue.chmFile.HomeUrl
+        isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
-            ochm=os.path.join(os.path.dirname(globalvalue.chmpath),ochm)
-            if ochm!=globalvalue.chmpath:
-                url=pg
+            ochm = os.path.join(os.path.dirname(globalvalue.chmpath), ochm)
+            if ochm != globalvalue.chmpath:
+                url = pg
             else:
-                pass
                 return
-        url=os.path.normpath(url)
+        url = os.path.normpath(url)
         #self.openPage(url) #delete this and emit the url #######################################
-        self.emit(QtCore.SIGNAL('openUrl'),url)
+        self.emit(QtCore.SIGNAL('openUrl'), url)
 
-#    def clearurl(self,url):
+#    def clearurl(self, url):
 #        if len(url)==0:
 #            return None
 #        if urltools.isjsurl(url):
 #            return None
 #        if urltools.isRemoteURL(url)[0]:
 #            return None
-#        isnew,ochm,pg=urltools.isnewchmurl(url)
+#        isnew, ochm, pg=urltools.isnewchmurl(url)
 #        if isnew:
 #            if os.path.abspath(ochm)!=os.path.abspath(globalvalue.chmpath):
 #                url=pg
@@ -307,40 +305,40 @@ class PyChmWebView(QWebView):
 #        url=os.path.normpath(url)
 #        return url
 
-    def openPage(self,url):
+    def openPage(self, url):
         '''
         url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
         '''
-        assert isinstance(url,QtCore.QString) or isinstance(url,unicode)
-        if isinstance(url,QtCore.QString):
-            url=unicode(url)
-        if url[0:4]=='http':
+        assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
+        if isinstance(url, QtCore.QString):
+            url = unicode(url)
+        if url[0:4] == 'http':
 #            if not globalvalue.globalcfg.openremote:
 #                return
             self.load(QtCore.QUrl(url))
             globalvalue.tabs.setTabName(self)
-            self.openedpg=url
+            self.openedpg = url
             return
-        if url==u'/':
-            url=globalvalue.chmFile.HomeUrl
+        if url == u'/':
+            url = globalvalue.chmFile.HomeUrl
         try:
-            pos=url.index(u'://')
-            if url[0:pos]!=u'ms-its': #just for url in chmfile
+            pos = url.index(u'://')
+            if url[0:pos] != u'ms-its': #just for url in chmfile
                 return
-            url=url[0:pos]+os.path.normpath(url[pos+3:])
+            url = url[0:pos]+os.path.normpath(url[pos+3:])
         except:
-            url=os.path.normpath(url)
-            if url[0]!=u'/':
-                url=u'/'+url
-            url=os.path.normpath(url)
+            url = os.path.normpath(url)
+            if url[0] != u'/':
+                url = u'/' + url
+            url = os.path.normpath(url)
 
         if not url.lower().startswith(u'ms-its://'):
-            url=u'ms-its://'+url
+            url = u'ms-its://'+url
         #self.setUrl(QtCore.QUrl(url))
         self.load(QtCore.QUrl(url))
         #set title on tab
         globalvalue.tabs.setTabName(self)
-        self.openedpg=url[9:]
+        self.openedpg = url[9:]
         return True
 
     def getScrollPos(self):
@@ -349,12 +347,12 @@ class PyChmWebView(QWebView):
         '''
         return self.page().currentFrame().scrollBarValue(Qt.Vertical)
 
-    def setScrollPos(self,pos):
+    def setScrollPos(self, pos):
         '''
         set current pos of the frame
         '''
-        self.scrolltopos=pos
-        self.page().currentFrame().setScrollBarValue(Qt.Vertical,pos)
+        self.scrolltopos = pos
+        self.page().currentFrame().setScrollBarValue(Qt.Vertical, pos)
 
     def canback(self):
         return self.history().canGoBack()
@@ -362,7 +360,7 @@ class PyChmWebView(QWebView):
     def canforward(self):
         return self.history().canGoForward()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     from pychmfile import PyChmFile
     globalvalue.chmFile = PyChmFile()
