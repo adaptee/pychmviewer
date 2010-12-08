@@ -222,9 +222,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.setWindowTitle(globalvalue.chmFile.Title+u' PyChmViewer')
 
     def openFile(self):
-        file = QtGui.QFileDialog.getOpenFileName(None, u'choose file', globalvalue.globalcfg.lastdir,
-                u'CHM files (*.chm)')
-        chmpath = unicode(file)
+        choice = QtGui.QFileDialog.getOpenFileName(None,
+                                                 u'choose file',
+                                                 globalvalue.globalcfg.lastdir,
+                                                 u'CHM files (*.chm)',
+                                                 )
+        chmpath = unicode(choice)
         chmFile = PyChmFile()
         ok = chmFile.loadFile(chmpath)
         if not ok:
