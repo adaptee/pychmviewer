@@ -57,7 +57,7 @@ def guessEncoding(contents):
     elif globalvalue.encoding:
         encoding = globalvalue.encoding
     else:
-        encoding = 'utf-8'
+        encoding = "utf-8"
 
     return encoding
 
@@ -65,17 +65,18 @@ def guessEncoding(contents):
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
+
         self.setupUi(self)
         self.searchBox.setFocus()
-        self.connect(self.btnGo, QtCore.SIGNAL('clicked()'), self.onReturnPressed)
-        self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
+        self.connect(self.btnGo, QtCore.SIGNAL('clicked()'), self.search)
+        self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.search)
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
 
     def clear(self):
         self.tree.clear()
         self.searchBox.lineEdit().clear()
 
-    def search(self, rexp):
+    def searchBySelf(self, rexp):
         filenames = filterByExt( getFilenames(), getExtensions() )
         if not filenames:
             return
@@ -117,19 +118,12 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
 
-    def onReturnPressed(self):
-        text = self.searchBox.lineEdit().text()
-        text = unicode(text).strip()
-        if text == u'':
-            return
-        if globalvalue.globalcfg.sengine_own:
-            self.search(text)
-            return
+    def searchByOthers(self, rexp):
         if not globalvalue.chmFile.IsSearchable():
             return
         self.tree.clear()
-        rt = globalvalue.chmFile.Search(text)
-        for entry in rt:
+        results = globalvalue.chmFile.search(text)
+        for entry in results:
             for url in entry.urls:
                 item = QTreeWidgetItem(self.tree)
                 item.url = url
@@ -137,8 +131,20 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
                 item.setText(1, url)
         self.tree.update()
 
+    def search(self):
+        text = self.searchBox.lineEdit().text()
+        text = unicode(text).strip()
+        if not text :
+            return
+
+        if globalvalue.globalcfg.sengine_own:
+            self.searchBySelf(text)
+        else:
+            self.searchByOthers(text)
+
+
     def onDoubleClicked(self, item, col):
-        if item is None:
+        if not item :
             return
         self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
