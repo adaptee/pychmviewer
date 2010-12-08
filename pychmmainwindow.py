@@ -183,10 +183,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.genc.addAction(action)
         encmenu.addAction(action)
 
-        for a, b in encodings:
+        for language, encoding in encodings:
             action = QAction(self)
-            action.setText(a+'-*- '+b)
-            action.encoding = b
+            action.setText(language + '-*- ' + encoding)
+            action.encoding = encoding
             action.setCheckable(True)
             self.genc.addAction(action)
             encmenu.addAction(action)
@@ -197,8 +197,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onEncodingChg(self, action):
         globalvalue.encoding = action.encoding
-        for v in self.WebViewsWidget.windows:
-            v.reload()
+        for window in self.WebViewsWidget.windows:
+            window.reload()
 
     def inital(self):
         globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
@@ -217,7 +217,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.setWindowTitle(globalvalue.chmFile.Title+u' PyChmViewer')
 
     def openFile(self):
-        file = QtGui.QFileDialog.getOpenFileName(None, u'choose file',globalvalue.globalcfg.lastdir,
+        file = QtGui.QFileDialog.getOpenFileName(None, u'choose file', globalvalue.globalcfg.lastdir,
                 u'CHM files (*.chm)')
         chmpath = unicode(file)
         chmFile = PyChmFile()
@@ -264,7 +264,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def viewForward(self):
         globalvalue.currentwebview.forward()
 
-    def closeEvent(self,e):
+    def closeEvent(self, e):
         self.WebViewsWidget.savealltab(self.conf.lastconfdb)
         e.accept()
 
@@ -275,16 +275,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
         if len(od) == 0:
             return
-        ok,filelist = getfilelist(globalvalue.chmpath)
+        ok, filelist = getfilelist(globalvalue.chmpath)
         if not ok:
             return
-        prgrs = QtGui.QProgressDialog(u'Extract chm file',u'Abort',
+        prgrs = QtGui.QProgressDialog(u'Extract chm file', u'Abort',
                0, len(filelist),self)
         prgrs.forceShow()
         od = unicode(od).encode(sys.getfilesystemencoding())
-        for i,opath in enumerate(filelist):
+        for i, opath in enumerate(filelist):
             prgrs.setValue(i)
-            if i%5 == 0:
+            if i % 5 == 0:
                 if prgrs.wasCanceled():
                     break
             fpath = opath.decode('utf-8').encode(sys.getfilesystemencoding())
