@@ -15,13 +15,15 @@ import globalvalue
 from Ui_settingdlg import Ui_Dialog
 
 # FIXME; ugly name and location
-def font_info(config):
-    template = u"Font family: %s\nFont size: %s"
-
+def get_font_info(config):
     family = config.fontfamily or "default"
     size   = config.fontsize or "default"
+    return family, size
 
+def stringlize_font_info(family, size):
+    template = u"Font family: %s\nFont size: %s"
     return template % (family, size)
+
 
 
 class SettingDlg(QtGui.QDialog, Ui_Dialog):
@@ -48,7 +50,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.fontfamily = globalvalue.globalcfg.fontfamily
         self.fontsize = globalvalue.globalcfg.fontsize
 
-        text = font_info(globalvalue.globalcfg)
+        text = stringlize_font_info(*get_font_info(globalvalue.globalcfg))
         self.label.setText(text)
 
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
@@ -103,10 +105,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             self.loadlasttime = False
 
     def onOpenRemote(self):
-        if self.openRemoteCheckbox.isChecked():
-            self.openremote = True
-        else:
-            self.openremote = False
+        self.openremote = True if self.openRemoteCheckbox.isChecked() else False
         self.msglabel.setText(u'重启后生效')
 
 
@@ -117,7 +116,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             self.fontsize = font.pixelSize()
             if self.fontsize == -1:
                 self.fontsize = font.pointSize()
-            text = u'font family: ' + self.fontfamily + u'\nfont size: ' + str(self.fontsize)
+            text = stringlize_font_info(self.fontfamily, self.fontsize)
             self.label.setText(text)
 
 
