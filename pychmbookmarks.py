@@ -177,8 +177,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item = PyChmBookmarkItem(self.list)
             key = key.decode('utf-8')
             item.name = key
-            item.setText(key)
             item.setUrlandPos(value)
+            item.setText(key)
 
         self.dataloaded = True
 
