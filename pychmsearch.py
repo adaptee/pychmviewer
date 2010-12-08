@@ -150,14 +150,22 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
 if __name__ == "__main__":
+
     import sys
+    import locale
     from pychmfile import PyChmFile
-    globalvalue.chmpath = u'sb.chm'
-    globalvalue.chmFile = PyChmFile()
-    globalvalue.chmFile.loadFile(globalvalue.chmpath)
-    app = QtGui.QApplication(sys.argv)
-    sch = PyChmSearchView()
-    sch.show()
-    sys.exit(app.exec_())
+
+    default_encoding = locale.getdefaultlocale()[1]
+
+    if len(sys.argv) > 1:
+
+        globalvalue.chmpath = sys.argv[1].decode(default_encoding)
+        globalvalue.chmFile = PyChmFile()
+        globalvalue.chmFile.loadFile(globalvalue.chmpath)
+
+        app = QtGui.QApplication(sys.argv)
+        sch = PyChmSearchView()
+        sch.show()
+        sys.exit(app.exec_())
 
 
