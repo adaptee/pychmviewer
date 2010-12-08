@@ -159,7 +159,7 @@ class PyChmFile(object):
     def __hasindextable(self):
         self.__getIndexTable()
         return self.__index_table is not None and len(self.__index_table) != 0
-    HasIndex = property(__hasindextable)
+    hasIndex = property(__hasindextable)
 
     def IsSearchable(self):
         return self.__chm.IsSearchable()
