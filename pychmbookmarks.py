@@ -11,7 +11,6 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
-from PyQt4.QtCore import QString
 
 from Ui_tab_bookmarks import Ui_TabBookmarks
 import globalvalue
@@ -37,7 +36,7 @@ class PyChmBookmarkItem(QListWidgetItem):
         try:
             del db[name]
             db.sync()
-        except:
+        except StandardError :
             pass
 
     def seturlandpos(self, db_value):
@@ -66,6 +65,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                             default=u"new bookmark",
                         ):
 
+        #TODO: make sure the dialog is always wide enough ,
+        # to show the title completely.
         name, ok = QtGui.QInputDialog.getText( self,
                                                title,
                                                prompt,
@@ -89,20 +90,18 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                                       prompt=prompt,
                                       default=default,
                                     )
-        if not name:
-            return u""
+        if name :
+            # name confliction is not allowed
+            while self.db.has_key(name.encode('utf-8')):
 
-        # name confliction is not allowed
-        while self.db.has_key(name.encode('utf-8')):
-
-            title = u"name confliction"
-            prompt = u"Bookmark named as '%s' already exists, choose another name." % name
-            name = self._getNameFromUser( title=title,
-                                          prompt=prompt,
-                                          default=name,
-                                        )
-            if not name:
-                return u""
+                title = u"name confliction"
+                prompt = u"Bookmark named as '%s' already exists, choose another name." % name
+                name = self._getNameFromUser( title=title,
+                                            prompt=prompt,
+                                            default=name,
+                                            )
+                if not name:
+                    break
 
         return name
 
