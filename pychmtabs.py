@@ -30,29 +30,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         if self.tabWidget.count() > 0:
             self.tabWidget.removeTab(0)
+
         self.connect(self.tabWidget,
-                QtCore.SIGNAL('currentChanged(int)'), self.onTabChanged)
+                     QtCore.SIGNAL('currentChanged(int)'),
+                     self.onTabChanged
+                    )
 
-        self.closeButton = QtGui.QToolButton(self)
-        self.closeButton.setCursor(QtCore.Qt.ArrowCursor)
-        self.closeButton.setAutoRaise(True)
-        icon  =  QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/images/closetab.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.closeButton.setIcon(icon)
-        self.closeButton.setToolTip(u'close current page')
-        self.closeButton.setEnabled(False)
-        self.connect(self.closeButton, QtCore.SIGNAL('clicked()'), self.onCloseCurrentTab)
-        self.tabWidget.setCornerWidget(self.closeButton, QtCore.Qt.TopRightCorner)
-
-        self.newButton = QtGui.QToolButton(self)
-        self.newButton.setCursor(QtCore.Qt.ArrowCursor)
-        self.newButton.setAutoRaise(True)
-        icon  =  QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/images/addtab.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.newButton.setIcon(icon)
-        self.newButton.setToolTip(u'add page')
-        self.connect(self.newButton, QtCore.SIGNAL('clicked()'), self.onOpenNewTab)
-        self.tabWidget.setCornerWidget(self.newButton, QtCore.Qt.TopLeftCorner)
+        self._setupCloseButton()
+        self._setupNewButton()
 
         self.frameFind.setVisible(False)
 
@@ -65,6 +50,40 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
 
         self.windows = []
+
+    def _setupCloseButton(self):
+
+        self.closeButton = self._createButton(pixmap=":/images/closetab.png",
+                                              tooltip=u"close current page",
+                                             )
+        self.closeButton.setEnabled(False)
+        self.connect(self.closeButton, QtCore.SIGNAL('clicked()'), self.onCloseCurrentTab)
+        self.tabWidget.setCornerWidget(self.closeButton, QtCore.Qt.TopRightCorner)
+
+    def _setupNewButton(self):
+        self.newButton = self._createButton(pixmap=":/images/addtab.png",
+                                            tooltip=u"open new page",
+                                           )
+        self.connect(self.newButton, QtCore.SIGNAL('clicked()'), self.onOpenNewTab)
+        self.tabWidget.setCornerWidget(self.newButton, QtCore.Qt.TopLeftCorner)
+
+    def _createButton(self, pixmap, tooltip=u""):
+
+        def createIcon(pixmap_path):
+            icon = QtGui.QIcon()
+            icon.addPixmap(QtGui.QPixmap(pixmap_path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            return icon
+
+        icon   = createIcon(pixmap)
+        button = QtGui.QToolButton(self)
+
+        button.setCursor(QtCore.Qt.ArrowCursor)
+        button.setAutoRaise(True)
+        button.setIcon(icon)
+        button.setToolTip(tooltip)
+
+        return button
+
 
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Find):
