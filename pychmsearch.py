@@ -13,10 +13,24 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from Ui_tab_search import Ui_TabSearch
 from extract_chm import getfilelist
+from Ui_tab_search import Ui_TabSearch
 
 
+
+def getExtensions():
+    extensions= []
+
+    for a, b in globalvalue.globalcfg.searchext.iteritems():
+        if b:
+            extensions.append(a)
+
+    return extensions
+
+def getFilenames():
+
+    ok, filenames = getfilelist(globalvalue.chmpath)
+    return filenames if ok else [ ]
 
 def filterByExt(filenames, exts):
     if not filenames or not exts:
@@ -24,7 +38,6 @@ def filterByExt(filenames, exts):
 
     filenames = [ filename.lower() for filename in filenames  ]
     exts      = [ ext.lower() for ext in exts  ]
-
     results   = [ ]
 
     for filename in filenames:
@@ -34,24 +47,11 @@ def filterByExt(filenames, exts):
 
     return results
 
-def getExtensions():
-    extensions= []
-
-    for a, b in globalvalue.globalcfg.searchext.iteritems():
-        if b:
-            extensions.append(a)
-    return extensions
-
-def getFilenames():
-
-    ok, filenames = getfilelist(globalvalue.chmpath)
-    return filenames if ok else [ ]
 
 def guessEncoding(contents):
     meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
     match = meta_charset.search(contents)
-
     if match:
         encoding = match.group(1)
     elif globalvalue.encoding:
@@ -104,8 +104,9 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
                                   match.group(0).decode(encoding, 'ignore'),)
                               )
 
-        self.showSearchResults(results)
         progress.setValue( len(filenames) )
+
+        self.showSearchResults(results)
 
 
     #FIXME; temporary name
