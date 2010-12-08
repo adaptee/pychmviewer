@@ -10,23 +10,24 @@
 import sys
 import os
 import exceptions
+from ConfigParser import ConfigParser
 #FIXME; this module is deprecated and marked to be removal in future
 import bsddb
+
 from md5sum import md5sum
-from ConfigParser import ConfigParser
 
 home          = os.environ['HOME']
 cfghome       = os.path.join(home, '.pychmviewer')
-globalcfgfile = os.path.join(cfghome, 'config.cfg')
+globalcfgfile = os.path.join(cfghome, 'pychmviewer.cfg')
 encoding      = sys.getfilesystemencoding()
 
 class GlobalConfig(object):
     def __getlastdir(self):
         return self.__lastdir.decode(encoding)
 
-    def __setlastdir(self, v):
-        assert isinstance(v, unicode)
-        self.__lastdir = v.encode(encoding)
+    def __setlastdir(self, value):
+        assert isinstance(value, unicode)
+        self.__lastdir = value.encode(encoding)
 
     lastdir = property(__getlastdir, __setlastdir)
 
