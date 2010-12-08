@@ -16,6 +16,10 @@ from PyQt4.QtCore import QString
 from Ui_tab_bookmarks import Ui_TabBookmarks
 import globalvalue
 
+def getCurrentWebView():
+    return globalvalue.currentwebview
+
+
 class PyChmBookmarkItem(QListWidgetItem):
     def __init__(self, parent, name=None, url=None, pos=None):
         QListWidgetItem.__init__(self, parent)
@@ -63,14 +67,22 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         inner method
         '''
-        url = globalvalue.currentwebview.openedpg
-        title = globalvalue.currentwebview.title()
 
-        if title is None:
-            title = u'new bookmark'
-        name, ok = QtGui.QInputDialog.getText(self, u'add bookmark', u'input the name of this bookmark',
-                QtGui.QLineEdit.Normal,title)
-        if not ok or len(name) == 0:
+        webview = getCurrentWebView()
+
+        url          = webview.openedpg
+        title        = webview.title()
+        pos          = webview.getScrollPos()
+
+        default_name = title or u"new bookmark"
+
+        name, ok = QtGui.QInputDialog.getText(  self,
+                                                u'add bookmark',
+                                                u'input the name of this bookmark',
+                                                QtGui.QLineEdit.Normal,
+                                                default_name,
+                                              )
+        if not ok or not name:
             return
 
         while self.db.has_key(unicode(name).encode('utf-8')):
@@ -79,7 +91,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             if not ok or len(name) == 0:
                 return
 
-        pos = globalvalue.currentwebview.getScrollPos()
         item = PyChmBookmarkItem(self.list, name, url, pos)
         item.setText(name)
         item.save(self.db)
@@ -142,8 +153,12 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         inner method
         '''
-        if item is None:
+        if not item :
             return
-        if globalvalue.currentwebview.openedpg != item.url:
-            globalvalue.currentwebview.openPage(item.url)
-        globalvalue.currentwebview.setScrollPos(item.pos)
+
+        webview = getCurrentWebView()
+
+        if webview.openedpg != item.url:
+            webview.openPage(item.url)
+
+        webview.setScrollPos(item.pos)
