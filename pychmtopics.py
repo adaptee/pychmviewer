@@ -10,9 +10,18 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
+import globalvalue
 from Ui_tab_contents import Ui_TabContents
 from pychmselecttopic import PyChmSlctTopicDlg
-import globalvalue
+from utils import remove_comment
+
+
+def normalize_key(key):
+    if key and key[0] != u'/':
+        key = u'/' + key
+
+    return remove_comment(key)
+
 
 class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
     '''
@@ -27,38 +36,15 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             self.cmap = {}
 
         def get(self, key, default):
-            if key and key[0] != u'/':
-                key = u'/' + key
-
-            try:
-                pos = key.index(u'#')
-                key = key[0:pos]
-            except:
-                pass
-
+            key = normalize_key(key)
             return self.cmap.get(key, default)
 
         def __getitem__(self, key):
-
-            if key and key[0] != u'/':
-                key = u'/'+key
-            try:
-                pos = key.index(u'#')
-                key = key[0:pos]
-            except:
-                pass
-
+            key = normalize_key(key)
             return self.cmap[key]
 
         def __setitem__(self, key, value):
-            if key and key[0] != u'/':
-                key = u'/'+key
-
-            try:
-                pos = key.index(u'#')
-                key = key[0:pos]
-            except:
-                pass
+            key = normalize_key(key)
 
             if not self.cmap.has_key(key):
                 self.cmap[key] = value
