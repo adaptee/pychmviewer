@@ -16,7 +16,6 @@ import globalvalue
 from Ui_tab_search import Ui_TabSearch
 from extract_chm import getfilelist
 
-detenc = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
 
 def filterByExt(filenames, exts):
@@ -47,6 +46,20 @@ def getFilenames():
 
     ok, filenames = getfilelist(globalvalue.chmpath)
     return filenames if ok else [ ]
+
+def guessEncoding(contents):
+    meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
+
+    match = meta_charset.search(contents)
+
+    if match:
+        encoding = match.group(1)
+    elif globalvalue.encoding:
+        encoding = globalvalue.encoding
+    else:
+        encoding = 'utf-8'
+
+    return encoding
 
 
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
@@ -81,18 +94,14 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             if not file_content:
                 continue
 
-            match = detenc.search(file_content)
-            if match:
-                encoding = match.group(1)
-            elif globalvalue.encoding:
-                encoding = globalvalue.encoding
-            else:
-                encoding = 'utf-8'
+            encoding = guessEncoding(file_content)
 
             rc = re.compile(unicode(rexp).encode(encoding))
             match = rc.search(file_content)
             if match:
-                results.append((filename.decode('utf-8', 'ignore'), match.group(0).decode(encoding, 'ignore')))
+                results.append( ( filename.decode('utf-8', 'ignore'),
+                                  match.group(0).decode(encoding, 'ignore'),)
+                              )
 
         self.showSearchResults(results)
         progress.setValue( len(filenames) )
