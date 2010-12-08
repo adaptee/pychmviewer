@@ -13,6 +13,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
+from utils import getchmfile, getchmpath, getmainwindow, getencoding, getcfg
 from extract_chm import getfilelist
 from Ui_tab_search import Ui_TabSearch
 
@@ -21,7 +22,7 @@ from Ui_tab_search import Ui_TabSearch
 def getExtensions():
     extensions= []
 
-    for a, b in globalvalue.globalcfg.searchext.iteritems():
+    for a, b in getcfg().searchext.iteritems():
         if b:
             extensions.append(a)
 
@@ -29,7 +30,7 @@ def getExtensions():
 
 def getFilenames():
 
-    ok, filenames = getfilelist(globalvalue.chmpath)
+    ok, filenames = getfilelist(getchmpath())
     return filenames if ok else [ ]
 
 def filterByExt(filenames, exts):
@@ -54,8 +55,8 @@ def guessEncoding(contents):
     match = meta_charset.search(contents)
     if match:
         encoding = match.group(1)
-    elif globalvalue.encoding:
-        encoding = globalvalue.encoding
+    elif getencoding():
+        encoding = getencoding()
     else:
         encoding = "utf-8"
 
@@ -91,7 +92,8 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             if index % 5 == 0 and progress.wasCanceled() :
                     break
 
-            file_content = globalvalue.chmFile.GetFileAsStrByUrl(filename.decode('utf-8', 'ignore'))
+            chmfile = getchmfile()
+            file_content = chmfile.GetFileAsStrByUrl(filename.decode('utf-8', 'ignore'))
             if not file_content:
                 continue
 
@@ -120,10 +122,11 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.tree.update()
 
     def searchByOthers(self, rexp):
-        if not globalvalue.chmFile.IsSearchable():
+        chmfile = getchmfile()
+        if not chmfile.IsSearchable():
             return
         self.tree.clear()
-        results = globalvalue.chmFile.search(text)
+        results = chmfile.search(text)
         for entry in results:
             for url in entry.urls:
                 item = QTreeWidgetItem(self.tree)
@@ -138,7 +141,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         if not text :
             return
 
-        if globalvalue.globalcfg.sengine_own:
+        if getcfg().sengine_own:
             self.searchBySelf(text)
         else:
             self.searchByOthers(text)
