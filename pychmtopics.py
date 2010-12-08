@@ -98,8 +98,10 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         elif len(item.entry.urls) > 1:
             main_window = getmainwindow()
             dialog = PyChmSlctTopicDlg(main_window)
+            # FIXME; zip(*item.entry.urls) is a better solution ?
             titles = [a for a, b in item.entry.urls]
             urls = [b for a, b in item.entry.urls]
+
             url = dialog.getUrl(titles, urls)
 
             if url:
