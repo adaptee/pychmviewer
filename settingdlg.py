@@ -8,10 +8,11 @@
 # Description:
 #########################################################################
 
-from Ui_settingdlg import Ui_Dialog
 from PyQt4 import QtCore, QtGui
-import globalvalue
 from PyQt4.QtGui import QListWidgetItem
+
+import globalvalue
+from Ui_settingdlg import Ui_Dialog
 
 class SettingDlg(QtGui.QDialog, Ui_Dialog):
     def __init__(self, parent=None):
@@ -64,7 +65,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
     def onSlctExt(self):
         item = self.list_unsearch.currentItem()
-        if item == None:
+        if item is None:
             return
         ext = str(item.text())
         nit = QListWidgetItem(self.list_search)
