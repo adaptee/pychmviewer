@@ -157,7 +157,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.onAddPressed()
 
     def onCheckToolBar(self):
-        if globalvalue.currentwebview == None:
+        if globalvalue.currentwebview is None:
             self.nav_actionBack.setEnabled(False)
             self.nav_actionForward.setEnabled(False)
             return

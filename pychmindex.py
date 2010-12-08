@@ -74,7 +74,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         inner method for openurl
         '''
-        if item == None:
+        if item is None:
             return
         if item.isExpanded():
             item.setExpanded(False)
@@ -127,7 +127,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
                 item.entry = data[i]
                 item.setText(0, data[i].key)
             else:
-                if rootentry[indent-1] == None:
+                if rootentry[indent-1] is None:
                     print 'error no root entry'
                 item = QTreeWidgetItem(rootentry[indent-1], lastchild[indent])
                 item.entry = data[i]
