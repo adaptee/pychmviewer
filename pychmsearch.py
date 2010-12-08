@@ -62,7 +62,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.tree.clear()
         self.searchBox.lineEdit().clear()
 
-    def mySearch(self, rexp):
+    def search(self, rexp):
         filenames = filterByExt( getFilenames(), getExtensions() )
         if not filenames:
             return
@@ -94,6 +94,12 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             if match:
                 results.append((filename.decode('utf-8', 'ignore'), match.group(0).decode(encoding, 'ignore')))
 
+        self.showSearchResults(results)
+        progress.setValue( len(filenames) )
+
+
+    #FIXME; temporary name
+    def showSearchResults(self, results):
         self.tree.clear()
         for url, name in results:
             item = QTreeWidgetItem(self.tree)
@@ -102,15 +108,13 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
 
-        progress.setValue( len(filenames) )
-
     def onReturnPressed(self):
         text = self.searchBox.lineEdit().text()
         text = unicode(text).strip()
         if text == u'':
             return
         if globalvalue.globalcfg.sengine_own:
-            self.mySearch(text)
+            self.search(text)
             return
         if not globalvalue.chmFile.IsSearchable():
             return
