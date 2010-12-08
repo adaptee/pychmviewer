@@ -52,7 +52,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         def __setitem__(self, key, value):
             key = normalize_key(key)
 
-            if not self.cmap.has_key(key):
+            if not key in self.cmap:
                 self.cmap[key] = value
 
     def __init__(self, parent=None):
@@ -97,10 +97,10 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             return
         elif len(item.entry.urls) > 1:
             main_window = getmainwindow()
-            dlg = PyChmSlctTopicDlg(main_window)
+            dialog = PyChmSlctTopicDlg(main_window)
             titles = [a for a, b in item.entry.urls]
             urls = [b for a, b in item.entry.urls]
-            url = dlg.getUrl(titles, urls)
+            url = dialog.getUrl(titles, urls)
 
             if url:
                 self.emit(QtCore.SIGNAL('openUrl'), url)
@@ -122,14 +122,15 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         if self.dataloaded:
             return
 
+        self.tree.clear()
         if not data:
-            self.tree.clear()
             return
 
         self.urlmap = PyChmTopicsView.__UrlDict()
-        self.tree.clear()
+
         lastchild = []
         rootentry = []
+
         for i in xrange(len(data)):
             indent = data[i].indent
             if indent >= len(rootentry):
@@ -163,6 +164,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
                 self.urlmap[url] = item
             lastchild[indent] = item
             rootentry[indent] = item
+
         self.tree.update()
 
         self.dataloaded = True
