@@ -88,53 +88,57 @@ class PyChmFile(object):
         self.__title = u''
         self.__content_table = None
         self.__index_table = None
-        self.__chm.GetWindowsInfo()
-        self.__code = self.__chm.GetLCID()[0]
-        self.__homeurl = self.__chm.home.decode(self.__code)
-        self.__homeurl = normalize_url(self.__homeurl)
 
+        self.__chm.GetWindowsInfo()
+
+        self.__code = self.__chm.GetLCID()[0]
         if self.__code is None or self.__code == '':
             self.__code = "utf-8"
 
         self.__homeurl = self.__chm.home.decode(self.__code)
+        self.__homeurl = normalize_url(self.__homeurl)
         self.__title = self.__chm.title.decode(self.__code)
 
         return True
 
     def __getChmEncoding(self):
         return self.__code
-    chmencoding = property(__getChmEncoding, None, None, 'encoding from LCID')
+    encoding = property(__getChmEncoding, None, None, 'encoding from LCID')
 
     def __getIndexTable(self):
         if self.__index_table :
             return self.__index_table
-        #parse indextree
+
         if self.__chm.index is None:
             self.__index_table = []
             return []
-        idxurl = self.__chm.index.decode(self.__code)
-        idxctt = self.GetFileAsStrByUrl(idxurl)
-        if not idxctt:
-            idxctt = self.__chm.GetIndex()
-        if idxctt:
-            print (self.__code)
-            self.__parseIndexTable(idxctt.decode(self.__code, 'ignore'))
+
+        #parse indextree
+        index_url = self.__chm.index.decode(self.__code)
+        index_data = self.GetFileAsStrByUrl(index_url)
+        if not index_data:
+            index_data = self.__chm.GetIndex()
+        if index_data:
+            self.__parseIndexTable(index_data.decode(self.__code, 'ignore'))
         return self.__index_table
+
     index = property(__getIndexTable, None, None, "parsed indextree, list of TableEntry")
 
     def __getContentTable(self):
         if self.__content_table :
             return self.__content_table
-        # parse topictree
+
         if self.__chm.topics is None:
             self.__content_table = []
             return []
-        tpurl = self.__chm.topics.decode(self.__code)
-        tpctt = self.GetFileAsStrByUrl(tpurl)
-        if not tpctt:
-            tpctt = self.__chm.GetTopicsTree()
-        if tpctt:
-            self.__parseContentTable(tpctt.decode(self.__code) )
+
+        topic_url = self.__chm.topics.decode(self.__code)
+        topic_data = self.GetFileAsStrByUrl(topic_url)
+
+        if not topic_data:
+            topic_data = self.__chm.GetTopicsTree()
+        if topic_data:
+            self.__parseContentTable(topic_data.decode(self.__code) )
         return self.__content_table
     topic = property(__getContentTable, None, None, "parsed topictree, list of TableEntry")
 
@@ -233,19 +237,19 @@ class PyChmFile(object):
 
         return data[0:length] if length else None
 
-    def __parseContentTable(self, ctt):
+    def __parseContentTable(self, content):
         assert isinstance(ctt, unicode)
 
         parser = TableParser()
-        parser.feed(ctt)
+        parser.feed(content)
         self.__content_table = parser.EntryList
 
-    def __parseIndexTable(self, idx):
+    def __parseIndexTable(self, index):
 
         assert isinstance(idx, unicode)
 
         parser  =  TableParser()
-        parser.feed(idx)
+        parser.feed(index)
         self.__index_table = parser.EntryList
 
         self.__index_table.sort(key=lambda x:x.key)
