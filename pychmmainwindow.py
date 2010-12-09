@@ -261,6 +261,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.topicsview.locateUrl(globalvalue.currentwebview.openedpg)
 
     def openincurrenttab(self, url):
+        print "[debug] trying to open url: %s" % url
         globalvalue.currentwebview.openPage(url)
 
     def viewHome(self):
