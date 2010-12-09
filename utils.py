@@ -28,3 +28,10 @@ def getencoding():
 
 def getcfg():
     return globalvalue.globalcfg
+
+def getcurrentview():
+    return globalvalue.currentwebview
+
+def setcurrentview(view):
+    globalvalue.currentwebview = view
+
