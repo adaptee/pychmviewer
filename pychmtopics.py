@@ -12,6 +12,7 @@ from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
 from utils import remove_comment, getchmfile
+from treeview import AbstractTreeView
 from Ui_tab_contents import Ui_TabContents
 
 
@@ -22,7 +23,7 @@ def normalize_key(key):
     return remove_comment(key)
 
 
-class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
+class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
@@ -54,15 +55,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
 
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        self.setupUi(self)
-        self.tree.headerItem().setHidden(True)
-        self.connect(self.tree,
-                     QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'),
-                     self.onDoubleClicked,
-                    )
+        AbstractTreeView.__init__(self)
 
         self.url2item = PyChmTopicsView.URLDict()
-        self.dataloaded = False
 
         chmfile = getchmfile()
         if chmfile and chmfile.topics:
@@ -84,50 +79,33 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             parent.setExpanded(True)
             parent = parent.parent()
 
-    def onDoubleClicked(self, item, _col):
-        if item :
-            url = item.entry.url
-            self.emit(QtCore.SIGNAL('openUrl'), url)
-
     def clear(self):
         '''
         clear the data in the index view
         '''
-        self.tree.clear()
+        AbstractTreeView.clear(self)
         self.url2item.clear()
-        self.dataloaded = False
 
-    def loadTopics(self, tree):
-        "load data for topics tree."
-        if self.dataloaded:
-            return
+    loadTopics = AbstractTreeView.loadData
 
-        if tree:
-            self.clear()
+    #def loadNode(self, node, parent):
+        ## special case for the root of tree
+        #if not parent:
+            #parent = self.tree
 
-            self._loadNode(node=tree, parent=None)
+        #prev = None
+        #for child in node.children:
+            ## insert below `parent`, after `prev`
+            #item = QTreeWidgetItem(parent, prev)
 
-            self.tree.update()
-            self.dataloaded = True
+            #item.entry = child
+            #item.setText(0, child.name)
+            #if child.url :
+                #self.url2item[child.url] = item
 
-    def _loadNode(self, node, parent):
-        # special case for the root of tree
-        if not parent:
-            parent = self.tree
+            #self._loadNode(child, item)
 
-        prev = None
-        for child in node.children:
-            # insert below `parent`, after `prev`
-            item = QTreeWidgetItem(parent, prev)
-
-            item.entry = child
-            item.setText(0, child.name)
-            if child.url :
-                self.url2item[child.url] = item
-
-            self._loadNode(child, item)
-
-            prev = item
+            #prev = item
 
 if __name__  ==  "__main__":
 
