@@ -132,29 +132,29 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         setWebFont()
 
     def onAbout(self):
-        dlg = aboutdlg(self)
-        dlg.exec_()
+        dialog = aboutdlg(self)
+        dialog.exec_()
 
     def onSetting(self):
-        dlg = SettingDlg(self)
-        if dlg.exec_() == QtGui.QDialog.Accepted:
-            globalvalue.globalcfg.loadlasttime = dlg.loadlasttime
-            globalvalue.globalcfg.fontfamily = unicode(dlg.fontfamily)
-            globalvalue.globalcfg.fontsize = dlg.fontsize
-            globalvalue.globalcfg.openremote = dlg.openremote
-            globalvalue.globalcfg.searchext = dlg.searchext
+        dialog = SettingDlg(self)
+        if dialog.exec_() == QtGui.QDialog.Accepted:
+            globalvalue.globalcfg.loadlasttime = dialog.loadlasttime
+            globalvalue.globalcfg.fontfamily = unicode(dialog.fontfamily)
+            globalvalue.globalcfg.fontsize = dialog.fontsize
+            globalvalue.globalcfg.openremote = dialog.openremote
+            globalvalue.globalcfg.searchext = dialog.searchext
             globalvalue.globalcfg.savecfg()
             setWebFont()
             for window in self.WebViewsWidget.windows:
                 window.reload()
 
     def onViewSource(self):
-        dlg = HtmlDlg(self)
-        editor = dlg.sourceEdit
+        dialog = HtmlDlg(self)
+        editor = dialog.sourceEdit
         editor.setPlainText(globalvalue.currentwebview.page().currentFrame().toHtml())
         editor.setWindowTitle(globalvalue.currentwebview.title())
-        dlg.resize(800, 600)
-        dlg.exec_()
+        dialog.resize(800, 600)
+        dialog.exec_()
 
     def onAddBookmark(self):
         self.bookmarkview.onAddPressed()

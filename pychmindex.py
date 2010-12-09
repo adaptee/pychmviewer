@@ -67,10 +67,10 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
                 return
             elif len(item.entry.urls)>1:
                 main_window = getmainwindow()
-                dlg = PyChmSlctTopicDlg(main_window)
+                dialog = PyChmSlctTopicDlg(main_window)
                 titles = [a for a, b in item.entry.urls]
                 urls = [b for a, b in item.entry.urls]
-                url = dlg.getUrl(titles, urls)
+                url = dialog.getUrl(titles, urls)
                 if url :
                     self.emit(QtCore.SIGNAL('openUrl'), url)
                     return url
@@ -88,10 +88,10 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
             return
         elif len(item.entry.urls)>1:
             main_window = getmainwindow()
-            dlg = PyChmSlctTopicDlg(main_window)
+            dialog = PyChmSlctTopicDlg(main_window)
             titles = [a for a, b in item.entry.urls]
             urls = [b for a, b in item.entry.urls]
-            url = dlg.getUrl(titles, urls)
+            url = dialog.getUrl(titles, urls)
             if url:
                 self.emit(QtCore.SIGNAL('openUrl'), url)
                 return url
