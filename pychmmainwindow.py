@@ -219,7 +219,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.indexview.loaddata(globalvalue.chmFile.index)
         self.topicsview.loaddata(globalvalue.chmFile.topic)
         self.bookmarkview.loadData()
-        self.setWindowTitle(globalvalue.chmFile.Title+u' PyChmViewer')
+        self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
 
     def openFile(self):
         choice = QtGui.QFileDialog.getOpenFileName(None,
