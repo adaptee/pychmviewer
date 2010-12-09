@@ -88,24 +88,24 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
 
     loadTopics = AbstractTreeView.loadData
 
-    #def loadNode(self, node, parent):
-        ## special case for the root of tree
-        #if not parent:
-            #parent = self.tree
+    def loadNode(self, node, parent):
+        # special case for the root of tree
+        if not parent:
+            parent = self.tree
 
-        #prev = None
-        #for child in node.children:
-            ## insert below `parent`, after `prev`
-            #item = QTreeWidgetItem(parent, prev)
+        prev = None
+        for child in node.children:
+            # insert below `parent`, after `prev`
+            item = QTreeWidgetItem(parent, prev)
 
-            #item.entry = child
-            #item.setText(0, child.name)
-            #if child.url :
-                #self.url2item[child.url] = item
+            item.entry = child
+            item.setText(0, child.name)
+            if child.url :
+                self.url2item[child.url] = item
 
-            #self._loadNode(child, item)
+            self._loadNode(child, item)
 
-            #prev = item
+            prev = item
 
 if __name__  ==  "__main__":
 
