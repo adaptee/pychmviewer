@@ -154,7 +154,7 @@ class PyChmFile(object):
         return bool(self.__index_table)
     hasIndex = property(__hasindextable)
 
-    def IsSearchable(self):
+    def isSearchable(self):
         return self.__chm.IsSearchable()
 
     def Search(self, text, wholewords=0, titleonly=0):
@@ -169,7 +169,7 @@ class PyChmFile(object):
         item.urls being list of unicode
         '''
 
-        if not self.IsSearchable():
+        if not self.isSearchable():
             return None
 
         assert isinstance(text, unicode)
