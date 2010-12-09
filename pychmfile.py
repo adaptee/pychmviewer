@@ -231,22 +231,15 @@ class PyChmFile(object):
     def __parseContentTable(self, content):
         assert isinstance(content, unicode)
 
-        #parser = TableParser()
-        #parser.feed(content)
-        #self.__content_table = parser.EntryList
-
         self.__content_table = self.__parseTable(content)
 
     def __parseIndexTable(self, index):
 
         assert isinstance(index, unicode)
 
-        #parser  =  TableParser()
-        #parser.feed(index)
-        #self.__index_table = parser.EntryList
-
         self.__index_table = self.__parseTable(index)
         self.__index_table.sort(key=lambda x:x.key)
+
 
 class TableParser(HTMLParser):
     def __init__(self):
