@@ -47,6 +47,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         items = self.tree.findItems(v, QtCore.Qt.MatchStartsWith)
         if items:
+            #FIXME; I feel somthing wrong here
             item = items[0]
             self.tree.setCurrentItem(item)
             self.tree.scrollToItem(item)
@@ -63,12 +64,8 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
             item = self.lastitem
             self.emit(QtCore.SIGNAL('openUrl'), item.entry.url)
 
-    def onDoubleClicked(self, item, col):
+    def onDoubleClicked(self, item, _col):
         if item :
-            # FIXME; is this right?
-            if item.isExpanded():
-                item.setExpanded(False)
-
             url = item.entry.url
             self.emit(QtCore.SIGNAL('openUrl'), url)
 
