@@ -11,17 +11,10 @@
 import sys
 import re
 import os.path
+from chm.chm import CHMFile
 from HTMLParser import HTMLParser
 
 from utils import remove_comment
-
-try:
-    from pychm.chm import CHMFile
-    has_pychm = True
-except ImportError :
-    from chm.chm import CHMFile
-    print ("Can't find pychm.chm.CHMFile, use CHMFile instead")
-    has_pychm = False
 
 def normalize_url(url):
     if not url:
@@ -185,18 +178,11 @@ class PyChmFile(object):
         rt   = self.__chm.Search(text, wholewords, titleonly)
         srt  = []
 
-        if has_pychm:
-            for k, v in rt.iteritems():
-                entry = TableEntry()
-                entry.key = k.decode(self.__code)
-                entry.urls = [v.decode(self.__code) for v in v]
-                srt.append(entry)
-        else:
-            for k, v in rt[1].items():
-                entry = TableEntry()
-                entry.key = k.decode(self.__code)
-                entry.urls = [v.decode(self.__code),]
-                srt.append(entry)
+        for k, v in rt[1].items():
+            entry = TableEntry()
+            entry.key = k.decode(self.__code)
+            entry.urls = [v.decode(self.__code),]
+            srt.append(entry)
 
         return srt
 
