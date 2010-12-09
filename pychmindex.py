@@ -77,15 +77,13 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         if self.dataloaded:
             return
 
-        if not tree:
-            return
+        if tree:
+            self.clear()
 
-        self.clear()
+            self._loadNode(node=tree, parent=None)
 
-        self._loadNode(node=tree, parent=None)
-
-        self.tree.update()
-        self.dataloaded = True
+            self.tree.update()
+            self.dataloaded = True
 
     def _loadNode(self, node, parent):
         # special case for the root of tree

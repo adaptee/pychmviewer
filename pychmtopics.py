@@ -11,8 +11,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from pychmselecttopic import PyChmSlctTopicDlg
-from utils import remove_comment, getchmfile, getmainwindow
+from utils import remove_comment, getchmfile
 from Ui_tab_contents import Ui_TabContents
 
 
@@ -86,12 +85,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             parent = parent.parent()
 
     def onDoubleClicked(self, item, col):
-        if not item :
-            return
-
-        url = item.entry.url
-        self.emit(QtCore.SIGNAL('openUrl'), url)
-
+        if item :
+            url = item.entry.url
+            self.emit(QtCore.SIGNAL('openUrl'), url)
 
     def clear(self):
         '''
@@ -106,15 +102,13 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         if self.dataloaded:
             return
 
-        if not tree:
-            return
+        if tree:
+            self.clear()
 
-        self.clear()
+            self._loadNode(node=tree, parent=None)
 
-        self._loadNode(node=tree, parent=None)
-
-        self.tree.update()
-        self.dataloaded = True
+            self.tree.update()
+            self.dataloaded = True
 
     def _loadNode(self, node, parent):
         # special case for the root of tree
