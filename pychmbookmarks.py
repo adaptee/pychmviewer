@@ -154,7 +154,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         if not self.db or self.dataloaded:
             return
 
-        self.loadData()
+        self.loadBookmarks()
 
     def clearandsetdb(self, db):
         '''
@@ -164,9 +164,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.list.clear()
         self.dataloaded = False
 
-    def loadData(self):
+    def loadBookmarks(self):
         '''
-        loadData from db
+        load Bookmarks from db
         '''
         if self.dataloaded:
             return
