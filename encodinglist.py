@@ -29,8 +29,8 @@ encodings = [
 	    (u'Turkish', 'cp1026'),
 	    (u'Central and Eastern Europe', 'cp1250'),
 	    (u'Greek', 'cp1253'),
-	    (u'unicode', 'utf_32'),
-	    (u'unicode', 'utf_16'),
-	    (u'utf-7', 'utf_7'),
-	    (u'utf-8', 'utf_8'),
+	    (u'unicode', 'utf-32'),
+	    (u'unicode', 'utf-16'),
+	    (u'utf-7', 'utf-7'),
+	    (u'utf-8', 'utf-8'),
 	]
