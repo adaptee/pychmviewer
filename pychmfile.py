@@ -141,7 +141,7 @@ class PyChmFile(object):
         return self._index_table
 
     @property
-    def topic(self):
+    def topics(self):
         if self._content_table :
             return self._content_table
 
