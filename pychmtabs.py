@@ -13,7 +13,7 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 
 import globalvalue
-from utils import getchmfile, getcfg
+from utils import getchmfile, getcfg, getcurrentview, setcurrentview
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -109,13 +109,16 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         if active or len(self.windows) == 1:
             self.tabWidget.setCurrentWidget(view)
-            globalvalue.currentwebview = view #set the current web view, so other part will know
+
+            #set the current web view, so other part will know
+            setcurrentview(view)
+
             # FIXME
             #self.parent().currentwebview = view
-        self.connect(view, QtCore.SIGNAL('openUrl'), globalvalue.currentwebview.openPage)
+        self.connect(view, QtCore.SIGNAL('openUrl'), getcurrentview().openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenatNewTab)
         if getcfg().openremote:
-            self.connect(view, QtCore.SIGNAL('openRemoteUrl'), globalvalue.currentwebview.openPage)
+            self.connect(view, QtCore.SIGNAL('openRemoteUrl'), getcurrentview().openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenatNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
         self.emit(QtCore.SIGNAL('newtabadded'), view)
@@ -157,8 +160,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onTabChanged(self, tabnum):
         if tabnum == -1:
             return
-        globalvalue.currentwebview = self.tabWidget.widget(tabnum)
-        globalvalue.currentwebview.setFocus()
+        setcurrentview( self.tabWidget.widget(tabnum) )
+        getcurrentview().setFocus()
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def closeAll(self):
@@ -169,7 +172,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if len(self.windows) == 1:
             return
         self.closeTab(self.tabWidget.currentWidget())
-        globalvalue.currentwebview = self.tabWidget.currentWidget()
+        setcurrentview(self.tabWidget.currentWidget() )
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg
