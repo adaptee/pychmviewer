@@ -29,8 +29,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        if self.tabWidget.count() > 0:
-            self.tabWidget.removeTab(0)
+        # FIXME; how could this happen?
+        #if self.tabWidget.count() > 0:
+            #self.tabWidget.removeTab(0)
 
         self.connect(self.tabWidget,
                      QtCore.SIGNAL('currentChanged(int)'),
@@ -85,7 +86,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         return button
 
-
+    # called when keyboard is pressed
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Find):
             self.frameFind.show()
@@ -95,6 +96,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             selectedText = self.tabWidget.currentWidget().selectedText()
             if not selectedText.isEmpty():
                 QtGui.QApplication.clipboard().setText(selectedText)
+        elif event.matches(QtGui.QKeySequence.SelectedAll):
+            # TODO ; implement this!
+            print ("[debug] keyboard event: SelectAll")
+            pass
 
 
     def onFindReturnPressed(self):
@@ -116,10 +121,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             # FIXME
             #self.parent().currentwebview = view
         self.connect(view, QtCore.SIGNAL('openUrl'), getcurrentview().openPage)
-        self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenatNewTab)
+        self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
         if getcfg().openremote:
             self.connect(view, QtCore.SIGNAL('openRemoteUrl'), getcurrentview().openPage)
-            self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenatNewTab)
+            self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
         self.emit(QtCore.SIGNAL('newtabadded'), view)
         self.updateCloseButton()
@@ -152,7 +157,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         enable = len(self.windows) > 1
         self.closeButton.setEnabled(enable)
 
-    def onOpenatNewTab(self, url):
+    def onOpenAtNewTab(self, url):
         view = self.addNewTab(True)
         view.openPage(url)
         return view
@@ -176,7 +181,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg
-        self.onOpenatNewTab(url)
+        self.onOpenAtNewTab(url)
 
     def onTextEdited(self, _):
         self.find()
@@ -221,7 +226,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         try:
             for k, v in db.iteritems():
                 url, pos = Pickle.loads(v)
-                view = self.onOpenatNewTab(url)
+                view = self.onOpenAtNewTab(url)
                 view.setScrollPos(pos)
             return True
         except:
@@ -245,7 +250,7 @@ if __name__ == '__main__':
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()
         globalvalue.tabs = Form
-        Form.onOpenatNewTab(globalvalue.chmFile.home)
+        Form.onOpenAtNewTab(globalvalue.chmFile.home)
         Form.show()
         sys.exit(app.exec_())
 
