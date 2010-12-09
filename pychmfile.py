@@ -144,11 +144,6 @@ class PyChmFile(object):
         return self.__homeurl
     home = property(__gethomeurl, None, None, "home url of the chm file")
 
-    def __hascontenttable(self):
-        self.__getContentTable()
-        return bool(self.__content_table)
-    hasTopic = property(__hascontenttable)
-
     def __hasindextable(self):
         self.__getIndexTable()
         return bool(self.__index_table)
