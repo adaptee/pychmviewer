@@ -36,6 +36,7 @@
     <Form>window_main.ui</Form>
     <Form>cs.ui</Form>
     <Form>dialog_topicselector.ui</Form>
+    <Form>settingdlg.ui</Form>
   </Forms>
   <Translations>
   </Translations>
