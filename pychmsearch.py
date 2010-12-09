@@ -123,7 +123,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
 
     def searchByOthers(self, rexp):
         chmfile = getchmfile()
-        if not chmfile.IsSearchable():
+        if not chmfile.isSearchable():
             return
         self.tree.clear()
         results = chmfile.search(text)
