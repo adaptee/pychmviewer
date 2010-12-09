@@ -11,23 +11,21 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
+from treeview import AbstractTreeView
 from utils import getchmfile
 from Ui_tab_index import Ui_TabIndex
 
-class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
+class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        self.setupUi(self)
-        self.tree.headerItem().setHidden(True)
-        self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
+        AbstractTreeView.__init__(self)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
 
         self.lastitem = None
-        self.dataloaded = False
 
         chmfile = getchmfile()
         if chmfile and chmfile.index :
@@ -37,69 +35,33 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         clear the data in the index view
         '''
-        self.tree.clear()
+        AbstractTreeView.clear(self)
         self.text.clear()
-        self.dataloaded = False
 
+    loaddata = AbstractTreeView.loadData
+
+
+    #FIXME; I feel somthing wrong these 2 functions related with `lastitem`
     def onTextChanged(self, v):
         '''
         inner method for search item
         '''
         items = self.tree.findItems(v, QtCore.Qt.MatchStartsWith)
         if items:
-            #FIXME; I feel somthing wrong here
             item = items[0]
             self.tree.setCurrentItem(item)
             self.tree.scrollToItem(item)
             self.lastitem = item
         else:
             self.lastitem = None
-
     def onReturnPressed(self):
         '''
         inner method for openurl
         '''
-        #FIXME; I feel somthing wrong here
         if self.lastitem :
             item = self.lastitem
             self.emit(QtCore.SIGNAL('openUrl'), item.entry.url)
 
-    def onDoubleClicked(self, item, _col):
-        if item :
-            url = item.entry.url
-            self.emit(QtCore.SIGNAL('openUrl'), url)
-
-    def loaddata(self, tree):
-        "load data for topics tree."
-        if self.dataloaded:
-            return
-
-        if tree:
-            self.clear()
-
-            self._loadNode(node=tree, parent=None)
-
-            self.tree.update()
-            self.dataloaded = True
-
-    def _loadNode(self, node, parent):
-        # special case for the root of tree
-        if not parent:
-            parent = self.tree
-
-        prev = None
-        for child in node.children:
-            # insert below `parent`, after `prev`
-            item = QTreeWidgetItem(parent, prev)
-
-            item.entry = child
-            item.setText(0, child.name)
-            #if child.url :
-                #self.url2item[child.url] = item
-
-            self._loadNode(child, item)
-
-            prev = item
 
 if __name__  ==  "__main__":
     import sys
