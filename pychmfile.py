@@ -81,7 +81,7 @@ class PyChmFile(object):
 
         chm = self._chm
 
-        codepage, country, language = chm.GetLCID()
+        codepage, _country, _language = chm.GetLCID()
         encoding = codepage2encoding(codepage)
         self._encoding = encoding or 'utf-8'
 

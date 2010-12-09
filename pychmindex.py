@@ -8,7 +8,6 @@
 # Description:
 #########################################################################
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
 from treeview import AbstractTreeView
@@ -42,11 +41,11 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
 
 
     #FIXME; I feel somthing wrong these 2 functions related with `lastitem`
-    def onTextChanged(self, v):
+    def onTextChanged(self, text):
         '''
         inner method for search item
         '''
-        items = self.tree.findItems(v, QtCore.Qt.MatchStartsWith)
+        items = self.tree.findItems(text, QtCore.Qt.MatchStartsWith)
         if items:
             item = items[0]
             self.tree.setCurrentItem(item)
