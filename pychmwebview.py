@@ -21,7 +21,7 @@ from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
 import globalvalue
-from utils import getchmfile, getchmpath, getencoding
+from utils import getchmfile, getchmpath, getencoding, remove_comment
 from content_type import content_types
 
 urldecode = urllib.unquote_plus
@@ -61,25 +61,17 @@ class PyChmNetReply(QNetworkReply):
         chm = getchmfile()
         if not chm:
             return ''
+
         path = unicode(url.path())
-        try:
-            pos = path.index(u'#')
-            path = path[0:pos]
-        except:
-            pass
+        path = remove_comment(path)
         path = urldecode(path)
+
         data = chm.GetFileAsStrByUrl(path)
         if not data:
             self.setError(404,'')
             return None
         self.setContentTypeHeader(path)
-        #self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant("text/html; charset=UTF-8"))
-#        ext=os.path.splitext(path)[1].lower()
-#        if len(ext)>0:
-#            ext=ext[1:]
-#        ctt_type=content_types.get(ext,'binary/octet')
-#        if ctt_type.lower().startswith('text'):
-#            print data.decode('gb18030')
+
         return data
 
     def setContentTypeHeader(self, path):
@@ -180,8 +172,8 @@ class PyChmWebView(QWebView):
 
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
-        dlg = QtGui.QPrintDialog(printer, self)
-        if dlg.exec_()!=QtGui.QDialog.Accepted:
+        dialog = QtGui.QPrintDialog(printer, self)
+        if dialog.exec_()!=QtGui.QDialog.Accepted:
             return
         self.print_(printer)
 
@@ -197,7 +189,7 @@ class PyChmWebView(QWebView):
         '''
         menu = QtGui.QMenu(self)
         link = self.anchorAt(event.pos())
-        if link is not None:
+        if link :
             self.keepnewtaburl = link
             menu.addAction(u'在新标签页打开', self.openinnewtab)
             menu.exec_(event.globalPos())
