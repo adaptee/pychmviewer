@@ -61,7 +61,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         if not chmfile or self.dataloaded:
             return
         if chmfile.topics :
-            self.loaddata(chmfile.topics)
+            self.loadTree(chmfile.topics)
 
     def locateUrl(self, url):
         '''
@@ -74,35 +74,29 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             self.tree.scrollToItem(item)
 
 
-    def _updateParentStatus(item):
+    def _updateParentStatus(self, item):
         parent = item.parent()
         while parent :
             parent.setExpanded(True)
             parent = parent.parent()
 
+    #def onDoubleClicked(self, item, col):
+        #'''
+        #inner method
+        #'''
+        #if not item :
+            #return
+
+        #name = item.entry.urls[0][0]
+        #url =  item.entry.urls[0][1]
+        #self.emit(QtCore.SIGNAL('openUrl'), url)
+
     def onDoubleClicked(self, item, col):
-        '''
-        inner method
-        '''
         if not item :
             return
-        if len(item.entry.urls) == 1:
-            name = item.entry.urls[0][0]
-            url =  item.entry.urls[0][1]
-            self.emit(QtCore.SIGNAL('openUrl'), url)
-            return
-        elif len(item.entry.urls) > 1:
-            main_window = getmainwindow()
-            dialog = PyChmSlctTopicDlg(main_window)
-            # FIXME; zip(*item.entry.urls) is a better solution ?
-            titles = [a for a, b in item.entry.urls]
-            urls = [b for a, b in item.entry.urls]
 
-            url = dialog.getUrl(titles, urls)
-
-            if url:
-                self.emit(QtCore.SIGNAL('openUrl'), url)
-                return url
+        url = item.entry.url
+        self.emit(QtCore.SIGNAL('openUrl'), url)
 
 
     def clear(self):
@@ -111,6 +105,42 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         '''
         self.tree.clear()
         self.dataloaded = False
+
+    def loadTree(self, tree):
+        if self.dataloaded:
+            return
+
+        if not tree:
+            return
+
+        self.tree.clear()
+
+        prev = None
+
+        for child in tree.children:
+            item = QTreeWidgetItem(self.tree, prev)
+            item.entry = child
+            item.setText(0, child.name)
+            if child.url :
+                self.urlmap[child.url] = item
+
+            self.loadNode(child, item)
+
+            prev = item
+
+    def loadNode(self, node, parent):
+        prev = None
+
+        for child in node.children:
+            item = QTreeWidgetItem(parent, prev)
+            item.entry = child
+            item.setText(0, child.name)
+            if child.url :
+                self.urlmap[child.url] = item
+
+            self.loadNode(child, item)
+
+            prev = item
 
     def loaddata(self, data):
         '''

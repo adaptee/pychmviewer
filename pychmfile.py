@@ -15,6 +15,7 @@ from chm.chm import CHMFile
 from HTMLParser import HTMLParser
 
 from utils import remove_comment
+import soup
 
 # TODO: provide real implementation
 def codepage2encoding(codepage):
@@ -152,12 +153,10 @@ class PyChmFile(object):
         topics_url = self._chm.topics.decode(self._encoding)
         topics_data = self.getContentsByURL(topics_url)
 
-        if not topics_data:
-            topics_data = self._chm.GetTopicsTree()
-        if topics_data:
-            self._parseContentTable(topics_data.decode(self._encoding) )
+        _, tree = soup.parse(topics_data.decode(self._encoding))
+        self._content_table = tree
 
-        return self._content_table
+        return tree
 
     def checkURL(self, url):
         '''
