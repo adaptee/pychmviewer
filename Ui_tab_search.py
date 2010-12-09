@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/tab_search.ui'
 #
-# Created: Fri Dec 10 02:38:14 2010
+# Created: Thu Dec  9 03:23:43 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
