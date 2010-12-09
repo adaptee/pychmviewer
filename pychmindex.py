@@ -28,7 +28,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
 
         chmfile = getchmfile()
         if chmfile and chmfile.index :
-            self.loaddata(chmfile.index)
+            self.loadIndex(chmfile.index)
 
     def clear(self):
         '''
@@ -37,7 +37,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
         AbstractTreeView.clear(self)
         self.text.clear()
 
-    loaddata = AbstractTreeView.loadData
+    loadIndex = AbstractTreeView.loadData
 
 
     #FIXME; I feel somthing wrong these 2 functions related with `lastitem`

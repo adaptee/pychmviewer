@@ -216,7 +216,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             ok = self.WebViewsWidget.loadfromdb(self.conf.lastconfdb)
         if not ok:
             self.WebViewsWidget.onOpenatNewTab(globalvalue.chmFile.home)
-        self.indexview.loaddata(globalvalue.chmFile.index)
+        self.indexview.loadIndex(globalvalue.chmFile.index)
         self.bookmarkview.loadData()
         self.topicsview.loadTopics(globalvalue.chmFile.topics)
         self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
