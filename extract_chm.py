@@ -8,18 +8,16 @@
 # Description:
 #########################################################################
 
-import sys
+import locale
+from chm import chmlib
 
-try:
-    from pychm import chmlib
-except ImportError :
-    from chm import chmlib
+default_encoding = locale.getdefaultlocale()[1]
 
-def callback(cf, ui, lst):
+def callback(cf, ui, paths):
     '''
     innermethod
     '''
-    lst.append(ui.path)
+    paths.append(ui.path)
     return chmlib.CHM_ENUMERATOR_CONTINUE
 
 def getfilelist(chmpath):
@@ -29,8 +27,10 @@ def getfilelist(chmpath):
     '''
     assert isinstance(chmpath, unicode)
 
-    chmfile = chmlib.chm_open(chmpath.encode(sys.getfilesystemencoding()))
-    lst = []
-    ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, lst)
+    chmfile = chmlib.chm_open( chmpath.encode(default_encoding) )
+
+    paths = []
+    ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, paths)
     chmlib.chm_close(chmfile)
-    return (ok, lst)
+
+    return (ok, paths)
