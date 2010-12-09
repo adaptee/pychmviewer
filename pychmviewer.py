@@ -17,16 +17,15 @@ import globalvalue
 from utils import getchmfile, setchmfile, getchmpath, setchmpath, getcfg
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
+from session import system_encoding
 
 if __name__ == "__main__":
-
-    filesystem_encoding = sys.getfilesystemencoding()
 
     ok = False
     app = QtGui.QApplication(sys.argv)
 
     if len(sys.argv)>=2:
-        setchmpath( os.path.abspath(sys.argv[1].decode(filesystem_encoding)) )
+        setchmpath( os.path.abspath(sys.argv[1].decode(system_encoding)) )
         setchmfile( PyChmFile() )
         ok = getchmfile().loadFile(getchmpath())
 
