@@ -21,7 +21,7 @@ class PyChmSlctTopicDlg(QtGui.QDialog, Ui_DialogTopicSelector):
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onDoubleClicked)
 
     def onDoubleClicked(self, item):
-        if item is not None:
+        if item :
             accept()
 
     def getUrl(self, titles, urllist):
