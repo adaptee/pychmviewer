@@ -173,7 +173,7 @@ class PyChmWebView(QWebView):
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
         dialog = QtGui.QPrintDialog(printer, self)
-        if dialog.exec_()!=QtGui.QDialog.Accepted:
+        if dialog.exec_() != QtGui.QDialog.Accepted:
             return
         self.print_(printer)
 
