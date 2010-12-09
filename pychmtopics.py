@@ -60,8 +60,8 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         chmfile = getchmfile()
         if not chmfile or self.dataloaded:
             return
-        if chmfile.topic :
-            self.loaddata(chmfile.topic)
+        if chmfile.topics :
+            self.loaddata(chmfile.topics)
 
     def locateUrl(self, url):
         '''
