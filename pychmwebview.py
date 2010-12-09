@@ -8,7 +8,6 @@
 # Description:
 #########################################################################
 
-import sys
 import os.path
 import urllib
 import cStringIO as StringIO
@@ -24,7 +23,6 @@ import globalvalue
 from utils import getchmfile, getchmpath, getencoding, remove_comment
 from content_type import content_types
 
-urldecode = urllib.unquote_plus
 
 class PyChmNetReply(QNetworkReply):
     def __init__(self, request, url, parent=None, qwebview=None):
@@ -64,7 +62,7 @@ class PyChmNetReply(QNetworkReply):
 
         path = unicode(url.path())
         path = remove_comment(path)
-        path = urldecode(path)
+        path = urllib.unquote_plus(path)
 
         data = chm.getContentsByURL(path)
         if not data:
@@ -283,27 +281,6 @@ class PyChmWebView(QWebView):
         #self.openPage(url) #delete this and emit the url #######################################
         self.emit(QtCore.SIGNAL('openUrl'), url)
 
-#    def clearurl(self, url):
-#        if len(url)==0:
-#            return None
-#        if urltools.isjsurl(url):
-#            return None
-#        if urltools.isRemoteURL(url)[0]:
-#            return None
-#        isnew, ochm, pg=urltools.isnewchmurl(url)
-#        if isnew:
-#            if os.path.abspath(ochm)!=os.path.abspath(getchmpath()):
-#                url=pg
-#            else:
-#                pass
-#                return None
-#        if url.lower().startswith(u'ms-its:'):
-#            url=url[7:]
-#        if url[0]!=u'/':
-#            url=self.baseurl+u'/'+url
-#        url=os.path.normpath(url)
-#        return url
-
     def openPage(self, url):
         '''
         url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
@@ -352,10 +329,10 @@ class PyChmWebView(QWebView):
         self.scrolltopos = pos
         self.page().currentFrame().setScrollBarValue(Qt.Vertical, pos)
 
-    def canback(self):
+    def canGoBack(self):
         return self.history().canGoBack()
 
-    def canforward(self):
+    def canGoForward(self):
         return self.history().canGoForward()
 
 if __name__ == '__main__':
