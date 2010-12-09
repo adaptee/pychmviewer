@@ -66,7 +66,7 @@ class PyChmNetReply(QNetworkReply):
         path = remove_comment(path)
         path = urldecode(path)
 
-        data = chm.GetFileAsStrByUrl(path)
+        data = chm.getContentsByURL(path)
         if not data:
             self.setError(404,'')
             return None

@@ -135,7 +135,7 @@ class PyChmFile(object):
 
         #parse indextree
         index_url = self._chm.index.decode(self._encoding)
-        index_data = self.GetFileAsStrByUrl(index_url)
+        index_data = self.getContentsByURL(index_url)
         if not index_data:
             index_data = self._chm.GetIndex()
         if index_data:
@@ -153,7 +153,7 @@ class PyChmFile(object):
             return []
 
         topics_url = self._chm.topics.decode(self._encoding)
-        topics_data = self.GetFileAsStrByUrl(topics_url)
+        topics_data = self.getContentsByURL(topics_url)
 
         if not topics_data:
             topics_data = self._chm.GetTopicsTree()
@@ -195,7 +195,7 @@ class PyChmFile(object):
 
         return srt
 
-    def CheckUrl(self, url):
+    def checkURL(self, url):
         '''
         url: unicode
         check if the url is available
@@ -212,7 +212,7 @@ class PyChmFile(object):
         return not bool(fail)
 
 
-    def GetFileAsStrByUrl(self, url):
+    def getContentsByURL(self, url):
         '''
         url must be unicode
         return the file content @ url as raw data (not encoded)

@@ -93,7 +93,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
                     break
 
             chmfile = getchmfile()
-            file_content = chmfile.GetFileAsStrByUrl(filename.decode('utf-8', 'ignore'))
+            file_content = chmfile.getContentsByURL(filename.decode('utf-8', 'ignore'))
             if not file_content:
                 continue
 
