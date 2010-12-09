@@ -175,8 +175,6 @@ class PyChmWebView(QWebView):
 #            mb=QtGui.QMessageBox(self)
 #            mb.setText(u'file not found')
 #            mb.exec_()
-            #self.openPage(globalvalue.chmFile.HomeUrl)
-            #tell user file not found!########################
             print 'file not found'
 
     def printPage(self):
@@ -313,8 +311,6 @@ class PyChmWebView(QWebView):
         if isinstance(url, QtCore.QString):
             url = unicode(url)
         if url[0:4] == 'http':
-#            if not globalvalue.globalcfg.openremote:
-#                return
             self.load(QtCore.QUrl(url))
             globalvalue.tabs.setTabName(self)
             self.openedpg = url
