@@ -87,7 +87,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
         if not item :
             return
         if len(item.entry.urls) == 1:
-            self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
+            name = item.entry.urls[0][0]
+            url =  item.entry.urls[0][1]
+            self.emit(QtCore.SIGNAL('openUrl'), url)
             return
         elif len(item.entry.urls) > 1:
             main_window = getmainwindow()
