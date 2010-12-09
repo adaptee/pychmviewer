@@ -138,7 +138,7 @@ class PyChmFile(object):
 
     def __gettitle(self):
         return self.__title
-    Title = property(__gettitle, None, None, "the title of the chm file")
+    title = property(__gettitle, None, None, "the title of the chm file")
 
     def __gethomeurl(self):
         return self.__homeurl
