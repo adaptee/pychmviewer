@@ -20,8 +20,6 @@ from utils import remove_comment
 def codepage2encoding(codepage):
     return codepage
 
-
-
 def normalize_url(url):
     if not url:
         return url
@@ -83,8 +81,10 @@ class PyChmFile(object):
         #self._chm.GetTopicsTree()
         #self._chm.GetIndex()
         #self._chm.filename
+
         #self._chm.GetEncoding()  (not working)
         #self._chm.lcid    (magic number)
+
         #self._chm.index   (url only)
         #self._chm.topics  (url only)
 
@@ -207,7 +207,6 @@ class PyChmFile(object):
         self._content_table = self._parseTable(content)
 
     def _parseIndexTable(self, index):
-
         assert isinstance(index, unicode)
 
         self._index_table = self._parseTable(index)
