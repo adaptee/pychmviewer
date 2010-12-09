@@ -23,7 +23,7 @@ from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
 from config import PyChmConfig
 from pychmfile import PyChmFile
-from htmldlg import HtmlDlg
+from htmldlg import HtmlDialog
 from encodinglist import encodings
 from settingdlg import SettingDlg
 from about import aboutdlg
