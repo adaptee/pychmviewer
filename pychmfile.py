@@ -141,6 +141,29 @@ class PyChmFile(object):
 
         return self._index_table
 
+    #@property
+    #def index(self):
+        #"Index of this chm file"
+        #if self._index_table :
+            #return self._index_table
+
+        #if not self._chm.index :
+            #self._index_table = []
+            #return []
+
+        #index_url = self._chm.index.decode(self._encoding)
+        #index_data = self.getContentsByURL(index_url)
+
+
+        #if not index_data:
+            #index_data = self._chm.GetIndex()
+
+        #if index_data:
+            #_, tree = soup.parse(index_data.decode(self._encoding))
+            #self._index_table = tree
+
+            #return tree
+
     @property
     def topics(self):
         if self._content_table :
@@ -153,10 +176,14 @@ class PyChmFile(object):
         topics_url = self._chm.topics.decode(self._encoding)
         topics_data = self.getContentsByURL(topics_url)
 
-        _, tree = soup.parse(topics_data.decode(self._encoding))
-        self._content_table = tree
+        if not index_data:
+            index_data = self._chm.GetTopicsTree()
 
-        return tree
+        if topics_data :
+            _, tree = soup.parse(topics_data.decode(self._encoding))
+            self._content_table = tree
+
+            return tree
 
     def checkURL(self, url):
         '''
