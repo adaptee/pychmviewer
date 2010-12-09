@@ -7,12 +7,11 @@
 # File Name: pychmindex.py
 # Description:
 #########################################################################
-from PyQt4.QtGui import QTreeWidgetItem
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from pychmselecttopic import PyChmSlctTopicDlg
-from utils import getchmfile, getmainwindow
+from utils import getchmfile
 from Ui_tab_index import Ui_TabIndex
 
 class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
@@ -23,17 +22,15 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.tree.headerItem().setHidden(True)
-        self.lastitem = None
-        self.dataloaded = False
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
 
-        chmfile = getchmfile()
+        self.lastitem = None
+        self.dataloaded = False
 
-        if not chmfile or self.dataloaded :
-            return
-        if chmfile.index :
+        chmfile = getchmfile()
+        if chmfile and chmfile.index :
             self.loaddata(chmfile.index)
 
     def clear(self):
@@ -41,8 +38,8 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         clear the data in the index view
         '''
         self.tree.clear()
-        self.dataloaded = False
         self.text.clear()
+        self.dataloaded = False
 
     def onTextChanged(self, v):
         '''
@@ -50,9 +47,10 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         items = self.tree.findItems(v, QtCore.Qt.MatchStartsWith)
         if items:
-            self.tree.setCurrentItem(items[0])
-            self.tree.scrollToItem(items[0])
-            self.lastitem = items[0]
+            item = items[0]
+            self.tree.setCurrentItem(item)
+            self.tree.scrollToItem(item)
+            self.lastitem = item
         else:
             self.lastitem = None
 
@@ -60,93 +58,56 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
         '''
         inner method for openurl
         '''
+        #FIXME; I feel somthing wrong here
         if self.lastitem :
             item = self.lastitem
-            if len(item.entry.urls) == 1:
-                self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
-                return
-            elif len(item.entry.urls)>1:
-                main_window = getmainwindow()
-                dialog = PyChmSlctTopicDlg(main_window)
-                titles = [a for a, b in item.entry.urls]
-                urls = [b for a, b in item.entry.urls]
-                url = dialog.getUrl(titles, urls)
-                if url :
-                    self.emit(QtCore.SIGNAL('openUrl'), url)
-                    return url
+            self.emit(QtCore.SIGNAL('openUrl'), item.entry.url)
 
     def onDoubleClicked(self, item, col):
-        '''
-        inner method for openurl
-        '''
-        if item is None:
-            return
-        if item.isExpanded():
-            item.setExpanded(False)
-        if len(item.entry.urls) == 1:
-            self.emit(QtCore.SIGNAL('openUrl'), item.entry.urls[0][1])
-            return
-        elif len(item.entry.urls)>1:
-            main_window = getmainwindow()
-            dialog = PyChmSlctTopicDlg(main_window)
-            titles = [a for a, b in item.entry.urls]
-            urls = [b for a, b in item.entry.urls]
-            url = dialog.getUrl(titles, urls)
-            if url:
-                self.emit(QtCore.SIGNAL('openUrl'), url)
-                return url
+        if item :
+            # FIXME; is this right?
+            if item.isExpanded():
+                item.setExpanded(False)
 
-    def loaddata(self, data):
-        '''
-        load data for index tree.
-        data is list of TableEntry(define in pychmfile.py
-        '''
+            url = item.entry.url
+            self.emit(QtCore.SIGNAL('openUrl'), url)
+
+    def loaddata(self, tree):
+        "load data for topics tree."
         if self.dataloaded:
             return
-        if not data :
-            return
-        self.dataloaded = True
-        self.tree.clear()
-        lastchild = []
-        rootentry = []
-        for i in xrange(len(data)):
-            indent = data[i].indent
-            if indent >= len(rootentry):
-                maxindent = len(rootentry)-1
-                lastchild.append(None)
-                rootentry.append(None)
-                if indent > 0 and maxindent < 0:
-                    print 'error, first entry isn\'t the root entry'
-                if (indent-maxindent) > 1:
-                    j = maxindent
-                    while j < indent:
-                        if len(lastchild)<=j+1:
-                            lastchild.append(None)
-                            rootentry.append(None)
-                        lastchild[j+1] = lastchild[j]
-                        rootentry[j+1] = rootentry[j]
-                        j += 1
-                lastchild[indent] = None
-                rootentry[indent] = None
-            if indent == 0:
-                item = QTreeWidgetItem(self.tree, lastchild[indent])
-                item.entry = data[i]
-                item.setText(0, data[i].key)
-            else:
-                if rootentry[indent-1] is None:
-                    print 'error no root entry'
-                item = QTreeWidgetItem(rootentry[indent-1], lastchild[indent])
-                item.entry = data[i]
-                item.setText(0, data[i].key)
-            item.setExpanded(True)
-            lastchild[indent] = item
-            rootentry[indent] = item
-        self.tree.update()
 
+        if not tree:
+            return
+
+        self.clear()
+
+        self._loadNode(node=tree, parent=None)
+
+        self.tree.update()
+        self.dataloaded = True
+
+    def _loadNode(self, node, parent):
+        # special case for the root of tree
+        if not parent:
+            parent = self.tree
+
+        prev = None
+        for child in node.children:
+            # insert below `parent`, after `prev`
+            item = QTreeWidgetItem(parent, prev)
+
+            item.entry = child
+            item.setText(0, child.name)
+            #if child.url :
+                #self.url2item[child.url] = item
+
+            self._loadNode(child, item)
+
+            prev = item
 
 if __name__  ==  "__main__":
     import sys
-    import locale
 
     from pychmfile import PyChmFile
     from session import system_encoding

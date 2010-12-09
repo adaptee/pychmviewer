@@ -141,28 +141,27 @@ class PyChmFile(object):
 
         return self._index_table
 
-    #@property
-    #def index(self):
-        #"Index of this chm file"
-        #if self._index_table :
-            #return self._index_table
+    @property
+    def index(self):
+        "Index of this chm file"
+        if self._index_table :
+            return self._index_table
 
-        #if not self._chm.index :
-            #self._index_table = []
-            #return []
+        if not self._chm.index :
+            self._index_table = []
+            return []
 
-        #index_url = self._chm.index.decode(self._encoding)
-        #index_data = self.getContentsByURL(index_url)
+        index_url = self._chm.index.decode(self._encoding)
+        index_data = self.getContentsByURL(index_url)
 
+        if not index_data:
+            index_data = self._chm.GetIndex()
 
-        #if not index_data:
-            #index_data = self._chm.GetIndex()
+        if index_data:
+            _, tree = soup.parse(index_data.decode(self._encoding))
+            self._index_table = tree
 
-        #if index_data:
-            #_, tree = soup.parse(index_data.decode(self._encoding))
-            #self._index_table = tree
-
-            #return tree
+            return tree
 
     @property
     def topics(self):
@@ -176,8 +175,8 @@ class PyChmFile(object):
         topics_url = self._chm.topics.decode(self._encoding)
         topics_data = self.getContentsByURL(topics_url)
 
-        if not index_data:
-            index_data = self._chm.GetTopicsTree()
+        if not topics_data:
+            topics_data = self._chm.GetTopicsTree()
 
         if topics_data :
             _, tree = soup.parse(topics_data.decode(self._encoding))
