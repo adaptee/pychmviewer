@@ -217,8 +217,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if not ok:
             self.WebViewsWidget.onOpenatNewTab(globalvalue.chmFile.home)
         self.indexview.loaddata(globalvalue.chmFile.index)
-        self.topicsview.loadTree(globalvalue.chmFile.topics)
         self.bookmarkview.loadData()
+        self.topicsview.loadTopics(globalvalue.chmFile.topics)
         self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
 
     def openFile(self):
@@ -240,8 +240,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             globalvalue.chmFile = chmFile
             self.WebViewsWidget.savealltab(self.conf.lastconfdb)
             self.indexview.dataloaded = False
-            self.topicsview.dataloaded = False
             self.bookmarkview.dataloaded = False
+            self.topicsview.clear()
             self.searchview.clear()
             self.inital()
 
