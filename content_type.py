@@ -7,7 +7,7 @@
 # File Name: content_type.py
 # Description:
 #########################################################################
-content_type = {
+content_types = {
     "rtf"       : "application/rtf",
     "show"      : "application/x-showcase",
     "aiff"      : "audio/x-aiff",

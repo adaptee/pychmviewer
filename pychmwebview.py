@@ -22,7 +22,7 @@ from PyQt4.QtCore import QIODevice, Qt
 import urltools
 import globalvalue
 from utils import getchmfile, getchmpath, getencoding
-from content_type import content_type
+from content_type import content_types
 
 urldecode = urllib.unquote_plus
 
@@ -77,17 +77,17 @@ class PyChmNetReply(QNetworkReply):
 #        ext=os.path.splitext(path)[1].lower()
 #        if len(ext)>0:
 #            ext=ext[1:]
-#        ctt_type=content_type.get(ext,'binary/octet')
+#        ctt_type=content_types.get(ext,'binary/octet')
 #        if ctt_type.lower().startswith('text'):
 #            print data.decode('gb18030')
         return data
 
     def setContentTypeHeader(self, path):
         ext = os.path.splitext(path)[1].lower()
-        if len(ext)>0:
+        if ext :
             ext = ext[1:]
-        ctt_type = content_type.get(ext, 'binary/octet')
-        if ctt_type.lower().startswith('text') and getencoding() is not None:
+        ctt_type = content_types.get(ext, 'binary/octet')
+        if ctt_type.lower().startswith('text') and getencoding() :
             ctt_type += '; charset=' + getencoding()
         self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(ctt_type))
 
