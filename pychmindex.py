@@ -33,7 +33,7 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
 
         if not chmfile or self.dataloaded :
             return
-        if chmfile.hasIndex :
+        if chmfile.index :
             self.loaddata(chmfile.index)
 
     def clear(self):

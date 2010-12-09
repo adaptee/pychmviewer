@@ -144,10 +144,6 @@ class PyChmFile(object):
         return self.__homeurl
     home = property(__gethomeurl, None, None, "home url of the chm file")
 
-    def __hasindextable(self):
-        self.__getIndexTable()
-        return bool(self.__index_table)
-    hasIndex = property(__hasindextable)
 
     def isSearchable(self):
         return self.__chm.IsSearchable()
