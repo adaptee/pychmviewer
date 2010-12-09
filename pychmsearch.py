@@ -121,33 +121,17 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
 
-    def searchByOthers(self, rexp):
-        chmfile = getchmfile()
-        if not chmfile.isSearchable():
-            return
-        self.tree.clear()
-        results = chmfile.search(rexp)
-        for entry in results:
-            for url in entry.urls:
-                item = QTreeWidgetItem(self.tree)
-                item.url = url
-                item.setText(0, entry.key)
-                item.setText(1, url)
-        self.tree.update()
-
     def search(self):
         text = self.searchBox.lineEdit().text()
         text = unicode(text).strip()
-        if not text :
-            return
 
-        self.searchBySelf(text)
+        if text :
+            self.searchBySelf(text)
 
 
-    def onDoubleClicked(self, item, col):
-        if not item :
-            return
-        self.emit(QtCore.SIGNAL('openUrl'), item.url)
+    def onDoubleClicked(self, item, _col):
+        if item :
+            self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
 if __name__ == "__main__":
 
