@@ -12,11 +12,8 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
+from utils import getcurrentview
 from Ui_tab_bookmarks import Ui_TabBookmarks
-import globalvalue
-
-def getCurrentWebView():
-    return globalvalue.currentwebview
 
 class PyChmBookmarkItem(QListWidgetItem):
     def __init__(self, parent, name=None, url=None, pos=None):
@@ -110,7 +107,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         inner method
         '''
 
-        webview = getCurrentWebView()
+        webview = getcurrentview()
 
         url   = webview.openedpg
         title = webview.title()
@@ -147,7 +144,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                 item.name = name
                 item.setText(name)
 
-    def showEvent(self, event):
+    def showEvent(self, _event):
         '''
         inner method
         '''
@@ -189,7 +186,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         if not item :
             return
 
-        webview = getCurrentWebView()
+        webview = getcurrentview()
 
         if webview.openedpg != item.url:
             webview.openPage(item.url)
