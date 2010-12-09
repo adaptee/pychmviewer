@@ -94,11 +94,24 @@ class PyChmFile(object):
 
         return True
 
-    def _getEncoding(self):
-        return self._code
-    encoding = property(_getEncoding, None, None, 'encoding from LCID')
+    @property
+    def title(self):
+        "Title of this CHM file"
+        return self._title
 
-    def _getIndexTable(self):
+    @property
+    def home(self):
+        "Home of this file"
+        return self._homeurl
+
+    @property
+    def encoding(self):
+        "Encoding of this chm file"
+        return self._code
+
+    @property
+    def index(self):
+        "Index of this chm file"
         if self._index_table :
             return self._index_table
 
@@ -113,11 +126,11 @@ class PyChmFile(object):
             index_data = self._chm.GetIndex()
         if index_data:
             self._parseIndexTable(index_data.decode(self._code, 'ignore'))
+
         return self._index_table
 
-    index = property(_getIndexTable, None, None, "parsed indextree, list of TableEntry")
-
-    def _getContentTable(self):
+    @property
+    def topic(self):
         if self._content_table :
             return self._content_table
 
@@ -133,16 +146,7 @@ class PyChmFile(object):
         if topic_data:
             self._parseContentTable(topic_data.decode(self._code) )
         return self._content_table
-    topic = property(_getContentTable, None, None, "parsed topictree, list of TableEntry")
 
-
-    def _getTitle(self):
-        return self._title
-    title = property(_getTitle, None, None, "the title of the chm file")
-
-    def _getHomeURL(self):
-        return self._homeurl
-    home = property(_getHomeURL, None, None, "home url of the chm file")
 
 
     def isSearchable(self):
