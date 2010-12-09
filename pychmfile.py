@@ -142,7 +142,7 @@ class PyChmFile(object):
 
     def __gethomeurl(self):
         return self.__homeurl
-    HomeUrl = property(__gethomeurl, None, None, "home url of the chm file")
+    home = property(__gethomeurl, None, None, "home url of the chm file")
 
     def __hascontenttable(self):
         self.__getContentTable()

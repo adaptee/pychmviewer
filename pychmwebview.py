@@ -233,7 +233,7 @@ class PyChmWebView(QWebView):
             return None
         url = unicode(qurl.path())
         if url == u'/':
-            url = chmfile.HomeUrl
+            url = chmfile.home
         isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
             ochm = os.path.join(os.path.dirname(chmpath), ochm)
@@ -271,7 +271,7 @@ class PyChmWebView(QWebView):
             return
         url = unicode(qurl.path())
         if url == u'/':
-            url = chmfile.HomeUrl
+            url = chmfile.home
         isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
             ochm = os.path.join(os.path.dirname(chmpath), ochm)
@@ -317,7 +317,7 @@ class PyChmWebView(QWebView):
             self.openedpg = url
             return
         if url == u'/':
-            url = getchmfile().HomeUrl
+            url = getchmfile().home
         try:
             pos = url.index(u'://')
             if url[0:pos] != u'ms-its': #just for url in chmfile
@@ -374,6 +374,6 @@ if __name__ == '__main__':
         app = QtGui.QApplication(sys.argv)
         Form = PyChmWebView()
     #    Form.code = 'gbk'
-        Form.openPage(globalvalue.chmFile.HomeUrl)
+        Form.openPage(globalvalue.chmFile.home)
         Form.show()
         sys.exit(app.exec_())

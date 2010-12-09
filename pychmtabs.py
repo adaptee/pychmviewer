@@ -246,7 +246,7 @@ if __name__ == '__main__':
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()
         globalvalue.tabs = Form
-        Form.onOpenatNewTab(globalvalue.chmFile.HomeUrl)
+        Form.onOpenatNewTab(globalvalue.chmFile.home)
         Form.show()
         sys.exit(app.exec_())
 
