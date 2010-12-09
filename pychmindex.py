@@ -147,9 +147,9 @@ class PyChmIdxView(QtGui.QWidget, Ui_TabIndex):
 if __name__  ==  "__main__":
     import sys
     import locale
-    from pychmfile import PyChmFile
 
-    system_encoding = locale.getdefaultlocale()[1]
+    from pychmfile import PyChmFile
+    from session import system_encoding
 
     if len(sys.argv) > 1:
 

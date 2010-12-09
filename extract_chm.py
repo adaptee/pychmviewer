@@ -11,7 +11,7 @@
 import locale
 from chm import chmlib
 
-system_encoding = locale.getdefaultlocale()[1]
+from session import system_encoding
 
 def callback(cf, ui, paths):
     '''
