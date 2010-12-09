@@ -8,7 +8,6 @@
 # Description:
 #########################################################################
 
-import locale
 from chm import chmlib
 
 from session import system_encoding

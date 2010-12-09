@@ -361,7 +361,6 @@ class PyChmWebView(QWebView):
 if __name__ == '__main__':
 
     import sys
-    import locale
 
     from pychmfile import PyChmFile
     from session import system_encoding
