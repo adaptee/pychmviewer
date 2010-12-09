@@ -52,7 +52,6 @@ class TableEntry(object):
         key: the key(unicode) of the entry
         urls: list of tuples, first item of tuple is the name(unicode) of the
               url, second is the url(unicode)
-              except!!! when return by search function, it's a list of unicode
         indent: the indent of the entry
         '''
         self.key    = None
@@ -81,16 +80,6 @@ class PyChmFile(object):
         if success,return True,
         else,return False
         '''
-        assert isinstance(filename, unicode)
-
-        self.reset()
-
-        if not self._chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
-            print ("load file failed")
-            return False
-
-        chm = self._chm
-
         #self._chm.GetTopicsTree()
         #self._chm.GetIndex()
         #self._chm.filename
@@ -98,6 +87,15 @@ class PyChmFile(object):
         #self._chm.lcid    (magic number)
         #self._chm.index   (url only)
         #self._chm.topics  (url only)
+
+        assert isinstance(filename, unicode)
+        self.reset()
+
+        if not self._chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
+            print ("load file failed")
+            return False
+
+        chm = self._chm
 
         codepage, country, language = chm.GetLCID()
         encoding = codepage2encoding(codepage)
@@ -133,7 +131,6 @@ class PyChmFile(object):
             self._index_table = []
             return []
 
-        #parse indextree
         index_url = self._chm.index.decode(self._encoding)
         index_data = self.getContentsByURL(index_url)
         if not index_data:
@@ -161,39 +158,6 @@ class PyChmFile(object):
             self._parseContentTable(topics_data.decode(self._encoding) )
 
         return self._content_table
-
-
-    def isSearchable(self):
-        return self._chm.IsSearchable()
-
-    def Search(self, text, wholewords=0, titleonly=0):
-        '''
-        Performs full-text search on the archive.
-        text:unicode
-        The first parameter is the word to look for, the second
-        indicates if the search should be for whole words only, and
-        the third parameter indicates if the search should be
-        restricted to page titles.
-        This method will return list of TableEntry,
-        item.urls being list of unicode
-        '''
-
-        if not self.isSearchable():
-            return None
-
-        assert isinstance(text, unicode)
-
-        text = text.encode('utf-8') ##not sure##############################
-        rt   = self._chm.Search(text, wholewords, titleonly)
-        srt  = []
-
-        for k, v in rt[1].items():
-            entry = TableEntry()
-            entry.key = k.decode(self._encoding)
-            entry.urls = [v.decode(self._encoding),]
-            srt.append(entry)
-
-        return srt
 
     def checkURL(self, url):
         '''
