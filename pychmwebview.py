@@ -21,6 +21,7 @@ from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
 import globalvalue
+from utils import getchmfile, getchmpath, getencoding
 from content_type import content_type
 
 urldecode = urllib.unquote_plus
@@ -57,7 +58,7 @@ class PyChmNetReply(QNetworkReply):
         return data
 
     def loadResource(self, url):
-        chm = globalvalue.chmFile
+        chm = getchmfile()
         if not chm:
             return ''
         path = unicode(url.path())
@@ -86,8 +87,8 @@ class PyChmNetReply(QNetworkReply):
         if len(ext)>0:
             ext = ext[1:]
         ctt_type = content_type.get(ext, 'binary/octet')
-        if ctt_type.lower().startswith('text') and globalvalue.encoding is not None:
-            ctt_type += '; charset=' + globalvalue.encoding
+        if ctt_type.lower().startswith('text') and getencoding() is not None:
+            ctt_type += '; charset=' + getencoding()
         self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(ctt_type))
 
 
@@ -227,6 +228,10 @@ class PyChmWebView(QWebView):
         '''
         inner method
         '''
+
+        chmfile = getchmfile()
+        chmpath = getchmpath()
+
         res = self.page().currentFrame().hitTestContent(pos)
         if not res.linkUrl().isValid():
             return None
@@ -237,11 +242,11 @@ class PyChmWebView(QWebView):
             return None
         url = unicode(qurl.path())
         if url == u'/':
-            url = globalvalue.chmFile.HomeUrl
+            url = chmfile.HomeUrl
         isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
-            ochm = os.path.join(os.path.dirname(globalvalue.chmpath), ochm)
-            if ochm != globalvalue.chmpath:
+            ochm = os.path.join(os.path.dirname(chmpath), ochm)
+            if ochm != chmpath:
                 url = pg
             else:
                 return None
@@ -262,6 +267,11 @@ class PyChmWebView(QWebView):
         '''
         inner method
         '''
+
+        chmfile = getchmfile()
+        chmpath = getchmpath()
+
+
         if qurl.scheme() == 'http' or qurl.scheme() == 'https':
             #self.openPage(unicode(qurl.toString())) #delete this and emit the url #######################################
             self.emit(QtCore.SIGNAL('openRemoteUrl'), unicode(qurl.toString()))
@@ -270,11 +280,11 @@ class PyChmWebView(QWebView):
             return
         url = unicode(qurl.path())
         if url == u'/':
-            url = globalvalue.chmFile.HomeUrl
+            url = chmfile.HomeUrl
         isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
         if isnew:
-            ochm = os.path.join(os.path.dirname(globalvalue.chmpath), ochm)
-            if ochm != globalvalue.chmpath:
+            ochm = os.path.join(os.path.dirname(chmpath), ochm)
+            if ochm != chmpath:
                 url = pg
             else:
                 return
@@ -291,7 +301,7 @@ class PyChmWebView(QWebView):
 #            return None
 #        isnew, ochm, pg=urltools.isnewchmurl(url)
 #        if isnew:
-#            if os.path.abspath(ochm)!=os.path.abspath(globalvalue.chmpath):
+#            if os.path.abspath(ochm)!=os.path.abspath(getchmpath()):
 #                url=pg
 #            else:
 #                pass
@@ -316,7 +326,7 @@ class PyChmWebView(QWebView):
             self.openedpg = url
             return
         if url == u'/':
-            url = globalvalue.chmFile.HomeUrl
+            url = getchmfile().HomeUrl
         try:
             pos = url.index(u'://')
             if url[0:pos] != u'ms-its': #just for url in chmfile
