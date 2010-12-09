@@ -55,11 +55,11 @@ class TableEntry(object):
 
 class PyChmFile(object):
     def __init__(self):
-        self.__chm        = None
-        self.__title      = u''
-        self.__homeurl    = u''
-        self.__content_table = None
-        self.__index_table   = None
+        self._chm        = None
+        self._title      = u''
+        self._homeurl    = u''
+        self._content_table = None
+        self._index_table   = None
 
     def loadFile(self, filename):
         '''
@@ -69,84 +69,84 @@ class PyChmFile(object):
         '''
         assert isinstance(filename, unicode)
 
-        if self.__chm:
-            self.__chm.CloseCHM()
+        if self._chm:
+            self._chm.CloseCHM()
         else:
-            self.__chm = CHMFile()
+            self._chm = CHMFile()
 
-        if not self.__chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
+        if not self._chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
             print ("load file failed")
             return False
 
-        self.__title = u''
-        self.__content_table = None
-        self.__index_table = None
+        self._title = u''
+        self._content_table = None
+        self._index_table = None
 
-        self.__chm.GetWindowsInfo()
+        self._chm.GetWindowsInfo()
 
-        self.__code = self.__chm.GetLCID()[0]
-        if not self.__code :
-            self.__code = "utf-8"
+        self._code = self._chm.GetLCID()[0]
+        if not self._code :
+            self._code = "utf-8"
 
-        self.__homeurl = self.__chm.home.decode(self.__code)
-        self.__homeurl = normalize_url(self.__homeurl)
-        self.__title = self.__chm.title.decode(self.__code)
+        self._homeurl = self._chm.home.decode(self._code)
+        self._homeurl = normalize_url(self._homeurl)
+        self._title = self._chm.title.decode(self._code)
 
         return True
 
-    def __getChmEncoding(self):
-        return self.__code
-    encoding = property(__getChmEncoding, None, None, 'encoding from LCID')
+    def _getEncoding(self):
+        return self._code
+    encoding = property(_getEncoding, None, None, 'encoding from LCID')
 
-    def __getIndexTable(self):
-        if self.__index_table :
-            return self.__index_table
+    def _getIndexTable(self):
+        if self._index_table :
+            return self._index_table
 
-        if not self.__chm.index :
-            self.__index_table = []
+        if not self._chm.index :
+            self._index_table = []
             return []
 
         #parse indextree
-        index_url = self.__chm.index.decode(self.__code)
+        index_url = self._chm.index.decode(self._code)
         index_data = self.GetFileAsStrByUrl(index_url)
         if not index_data:
-            index_data = self.__chm.GetIndex()
+            index_data = self._chm.GetIndex()
         if index_data:
-            self.__parseIndexTable(index_data.decode(self.__code, 'ignore'))
-        return self.__index_table
+            self._parseIndexTable(index_data.decode(self._code, 'ignore'))
+        return self._index_table
 
-    index = property(__getIndexTable, None, None, "parsed indextree, list of TableEntry")
+    index = property(_getIndexTable, None, None, "parsed indextree, list of TableEntry")
 
-    def __getContentTable(self):
-        if self.__content_table :
-            return self.__content_table
+    def _getContentTable(self):
+        if self._content_table :
+            return self._content_table
 
-        if not self.__chm.topics :
-            self.__content_table = []
+        if not self._chm.topics :
+            self._content_table = []
             return []
 
-        topic_url = self.__chm.topics.decode(self.__code)
+        topic_url = self._chm.topics.decode(self._code)
         topic_data = self.GetFileAsStrByUrl(topic_url)
 
         if not topic_data:
-            topic_data = self.__chm.GetTopicsTree()
+            topic_data = self._chm.GetTopicsTree()
         if topic_data:
-            self.__parseContentTable(topic_data.decode(self.__code) )
-        return self.__content_table
-    topic = property(__getContentTable, None, None, "parsed topictree, list of TableEntry")
+            self._parseContentTable(topic_data.decode(self._code) )
+        return self._content_table
+    topic = property(_getContentTable, None, None, "parsed topictree, list of TableEntry")
 
 
-    def __gettitle(self):
-        return self.__title
-    title = property(__gettitle, None, None, "the title of the chm file")
+    def _getTitle(self):
+        return self._title
+    title = property(_getTitle, None, None, "the title of the chm file")
 
-    def __gethomeurl(self):
-        return self.__homeurl
-    home = property(__gethomeurl, None, None, "home url of the chm file")
+    def _getHomeURL(self):
+        return self._homeurl
+    home = property(_getHomeURL, None, None, "home url of the chm file")
 
 
     def isSearchable(self):
-        return self.__chm.IsSearchable()
+        return self._chm.IsSearchable()
 
     def Search(self, text, wholewords=0, titleonly=0):
         '''
@@ -166,13 +166,13 @@ class PyChmFile(object):
         assert isinstance(text, unicode)
 
         text = text.encode('utf-8') ##not sure##############################
-        rt   = self.__chm.Search(text, wholewords, titleonly)
+        rt   = self._chm.Search(text, wholewords, titleonly)
         srt  = []
 
         for k, v in rt[1].items():
             entry = TableEntry()
-            entry.key = k.decode(self.__code)
-            entry.urls = [v.decode(self.__code),]
+            entry.key = k.decode(self._code)
+            entry.urls = [v.decode(self._code),]
             srt.append(entry)
 
         return srt
@@ -189,7 +189,7 @@ class PyChmFile(object):
         if url == u'':
             return False
 
-        fail, _ = self.__chm.ResolveObject( url.encode('utf-8') )
+        fail, _ = self._chm.ResolveObject( url.encode('utf-8') )
 
         return not bool(fail)
 
@@ -206,30 +206,30 @@ class PyChmFile(object):
         if url == u'':
             return None
 
-        fail, unit_info = self.__chm.ResolveObject( url.encode('utf-8') )
+        fail, unit_info = self._chm.ResolveObject( url.encode('utf-8') )
         if fail:
             return None
 
-        length, data = self.__chm.RetrieveObject(unit_info)
+        length, data = self._chm.RetrieveObject(unit_info)
 
         return data[0:length] if length else None
 
-    def __parseTable(self, data):
+    def _parseTable(self, data):
         parser = TableParser()
         parser.feed(data)
         return parser.EntryList
 
-    def __parseContentTable(self, content):
+    def _parseContentTable(self, content):
         assert isinstance(content, unicode)
 
-        self.__content_table = self.__parseTable(content)
+        self._content_table = self._parseTable(content)
 
-    def __parseIndexTable(self, index):
+    def _parseIndexTable(self, index):
 
         assert isinstance(index, unicode)
 
-        self.__index_table = self.__parseTable(index)
-        self.__index_table.sort(key=lambda x:x.key)
+        self._index_table = self._parseTable(index)
+        self._index_table.sort(key=lambda x:x.key)
 
 
 class TableParser(HTMLParser):
@@ -260,10 +260,10 @@ class TableParser(HTMLParser):
             getattr(self, 'end_' + tag)()
 
 
-    def __getEntryList(self):
+    def _getEntryList(self):
 #        self.close()
         return self.entrylist
-    EntryList = property(__getEntryList)
+    EntryList = property(_getEntryList)
 
     def start_object(self, attrs):
         for k, v in attrs:
