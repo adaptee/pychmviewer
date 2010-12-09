@@ -149,11 +149,11 @@ if __name__  ==  "__main__":
     import locale
     from pychmfile import PyChmFile
 
-    default_encoding = locale.getdefaultlocale()[1]
+    system_encoding = locale.getdefaultlocale()[1]
 
     if len(sys.argv) > 1:
 
-        globalvalue.chmpath = sys.argv[1].decode(default_encoding)
+        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
         globalvalue.chmFile = PyChmFile()
         globalvalue.chmFile.loadFile(globalvalue.chmpath)
 
