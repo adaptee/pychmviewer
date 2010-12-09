@@ -8,7 +8,7 @@
 # Description:
 #########################################################################
 from PyQt4 import QtGui
-#from PyQt4.QtGui import QTreeWidgetItem
+from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
 from utils import remove_comment, getchmfile
