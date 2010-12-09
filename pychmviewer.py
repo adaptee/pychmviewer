@@ -14,6 +14,7 @@ import sys
 from PyQt4 import QtGui
 
 import globalvalue
+from utils import getchmfile, setchmfile, getchmpath, setchmpath, getcfg
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
 
@@ -25,24 +26,25 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     if len(sys.argv)>=2:
-        globalvalue.chmpath = os.path.abspath(sys.argv[1].decode(filesystem_encoding))
-        globalvalue.chmFile = PyChmFile()
-        ok = globalvalue.chmFile.loadFile(globalvalue.chmpath)
+        setchmpath( os.path.abspath(sys.argv[1].decode(filesystem_encoding)) )
+        setchmfile( PyChmFile() )
+        ok = getchmfile().loadFile(getchmpath())
 
     if not ok:
-        if globalvalue.chmpath :
-            print (u"Failed open chm file: %s" % globalvalue.chmpath )
+        chmpath = getchmpath()
+        if chmpath :
+            print (u"Failed open chm file: %s" % chmpath )
 
         choice = QtGui.QFileDialog.getOpenFileName(
                                                 None,
                                                 u'choose file',
-                                                globalvalue.globalcfg.lastdir,
+                                                getcfg().lastdir,
                                                 u'CHM files (*.chm *.CHM)',
                                                    )
-        globalvalue.chmpath = os.path.abspath(unicode(choice))
-        globalvalue.chmFile = PyChmFile()
+        setchmpath( os.path.abspath(unicode(choice)) )
+        setchmfile( PyChmFile() )
 
-        ok = globalvalue.chmFile.loadFile(globalvalue.chmpath)
+        ok = getchmfile().loadFile(getchmpath())
         if not ok:
             sys.exit(1)
 

@@ -17,8 +17,14 @@ def remove_comment(text):
 def getchmfile():
     return globalvalue.chmFile
 
+def setchmfile(chmfile):
+    globalvalue.chmFile = chmfile
+
 def getchmpath():
     return globalvalue.chmpath
+
+def setchmpath(chmpath):
+    globalvalue.chmpath = chmpath
 
 def getmainwindow():
     return globalvalue.mainwindow
