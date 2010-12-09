@@ -215,7 +215,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
             ok = self.WebViewsWidget.loadfromdb(self.conf.lastconfdb)
         if not ok:
-            self.WebViewsWidget.onOpenatNewTab(globalvalue.chmFile.home)
+            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
         self.indexview.loadIndex(globalvalue.chmFile.index)
         self.bookmarkview.loadBookmarks()
         self.topicsview.loadTopics(globalvalue.chmFile.topics)
