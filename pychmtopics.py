@@ -84,7 +84,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents):
             parent.setExpanded(True)
             parent = parent.parent()
 
-    def onDoubleClicked(self, item, col):
+    def onDoubleClicked(self, item, _col):
         if item :
             url = item.entry.url
             self.emit(QtCore.SIGNAL('openUrl'), url)
