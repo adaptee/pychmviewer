@@ -16,6 +16,12 @@ from HTMLParser import HTMLParser
 
 from utils import remove_comment
 
+# TODO: provide real implementation
+def codepage2encoding(codepage):
+    return codepage
+
+
+
 def normalize_url(url):
     if not url:
         return url
@@ -55,11 +61,19 @@ class TableEntry(object):
 
 class PyChmFile(object):
     def __init__(self):
-        self._chm        = None
-        self._title      = u''
-        self._homeurl    = u''
-        self._content_table = None
-        self._index_table   = None
+        self.initialize()
+
+    def initialize(self):
+        self._chm           = CHMFile()
+        self._title         = u""
+        self._homeurl       = u""
+        self._encoding      = u""
+        self._content_table = [ ]
+        self._index_table   = [ ]
+
+    def reset(self):
+        self._chm.CloseCHM()
+        self.initialize()
 
     def loadFile(self, filename):
         '''
@@ -69,28 +83,28 @@ class PyChmFile(object):
         '''
         assert isinstance(filename, unicode)
 
-        if self._chm:
-            self._chm.CloseCHM()
-        else:
-            self._chm = CHMFile()
+        self.reset()
 
         if not self._chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
             print ("load file failed")
             return False
 
-        self._title = u''
-        self._content_table = None
-        self._index_table = None
+        chm = self._chm
 
-        self._chm.GetWindowsInfo()
+        #self._chm.GetTopicsTree()
+        #self._chm.GetIndex()
+        #self._chm.filename
+        #self._chm.GetEncoding()  (not working)
+        #self._chm.lcid    (magic number)
+        #self._chm.index   (url only)
+        #self._chm.topics  (url only)
 
-        self._code = self._chm.GetLCID()[0]
-        if not self._code :
-            self._code = "utf-8"
+        codepage, country, language = chm.GetLCID()
+        encoding = codepage2encoding(codepage)
+        self._encoding = encoding or 'utf-8'
 
-        self._homeurl = self._chm.home.decode(self._code)
-        self._homeurl = normalize_url(self._homeurl)
-        self._title = self._chm.title.decode(self._code)
+        self._homeurl = normalize_url( chm.home.decode(encoding) )
+        self._title   = chm.title.decode(encoding)
 
         return True
 
@@ -107,7 +121,7 @@ class PyChmFile(object):
     @property
     def encoding(self):
         "Encoding of this chm file"
-        return self._code
+        return self._encoding
 
     @property
     def index(self):
@@ -120,12 +134,12 @@ class PyChmFile(object):
             return []
 
         #parse indextree
-        index_url = self._chm.index.decode(self._code)
+        index_url = self._chm.index.decode(self._encoding)
         index_data = self.GetFileAsStrByUrl(index_url)
         if not index_data:
             index_data = self._chm.GetIndex()
         if index_data:
-            self._parseIndexTable(index_data.decode(self._code, 'ignore'))
+            self._parseIndexTable(index_data.decode(self._encoding, 'ignore'))
 
         return self._index_table
 
@@ -138,15 +152,15 @@ class PyChmFile(object):
             self._content_table = []
             return []
 
-        topic_url = self._chm.topics.decode(self._code)
-        topic_data = self.GetFileAsStrByUrl(topic_url)
+        topics_url = self._chm.topics.decode(self._encoding)
+        topics_data = self.GetFileAsStrByUrl(topics_url)
 
-        if not topic_data:
-            topic_data = self._chm.GetTopicsTree()
-        if topic_data:
-            self._parseContentTable(topic_data.decode(self._code) )
+        if not topics_data:
+            topics_data = self._chm.GetTopicsTree()
+        if topics_data:
+            self._parseContentTable(topics_data.decode(self._encoding) )
+
         return self._content_table
-
 
 
     def isSearchable(self):
@@ -175,8 +189,8 @@ class PyChmFile(object):
 
         for k, v in rt[1].items():
             entry = TableEntry()
-            entry.key = k.decode(self._code)
-            entry.urls = [v.decode(self._code),]
+            entry.key = k.decode(self._encoding)
+            entry.urls = [v.decode(self._encoding),]
             srt.append(entry)
 
         return srt
@@ -190,7 +204,7 @@ class PyChmFile(object):
         assert isinstance(url, unicode)
 
         url = normalize_url(url)
-        if url == u'':
+        if not url :
             return False
 
         fail, _ = self._chm.ResolveObject( url.encode('utf-8') )
@@ -207,7 +221,7 @@ class PyChmFile(object):
         assert isinstance(url, unicode)
 
         url = normalize_url(url)
-        if url == u'':
+        if not url :
             return None
 
         fail, unit_info = self._chm.ResolveObject( url.encode('utf-8') )
