@@ -164,11 +164,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.nav_actionBack.setEnabled(False)
             self.nav_actionForward.setEnabled(False)
             return
-        if globalvalue.currentwebview.canback():
+        if globalvalue.currentwebview.canGoBack():
             self.nav_actionBack.setEnabled(True)
         else:
             self.nav_actionBack.setEnabled(False)
-        if globalvalue.currentwebview.canforward():
+        if globalvalue.currentwebview.canGoForward():
             self.nav_actionForward.setEnabled(True)
         else:
             self.nav_actionForward.setEnabled(False)
