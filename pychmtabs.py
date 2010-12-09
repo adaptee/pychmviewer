@@ -29,9 +29,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        # FIXME; how could this happen?
-        #if self.tabWidget.count() > 0:
-            #self.tabWidget.removeTab(0)
+        # FIXME; without this strange line
+        # we will have a extra and weird 'Untitled' tab
+        if self.tabWidget.count() > 0:
+            self.tabWidget.removeTab(0)
 
         self.connect(self.tabWidget,
                      QtCore.SIGNAL('currentChanged(int)'),
@@ -96,7 +97,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             selectedText = self.tabWidget.currentWidget().selectedText()
             if not selectedText.isEmpty():
                 QtGui.QApplication.clipboard().setText(selectedText)
-        elif event.matches(QtGui.QKeySequence.SelectedAll):
+        elif event.matches(QtGui.QKeySequence.SelectAll):
             # TODO ; implement this!
             print ("[debug] keyboard event: SelectAll")
             pass
@@ -108,9 +109,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def addNewTab(self, active):
         ''''''
         view = PyChmWebView(self.tabWidget)
-        self.editFind.installEventFilter(self)
         self.windows.append(view)
         self.tabWidget.addTab(view, '')
+        self.editFind.installEventFilter(self)
 
         if active or len(self.windows) == 1:
             self.tabWidget.setCurrentWidget(view)
@@ -118,14 +119,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             #set the current web view, so other part will know
             setcurrentview(view)
 
-            # FIXME
-            #self.parent().currentwebview = view
         self.connect(view, QtCore.SIGNAL('openUrl'), getcurrentview().openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
+        self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
+
         if getcfg().openremote:
             self.connect(view, QtCore.SIGNAL('openRemoteUrl'), getcurrentview().openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
-        self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
+
         self.emit(QtCore.SIGNAL('newtabadded'), view)
         self.updateCloseButton()
         return view
@@ -136,14 +137,15 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def closeTab(self, view):
         pos = -1
-        for i, v in enumerate(self.windows):
-            if v == view:
-                pos = i
+        for index, window in enumerate(self.windows):
+            if window == view:
+                pos = index
         if pos != -1:
             del self.windows[pos]
         else:
-            print ('err: unknow webview to close')
+            print ('[Error] unknow webview to close')
             return
+
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
         self.updateCloseButton()
 
@@ -158,6 +160,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.closeButton.setEnabled(enable)
 
     def onOpenAtNewTab(self, url):
+        # 'True' means forcc opening new tab at foregound.
         view = self.addNewTab(True)
         view.openPage(url)
         return view
@@ -174,8 +177,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.closeTab(window)
 
     def onCloseCurrentTab(self):
+        # FIXME; prevent closing the only tab
         if len(self.windows) == 1:
             return
+
         self.closeTab(self.tabWidget.currentWidget())
         setcurrentview(self.tabWidget.currentWidget() )
 
@@ -194,38 +199,37 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                                           False  , self.checkCase.isChecked())
 
     def setTabName(self, view):
-        i = self.tabWidget.indexOf(view)
-        if i == -1:
+        index = self.tabWidget.indexOf(view)
+        if index == -1:
             return
-        title = view.title()
-        if not title :
-            title = getchmfile().title
-        if not title :
-            title = u'no title'
+
+        title = view.title() or getchmfile().title or u"no title"
         if len(title) > 15:
             title = title[0:12] + u'...'
-        self.tabWidget.setTabText(i, title)
+        self.tabWidget.setTabText(index, title)
 
     def savealltab(self, db):
         db.clear()
-        for i, v in enumerate(self.windows):
+
+        for index, view in enumerate(self.windows):
             if not getcfg().openremote:
                 try:
-                    v.openedpg.index(u'://')
+                    viewv.openedpg.index(u'://')
                     b = True
                 except:
                     b = False
                 if b:
                     continue
-            key = str(i)
-            v = Pickle.dumps((v.openedpg, v.getScrollPos()))
-            db[key] = v
+            key = str(index)
+            value = Pickle.dumps((view.openedpg, view.getScrollPos()))
+            db[key] = value
+
         db.sync()
 
     def loadfromdb(self, db):
         try:
-            for k, v in db.iteritems():
-                url, pos = Pickle.loads(v)
+            for key, value in db.iteritems():
+                url, pos = Pickle.loads(value)
                 view = self.onOpenAtNewTab(url)
                 view.setScrollPos(pos)
             return True
