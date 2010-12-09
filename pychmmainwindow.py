@@ -306,7 +306,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 os.makedirs(fdir)
             except StandardError:
                 pass
-            s = globalvalue.chmFile.GetFileAsStrByUrl(opath.decode('utf-8'))
+            s = globalvalue.chmFile.getContentsByURL(opath.decode('utf-8'))
             if not s :
                 #print 'extract',opath,'failed'
                 continue
