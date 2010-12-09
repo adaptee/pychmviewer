@@ -18,8 +18,8 @@ class Node(object):
         self.url      = url
         self.parent   = None
         self.level    = -1
-
         self.children = children
+
         for child in children:
             child.parent = self
 
@@ -108,6 +108,4 @@ if __name__ == '__main__':
 
         print "style: %s" % style
         print tree
-
-
 
