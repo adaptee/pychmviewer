@@ -126,7 +126,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         if not chmfile.isSearchable():
             return
         self.tree.clear()
-        results = chmfile.search(text)
+        results = chmfile.search(rexp)
         for entry in results:
             for url in entry.urls:
                 item = QTreeWidgetItem(self.tree)
@@ -141,10 +141,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         if not text :
             return
 
-        if getcfg().sengine_own:
-            self.searchBySelf(text)
-        else:
-            self.searchByOthers(text)
+        self.searchBySelf(text)
 
 
     def onDoubleClicked(self, item, col):
