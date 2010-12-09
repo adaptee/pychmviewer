@@ -103,7 +103,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
             if child.url :
                 self.url2item[child.url] = item
 
-            self._loadNode(child, item)
+            self.loadNode(child, item)
 
             prev = item
 
