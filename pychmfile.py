@@ -180,7 +180,7 @@ class PyChmFile(object):
     def CheckUrl(self, url):
         '''
         url: unicode
-        check if the url if aviable
+        check if the url is available
         return bool
         '''
         assert isinstance(url, unicode)
