@@ -213,7 +213,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         ok = False
         self.WebViewsWidget.closeAll()
         if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
-            ok = self.WebViewsWidget.loadfromdb(self.conf.lastconfdb)
+            ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
         if not ok:
             self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
         self.indexview.loadIndex(globalvalue.chmFile.index)
@@ -238,7 +238,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         else:
             globalvalue.chmpath = chmpath
             globalvalue.chmFile = chmFile
-            self.WebViewsWidget.savealltab(self.conf.lastconfdb)
+            self.WebViewsWidget.saveTo(self.conf.lastconfdb)
             self.indexview.dataloaded = False
             self.bookmarkview.dataloaded = False
             self.topicsview.clear()
@@ -274,7 +274,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         globalvalue.currentwebview.forward()
 
     def closeEvent(self, e):
-        self.WebViewsWidget.savealltab(self.conf.lastconfdb)
+        self.WebViewsWidget.saveTo(self.conf.lastconfdb)
         e.accept()
 
     def onExtractChm(self):

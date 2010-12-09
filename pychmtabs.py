@@ -208,7 +208,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             title = title[0:12] + u'...'
         self.tabWidget.setTabText(index, title)
 
-    def savealltab(self, db):
+    def saveTo(self, db):
         db.clear()
 
         for index, view in enumerate(self.windows):
@@ -226,7 +226,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         db.sync()
 
-    def loadfromdb(self, db):
+    def loadFrom(self, db):
         try:
             for key, value in db.iteritems():
                 url, pos = Pickle.loads(value)
