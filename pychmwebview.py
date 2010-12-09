@@ -330,8 +330,9 @@ class PyChmWebView(QWebView):
             url = os.path.normpath(url)
 
         if not url.lower().startswith(u'ms-its://'):
-            url = u'ms-its://'+url
+            url = u'ms-its://' + url
         #self.setUrl(QtCore.QUrl(url))
+        print ("[debug] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
         #set title on tab
         globalvalue.tabs.setTabName(self)
