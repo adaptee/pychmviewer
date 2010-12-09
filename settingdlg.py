@@ -12,6 +12,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
 import globalvalue
+from utils import getcfg
 from Ui_settingdlg import Ui_Dialog
 
 # FIXME; ugly name and location
@@ -30,11 +31,13 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
     def __init__(self, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.loadlastCheckbox.setChecked(globalvalue.globalcfg.loadlasttime)
-        self.openRemoteCheckbox.setChecked(globalvalue.globalcfg.openremote)
 
-        self.sengine_own = globalvalue.globalcfg.sengine_own
-        self.searchext = globalvalue.globalcfg.searchext
+        self.config = getcfg()
+        self.loadlastCheckbox.setChecked(self.config.loadlasttime)
+        self.openRemoteCheckbox.setChecked(self.config.openremote)
+
+        self.sengine_own = self.config.sengine_own
+        self.searchext = self.config.searchext
         if self.sengine_own:
             self.check_searchengine.setChecked(False)
             self.pushButton_slct.setEnabled(True)
@@ -44,13 +47,13 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             self.pushButton_slct.setEnabled(False)
             self.pushButton_deslct.setEnabled(False)
 
-        self.loadlasttime = globalvalue.globalcfg.loadlasttime
-        self.openremote = globalvalue.globalcfg.openremote
+        self.loadlasttime = self.config.loadlasttime
+        self.openremote = self.config.openremote
 
-        self.fontfamily = globalvalue.globalcfg.fontfamily
-        self.fontsize = globalvalue.globalcfg.fontsize
+        self.fontfamily = self.config.fontfamily
+        self.fontsize = self.config.fontsize
 
-        text = stringlize_font_info(*get_font_info(globalvalue.globalcfg))
+        text = stringlize_font_info(*get_font_info(self.config))
         self.label.setText(text)
 
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
