@@ -11,7 +11,7 @@ from PyQt4 import QtCore, QtGui
 
 from Ui_dialog_topicselector import Ui_DialogTopicSelector
 
-class PyChmSlctTopicDlg(QtGui.QDialog, Ui_DialogTopicSelector):
+class PyChmSelectTopicDialog(QtGui.QDialog, Ui_DialogTopicSelector):
     '''
     the dialog is for multiselection entry (in index tree or topics tree)
     '''
@@ -22,11 +22,12 @@ class PyChmSlctTopicDlg(QtGui.QDialog, Ui_DialogTopicSelector):
 
     def onDoubleClicked(self, item):
         if item :
-            accept()
+            self.accept()
 
-    def getUrl(self, titles, urllist):
+    def getUrl(self, titles, urls):
         for title in titles:
             self.list.addItem(title)
+
         if self.exec_() == QtGui.QDialog.Accepted and self.list.currentRow() != -1:
-            return urllist[self.list.currentRow()]
+            return urls[self.list.currentRow()]
         return None
