@@ -13,8 +13,9 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 
 import globalvalue
-from Ui_window_browser import Ui_TabbedBrowser
+from utils import getchmfile, getcfg
 from pychmwebview import PyChmWebView
+from Ui_window_browser import Ui_TabbedBrowser
 
 class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def __init__(self, parent=None):
@@ -113,7 +114,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             #self.parent().currentwebview = view
         self.connect(view, QtCore.SIGNAL('openUrl'), globalvalue.currentwebview.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenatNewTab)
-        if globalvalue.globalcfg.openremote:
+        if getcfg().openremote:
             self.connect(view, QtCore.SIGNAL('openRemoteUrl'), globalvalue.currentwebview.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenatNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
@@ -190,7 +191,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             return
         title = view.title()
         if not title :
-            title = globalvalue.chmFile.Title
+            title = getchmfile().Title
         if not title :
             title = u'no title'
         if len(title) > 15:
@@ -200,7 +201,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def savealltab(self, db):
         db.clear()
         for i, v in enumerate(self.windows):
-            if not globalvalue.globalcfg.openremote:
+            if not getcfg().openremote:
                 try:
                     v.openedpg.index(u'://')
                     b = True
