@@ -37,14 +37,6 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.openRemoteCheckbox.setChecked(self.config.openremote)
 
         self.searchext = self.config.searchext
-        #if self.sengine_own:
-            #self.check_searchengine.setChecked(False)
-            #self.pushButton_slct.setEnabled(True)
-            #self.pushButton_deslct.setEnabled(True)
-        #else:
-            #self.check_searchengine.setChecked(True)
-            #self.pushButton_slct.setEnabled(False)
-            #self.pushButton_deslct.setEnabled(False)
 
         self.loadlasttime = self.config.loadlasttime
         self.openremote = self.config.openremote
@@ -58,7 +50,6 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
         self.connect(self.loadlastCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
-        #self.connect(self.check_searchengine, QtCore.SIGNAL('clicked()'), self.onSlctEngine)
         self.connect(self.pushButton_slct, QtCore.SIGNAL('clicked()'), self.onSlctExt)
         self.connect(self.pushButton_deslct, QtCore.SIGNAL('clicked()'), self.onUnSlctExt)
         for a, b in self.searchext.iteritems():
@@ -88,18 +79,6 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         nit.setText(ext)
         self.list_search.takeItem(self.list_search.row(item))
         self.searchext[ext] = False
-
-
-    def onSlctEngine(self):
-        #if self.check_searchengine.isChecked():
-            #self.sengine_own = False
-            #self.pushButton_slct.setEnabled(False)
-            #self.pushButton_deslct.setEnabled(False)
-        #else:
-            #self.sengine_own = True
-            #self.pushButton_slct.setEnabled(True)
-            #self.pushButton_deslct.setEnabled(True)
-        pass
 
     def onLoadLast(self):
         if self.loadlastCheckbox.isChecked():
