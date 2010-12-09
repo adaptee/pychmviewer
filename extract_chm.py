@@ -11,7 +11,7 @@
 import locale
 from chm import chmlib
 
-default_encoding = locale.getdefaultlocale()[1]
+system_encoding = locale.getdefaultlocale()[1]
 
 def callback(cf, ui, paths):
     '''
@@ -27,7 +27,7 @@ def getfilelist(chmpath):
     '''
     assert isinstance(chmpath, unicode)
 
-    chmfile = chmlib.chm_open( chmpath.encode(default_encoding) )
+    chmfile = chmlib.chm_open( chmpath.encode(system_encoding) )
 
     paths = []
     ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, paths)
