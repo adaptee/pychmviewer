@@ -153,12 +153,12 @@ class PyChmFile(object):
 
     def __hascontenttable(self):
         self.__getContentTable()
-        return self.__content_table is not None and len(self.__content_table) != 0
+        return bool(self.__content_table)
     hasTopic = property(__hascontenttable)
 
     def __hasindextable(self):
         self.__getIndexTable()
-        return self.__index_table is not None and len(self.__index_table) != 0
+        return bool(self.__index_table)
     hasIndex = property(__hasindextable)
 
     def IsSearchable(self):
@@ -304,7 +304,7 @@ class TableParser(HTMLParser):
     def end_object(self):
         if not self.crtentry :
             return
-        if self.key is not None:
+        if self.key :
             if not self.root_indent_offset_set:
                 self.root_indent_offset_set = True
                 self.root_indent_offset = self.indent
@@ -334,7 +334,7 @@ class TableParser(HTMLParser):
         self.key = None
 
     def start_param(self, attrs):
-        if self.crtentry is not None:
+        if self.crtentry :
             isname    = False
             islocal   = False
             iskeyword = False
