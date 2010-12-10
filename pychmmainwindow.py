@@ -191,7 +191,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def initialize(self):
         globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
-        globalvalue.globalcfg.savecfg()
+        globalvalue.globalcfg.save_into_file()
         self.conf = PyChmConfig(globalvalue.chmpath)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
@@ -237,7 +237,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             globalvalue.globalcfg.fontsize = dialog.fontsize
             globalvalue.globalcfg.openremote = dialog.openremote
             globalvalue.globalcfg.searchext = dialog.searchext
-            globalvalue.globalcfg.savecfg()
+            globalvalue.globalcfg.save_into_file()
             setWebFont()
             for window in self.WebViewsWidget.windows:
                 window.reload()
