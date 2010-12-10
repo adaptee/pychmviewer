@@ -50,7 +50,7 @@ def getExtensions():
 
     for ext, enable in getcfg().searchext.iteritems():
         if enable:
-            extensions.append(a)
+            extensions.append(ext)
 
     return extensions
 
