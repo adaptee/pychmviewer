@@ -170,7 +170,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
         self.WebViewsWidget.closeAll()
-        if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
+        if self.conf.lastconfdb and globalvalue.globalcfg.loadlasttime:
             ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
         if not ok:
             self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
