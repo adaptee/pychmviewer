@@ -28,6 +28,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
+from utils import getchmfile
 from Ui_window_main import Ui_MainWindow
 
 
@@ -243,7 +244,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 window.reload()
 
     def onViewSource(self):
-        dialog = HtmlDlg(self)
+        dialog = HtmlDialog(self)
         editor = dialog.sourceEdit
         editor.setPlainText(globalvalue.currentwebview.page().currentFrame().toHtml())
         editor.setWindowTitle(globalvalue.currentwebview.title())
@@ -301,7 +302,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         globalvalue.currentwebview.goForward()
 
-    # FIXME; this method looks so long and messy
     def onExtractCurrentCHMFile(self):
         output_dir = QtGui.QFileDialog.getExistingDirectory(self,
                 'select a directory to store files',
@@ -309,51 +309,32 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
         if not output_dir:
             return
+
         output_dir = unicode(output_dir).encode(system_encoding)
 
-        ok, filelist = getfilelist(globalvalue.chmpath)
-        if not ok:
-            return
+        chmfile = getchmfile()
+        maximum = len( chmfile.getURLs() )
+
 
         progress = QtGui.QProgressDialog(u'Extract chm file',
                                          u'Abort',
                                          0,
-                                         len(filelist),
+                                         maximum,
                                          self
                                          )
         progress.forceShow()
 
-        for index, opath in enumerate(filelist):
-            progress.setValue(index)
-            if index % 5 == 0 and  progress.wasCanceled() :
-                    break
+        reports = chmfile.extractAll(output_dir)
+        logs = [ ]
 
-            # FIXME; always decode using 'utf-8'?
-            fpath = opath.decode('utf-8').encode(system_encoding)
-            if fpath[0] != '/':
-                fpath = '/' + fpath
-            fpath = os.path.normpath(fpath)
-            fpath = fpath[1:]
-            fpath = os.path.join(output_dir, fpath)
-            dirname, _ = os.path.split(fpath)
-            try:
-                os.makedirs(dirname)
-            except StandardError:
-                pass
+        counter = 1
+        for report in reports:
+            progress.setValue(counter)
+            counter += 1
+            if counter % 16 == 0 and progress.wasCanceled() :
+                break
+            logs.append(report)
 
-            contents = globalvalue.chmFile.getContentsByURL(opath.decode('utf-8'))
-            if not contents :
-                continue
-            try:
-                file = open(fpath,'wb+')
-                file.write(contents)
-                file.flush()
-                file.close()
-                print ("extract: %s" % opath.decode('utf-8') )
-            except StandardError:
-                print ("cannot open %s" % fpath)
-
-        progress.setValue(len(filelist))
 
     def closeEvent(self, event):
         self.WebViewsWidget.saveTo(self.conf.lastconfdb)

@@ -157,11 +157,12 @@ class PyChmFile(object):
                 yield None
 
     def getSearchableURLs(self):
-        return filterByExt( self._getURLs(), getextensions() )
+        return filterByExt( self.getURLs(), getextensions() )
 
-    def _getURLs(self):
+    def getURLs(self):
         '''
         get all the URLs in  this chm file
+        [note], return raw url, not unicode
         '''
 
         def collector(cf, ui, paths):
@@ -181,6 +182,42 @@ class PyChmFile(object):
 
         return paths if ok else [ ]
 
+    def extractAll(self, output_dir):
+        def normalize_path(path):
+            if path[0] != '/':
+                path = '/' + path
+            path = os.path.normpath(path)
+            path = path[1:]
+            return path
+
+        def prepare_for_extracting_to(fullpath):
+            dirname, _ = os.path.split(fullpath)
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+
+
+        urls = self.getURLs()
+        for url in urls:
+            # FIXME; always decode using 'utf-8'?
+            url = url.decode('utf-8')
+
+            path = url.encode(system_encoding)
+            path = normalize_path(path)
+
+            fullpath = os.path.join(output_dir, path)
+            prepare_for_extracting_to(fullpath)
+
+            contents = self.getContentsByURL(url)
+
+            if contents:
+                try :
+                    with open(fullpath, 'wb+') as writer:
+                        writer.write(contents)
+                    yield ( True,  u"[success] %s" % url )
+                except StandardError :
+                    yield ( False, u"[failure] %s" % url )
+            else:
+                yield( True, "[skip] %s (empty)" % url )
 
     @property
     def title(self):
@@ -259,10 +296,6 @@ class PyChmFile(object):
 
         return not bool(fail)
 
-    #def getContentsByURL(self, url):
-
-        #contents = self._getContentsByURL(url)
-        #return contents.decode(self.encoding)
 
     def getContentsByURL(self, url):
         '''
