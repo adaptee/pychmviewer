@@ -45,30 +45,29 @@ def normalize_url(url):
 
     return os.path.normpath(url)
 
-def getExtensions():
-    extensions= []
+def getextensions():
+    exts= []
 
     for ext, enable in getcfg().searchext.iteritems():
         if enable:
-            extensions.append(ext)
+            exts.append(ext)
 
-    return extensions
+    return exts
 
-def filterByExt(filenames, exts):
-    if not filenames or not exts:
-        return filenames
+def filterByExt(names, exts):
+    if not names or not exts:
+        return names
 
-    filenames = [ filename.lower() for filename in filenames  ]
-    exts      = [ ext.lower() for ext in exts  ]
-    results   = [ ]
+    names   = [ name.lower() for name in names  ]
+    exts    = [ ext.lower() for ext in exts  ]
+    results = [ ]
 
-    for filename in filenames:
+    for name in names:
         for ext in exts:
-            if filename.endswith(ext):
-                results.append(filename)
+            if name.endswith(ext):
+                results.append(name)
 
     return results
-
 
 def guessEncoding(contents):
     meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
@@ -82,7 +81,6 @@ def guessEncoding(contents):
         encoding = "utf-8"
 
     return encoding
-
 
 
 class PyChmFile(object):
@@ -140,57 +138,48 @@ class PyChmFile(object):
 
         return True
 
-
-
     def search(self, pattern):
         urls = self.getSearchableURLs()
 
         for url in urls:
-
-            file_content = self.getContentsByURL(url.decode('utf-8', 'ignore'))
-            if file_content:
-                encoding = guessEncoding(file_content)
-
-                rc = re.compile(unicode(pattern).encode(self.encoding))
-                match = rc.search(file_content)
+            contents = self.getContentssByURL(url.decode('utf-8', 'ignore'))
+            if contents:
+                encoding = guessEncoding(contents)
+                contents = unicode(contents, encoding)
+                match = re.search(pattern, contents, re.U)
                 if match:
-                    yield( ( url.decode('utf-8', 'ignore'),
-                            match.group(0).decode(encoding, 'ignore'),
-                        )
-                        )
+                    yield( url.decode('utf-8', 'ignore'),
+                           match.group(0),
+                         )
                 else:
                     yield None
             else:
                 yield None
 
     def getSearchableURLs(self):
-        return filterByExt( self._getfilelist(), getExtensions() )
+        return filterByExt( self._getURLs(), getextensions() )
 
-
-    def _getfilelist(self):
+    def _getURLs(self):
         '''
-        get filelist of the given path chm file
-        return (bool,fileurllist)
+        get all the URLs in  this chm file
         '''
 
-        def callback(cf, ui, paths):
-            '''
-            innermethod
-            '''
+        def collector(cf, ui, paths):
             paths.append(ui.path)
             return chmlib.CHM_ENUMERATOR_CONTINUE
-
 
         chmfile = chmlib.chm_open( self._fullpath.encode(system_encoding) )
 
         paths = []
-        ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, paths)
+        ok = chmlib.chm_enumerate(chmfile,
+                                  chmlib.CHM_ENUMERATE_ALL,
+                                  collector,
+                                  paths
+                                 )
+
         chmlib.chm_close(chmfile)
 
-        if ok:
-            return paths
-        else:
-            return []
+        return paths if ok else [ ]
 
 
     @property
@@ -218,14 +207,14 @@ class PyChmFile(object):
             self._index_table = []
             return []
 
-        index_url = self._chm.index.decode(self._encoding)
+        index_url = self._chm.index.decode(self.encoding)
         index_data = self.getContentsByURL(index_url)
 
         if not index_data:
             index_data = self._chm.GetIndex()
 
         if index_data:
-            _, tree = soup.parse(index_data.decode(self._encoding))
+            _, tree = soup.parse(index_data.decode(self.encoding))
             self._index_table = tree
 
             return tree
@@ -242,14 +231,14 @@ class PyChmFile(object):
             self._content_table = []
             return []
 
-        topics_url = self._chm.topics.decode(self._encoding)
+        topics_url = self._chm.topics.decode(self.encoding)
         topics_data = self.getContentsByURL(topics_url)
 
         if not topics_data:
             topics_data = self._chm.GetTopicsTree()
 
         if topics_data :
-            _, tree = soup.parse(topics_data.decode(self._encoding))
+            _, tree = soup.parse(topics_data.decode(self.encoding))
             self._content_table = tree
 
             return tree
@@ -270,6 +259,10 @@ class PyChmFile(object):
 
         return not bool(fail)
 
+    #def getContentsByURL(self, url):
+
+        #contents = self._getContentsByURL(url)
+        #return contents.decode(self.encoding)
 
     def getContentsByURL(self, url):
         '''
@@ -281,14 +274,14 @@ class PyChmFile(object):
 
         url = normalize_url(url)
         if not url :
-            return None
+            return ""
 
         fail, unit_info = self._chm.ResolveObject( url.encode('utf-8') )
         if fail:
-            return None
+            return ""
 
         length, data = self._chm.RetrieveObject(unit_info)
 
-        return data[0:length] if length else None
+        return data[0:length] if length else ""
 
 
