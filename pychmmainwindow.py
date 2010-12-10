@@ -26,7 +26,7 @@ from pychmfile import PyChmFile
 from htmldlg import HtmlDialog
 from encodinglist import encodings
 from settingdlg import SettingDlg
-from about import aboutdlg
+from about import AboutDialog
 from extract_chm import getfilelist
 
 
@@ -205,7 +205,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.inital()
 
     def onAbout(self):
-        dialog = aboutdlg(self)
+        dialog = AboutDialog(self)
         dialog.exec_()
 
     def onSetting(self):
@@ -252,7 +252,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         for window in self.WebViewsWidget.windows:
             window.reload()
 
-
     def onFilePrint(self):
         globalvalue.currentwebview.printPage()
 
@@ -281,10 +280,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         globalvalue.currentwebview.goForward()
 
-    def closeEvent(self, e):
+    def closeEvent(self, event):
         self.WebViewsWidget.saveTo(self.conf.lastconfdb)
-        e.accept()
+        event.accept()
 
+    # FIXME; this method looks so long and messy
     def onExtractChm(self):
         od = QtGui.QFileDialog.getExistingDirectory(self,
                 'select a directory to store files',
