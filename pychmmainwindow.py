@@ -56,50 +56,24 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
+        self._setupFileMenu()
+        self._setupViewMenu()
         self._setupPanelMenu()
         self._setupPanelDock()
+        self._setupNavigation()
+        self._setupSettingsMenu()
+        self._setupHelpMenu()
+        self._setupMiscActions()
+
+        self._setupEncodingsSubMenu()
+        setWebFont()
 
         # FIXME ; these 2 lines are so dirty and evil
         # it must die!
         globalvalue.tabs = self.WebViewsWidget
         globalvalue.mainWindow = self
 
-        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
-        self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
-        self.connect(self.file_Extract_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
-
-        self.connect(self.view_Increase_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
-        self.connect(self.view_Decrease_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoomOut)
-        self.connect(self.view_norm_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoomOff)
-
-        self.connect(self.view_Locate_in_contents_action,
-                QtCore.SIGNAL('triggered(bool)'), self.locateInTopics)
-
-        self.connect(self.nav_actionHome,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
-        self.connect(self.nav_actionBack,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoBack)
-        self.connect(self.nav_actionForward,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoForward)
-
-        self.connect(self.WebViewsWidget,
-                QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
-        self.connect(self.bookmark_AddAction,
-                QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
-        self.connect(self.view_View_HTML_source_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onViewSource)
-        self.connect(self.settings_SettingsAction,
-                QtCore.SIGNAL('triggered(bool)'), self.onSetting)
-        self.connect(self.actionAbout,
-                QtCore.SIGNAL('triggered(bool)'), self.onAbout)
-
-        self.addEncoding()
         self.initialize()
-        setWebFont()
 
     def _setupPanelMenu(self):
 
@@ -145,13 +119,54 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
         self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
 
+    def _setupFileMenu(self):
+        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
+        self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
+        self.connect(self.file_Extract_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
 
-    def addEncoding(self):
+    def _setupViewMenu(self):
+        self.connect(self.view_Increase_font_size_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
+        self.connect(self.view_Decrease_font_size_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onZoomOut)
+        self.connect(self.view_norm_font_size_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onZoomOff)
+        self.connect(self.view_View_HTML_source_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onViewSource)
+        self.connect(self.view_Locate_in_contents_action,
+                QtCore.SIGNAL('triggered(bool)'), self.locateInTopics)
+
+        self._setupEncodingsSubMenu()
+
+    def _setupNavigation(self):
+        self.connect(self.nav_actionHome,
+                QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
+        self.connect(self.nav_actionBack,
+                QtCore.SIGNAL('triggered(bool)'), self.onGoBack)
+        self.connect(self.nav_actionForward,
+                QtCore.SIGNAL('triggered(bool)'), self.onGoForward)
+
+    def _setupSettingsMenu(self):
+        self.connect(self.settings_SettingsAction,
+                QtCore.SIGNAL('triggered(bool)'), self.onSetting)
+
+    def _setupHelpMenu(self):
+        self.connect(self.actionAbout,
+                QtCore.SIGNAL('triggered(bool)'), self.onAbout)
+
+    def _setupMiscActions(self):
+        self.connect(self.WebViewsWidget,
+                QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
+        self.connect(self.bookmark_AddAction,
+                QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
+
+    def _setupEncodingsSubMenu(self):
         encodings_menu = QMenu(self)
         self.groupOfEncodings = QtGui.QActionGroup(self)
 
         action = QAction(self)
-        action.setText(u'auto')
+        action.setText(u'Auto')
         action.encoding = None
         action.setCheckable(True)
         action.setChecked(True)
@@ -200,9 +215,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         chmFile = PyChmFile()
         ok = chmFile.loadFile(chmpath)
         if not ok:
-            mb = QtGui.QMessageBox(self)
-            mb.setText(u'not open')
-            mb.exec_()
+            #mb = QtGui.QMessageBox(self)
+            #mb.setText(u'not open')
+            #mb.exec_()
             return
         else:
             globalvalue.chmpath = chmpath
