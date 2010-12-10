@@ -79,7 +79,7 @@ class GlobalConfig(object):
         except:
             self.__lastdir = home
 
-    def savecfg(self):
+    def save_info_file(self):
         cfg = ConfigParser()
         cfg.add_section('userconfig')
         cfg.set('userconfig', 'loadlasttime', str(self.loadlasttime))
