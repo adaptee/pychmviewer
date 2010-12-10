@@ -84,8 +84,10 @@ def guessEncoding(contents):
 
 
 class PyChmFile(object):
-    def __init__(self):
+    def __init__(self, path=None):
         self.initialize()
+        if path:
+            self.loadFile(path)
 
     def initialize(self):
         self._chm           = CHMFile()
