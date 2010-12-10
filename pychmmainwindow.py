@@ -103,7 +103,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.view_Increase_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.zoominview)
         self.connect(self.view_Decrease_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.zoomoutview)
+                QtCore.SIGNAL('triggered(bool)'), self.zoomOutView)
         self.connect(self.view_norm_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.normview)
         self.connect(self.view_Locate_in_contents_action,
@@ -251,8 +251,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def zoominview(self):
         globalvalue.currentwebview.zoomin()
 
-    def zoomoutview(self):
-        globalvalue.currentwebview.zoomout()
+    def zoomOutView(self):
+        globalvalue.currentwebview.zoomOut()
 
     def normview(self):
         globalvalue.currentwebview.normsize()
