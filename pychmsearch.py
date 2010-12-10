@@ -12,7 +12,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from utils import getchmfile
+from utils import getchmfile, setchmfile
 from Ui_tab_search import Ui_TabSearch
 
 
@@ -88,9 +88,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
 
-        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmfile = PyChmFile()
-        globalvalue.chmfile.loadFile(globalvalue.chmpath)
+        path = sys.argv[1].decode(system_encoding)
+        chmfile = PyChmFile(path)
+        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         sch = PyChmSearchView()

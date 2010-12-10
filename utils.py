@@ -20,12 +20,6 @@ def getchmfile():
 def setchmfile(chmfile):
     globalvalue.chmfile = chmfile
 
-#def getchmpath():
-    #return globalvalue.chmpath
-
-#def setchmpath(chmpath):
-    #globalvalue.chmpath = chmpath
-
 def getmainwindow():
     return globalvalue.mainwindow
 
