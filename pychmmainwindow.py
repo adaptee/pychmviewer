@@ -52,9 +52,10 @@ def setWebFont():
 
 
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, session, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
+
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -73,7 +74,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         settabs(self.WebViewsWidget)
         self.config = getcfg()
 
+        #experimental
+        self.session = session
+        self.config = session.config
+        self.tabmanager = self.WebViewsWidget
+        #self.topicsview =  None
+
         self.initialize()
+
 
     def _setupPanelMenu(self):
 

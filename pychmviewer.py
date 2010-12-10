@@ -13,6 +13,8 @@ import sys
 
 from PyQt4 import QtGui
 
+from session import Session
+
 from utils import getchmfile, setchmfile, getcfg
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
@@ -48,7 +50,10 @@ if __name__ == "__main__":
 
         setchmfile( chmfile )
 
+    # experimental
+    session = Session()
 
-    mainwin = PyChmMainWindow()
+    mainwin = PyChmMainWindow(session)
     mainwin.show()
+
     sys.exit(app.exec_())
