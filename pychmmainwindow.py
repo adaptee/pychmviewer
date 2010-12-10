@@ -27,7 +27,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding, gettabs, settabs
+from utils import getchmfile, setchmfile, setencoding, settabs
 from Ui_window_main import Ui_MainWindow
 
 
