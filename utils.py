@@ -20,8 +20,8 @@ def getchmfile():
 def setchmfile(chmfile):
     globalvalue.chmfile = chmfile
 
-def getmainwindow():
-    return globalvalue.mainwindow
+#def getmainwindow():
+    #return globalvalue.mainwindow
 
 def getencoding():
     return globalvalue.encoding

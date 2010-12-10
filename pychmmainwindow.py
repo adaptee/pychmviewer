@@ -72,7 +72,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         # FIXME ; these 2 lines are so dirty and evil
         # that it must die! ASAP!
         globalvalue.tabs = self.WebViewsWidget
-        globalvalue.mainWindow = self
+        #globalvalue.mainWindow = self
 
         self.initialize()
 

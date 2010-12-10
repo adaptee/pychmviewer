@@ -13,9 +13,8 @@ from option import PyChmViewerConfig as GlobalConfig
 globalcfg = GlobalConfig()
 
 chmfile        = None
-#chmpath        = u""
 encoding       = "gb18030"
-mainWindow     = None
+#mainWindow     = None
 currentwebview = None
 tabs           = None
 
