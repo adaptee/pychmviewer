@@ -10,10 +10,13 @@ _, system_encoding = locale.getdefaultlocale()
 
 
 class Session(object):
-    def __init__(self):
+    def __init__(self, config_path=None):
         self.config_dir = os.path.join( os.environ["HOME"], ".pychmviewer")
-        self.config_filename = os.path.join(self.config_dir, "pychmviewer.cfg")
-        self.config = PyChmViewerConfig(self.config_filename)
+
+        config_path = config_path or \
+                      os.path.join(self.config_dir, "pychmviewer.cfg" )
+
+        self.config = PyChmViewerConfig(config_path)
 
         self.system_encoding = locale.getdefaultlocale()[1]
 
