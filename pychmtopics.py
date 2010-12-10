@@ -52,7 +52,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
             del self.map
             self.map = { }
 
-    def __init__(self, parent=None):
+    def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
         AbstractTreeView.__init__(self)
 
@@ -61,6 +61,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
         chmfile = getchmfile()
         if chmfile and chmfile.topics:
             self.loadTopics(chmfile.topics)
+
+        #experimental
+        self.mainwin = mainwin
 
     def locateUrl(self, url):
         '''

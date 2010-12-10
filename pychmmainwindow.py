@@ -78,6 +78,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.session = session
         self.config = session.config
         self.tabmanager = self.WebViewsWidget
+        #self.bookmarkview = None [done]
         #self.topicsview =  None
 
         self.initialize()
@@ -118,7 +119,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.indexview = PyChmIdxView(self.dockIndex)
         self.dockIndex.setWidget(self.indexview)
 
-        self.topicsview = PyChmTopicsView(self.dockTopics)
+        #self.topicsview = PyChmTopicsView(self.dockTopics)
+        self.topicsview = PyChmTopicsView(mainwin=self, parent=self.dockTopics)
         self.dockTopics.setWidget(self.topicsview)
 
         self.searchview = PyChmSearchView(self.dockSearch)
