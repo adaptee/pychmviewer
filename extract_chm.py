@@ -12,6 +12,10 @@ from chm import chmlib
 
 from session import system_encoding
 
+def extract(chmpath):
+    pass
+
+
 def callback(cf, ui, paths):
     '''
     innermethod

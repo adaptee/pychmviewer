@@ -22,8 +22,8 @@ from Ui_tab_search import Ui_TabSearch
 def getExtensions():
     extensions= []
 
-    for a, b in getcfg().searchext.iteritems():
-        if b:
+    for ext, enable in getcfg().searchext.iteritems():
+        if enable:
             extensions.append(a)
 
     return extensions
