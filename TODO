@@ -2,3 +2,4 @@
 [ ] make encoding per document, not a global one.
 [ ] support 'Ctrl-A' for select all
 [ ] support vi-style keybindings
+[ ] sort the search result in `natural` way
