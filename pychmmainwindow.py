@@ -192,7 +192,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def initialize(self):
         globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
         globalvalue.globalcfg.save_into_file()
-        self.conf = PyChmConfig(globalvalue.chmpath)
+        self.conf = PyChmConfig(getchmfile().path)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
         self.WebViewsWidget.closeAll()
