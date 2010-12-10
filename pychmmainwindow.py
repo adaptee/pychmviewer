@@ -305,9 +305,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         globalvalue.currentwebview.goForward()
 
-    def closeEvent(self, event):
-        self.WebViewsWidget.saveTo(self.conf.lastconfdb)
-        event.accept()
 
     # FIXME; this method looks so long and messy
     def onExtractChm(self):
@@ -353,6 +350,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             except StandardError:
                 print ("cannot open %s" % fpath)
         prgrs.setValue(len(filelist))
+
+    def closeEvent(self, event):
+        self.WebViewsWidget.saveTo(self.conf.lastconfdb)
+        event.accept()
 
 if __name__  ==  "__main__":
     app = QtGui.QApplication(sys.argv)
