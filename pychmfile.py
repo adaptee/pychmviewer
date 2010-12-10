@@ -84,12 +84,6 @@ def guessEncoding(contents):
 
 
 class PyChmFile(object):
-    #self._chm.filename
-
-    #self._chm.GetTopicsTree()  (data)
-    #self._chm.GetIndex()       (data)
-    #self._chm.index   (url only)
-    #self._chm.topics  (url only)
     def __init__(self):
         self.initialize()
 
@@ -240,6 +234,10 @@ class PyChmFile(object):
         if self._index_table :
             return self._index_table
 
+        #self._chm.GetTopicsTree()  (data)
+        #self._chm.GetIndex()       (data)
+        #self._chm.index            (url only)
+        #self._chm.topics           (url only)
         if not self._chm.index :
             self._index_table = []
             return []
@@ -255,9 +253,6 @@ class PyChmFile(object):
             self._index_table = tree
 
             return tree
-
-
-
 
     @property
     def topics(self):
@@ -293,7 +288,6 @@ class PyChmFile(object):
             return False
 
         fail, _ = self._chm.ResolveObject( url.encode('utf-8') )
-
         return not bool(fail)
 
 
@@ -316,5 +310,4 @@ class PyChmFile(object):
         length, data = self._chm.RetrieveObject(unit_info)
 
         return data[0:length] if length else ""
-
 

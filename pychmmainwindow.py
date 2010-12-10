@@ -70,7 +70,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         setWebFont()
 
         # FIXME ; these 2 lines are so dirty and evil
-        # it must die!
+        # that it must die! ASAP!
         globalvalue.tabs = self.WebViewsWidget
         globalvalue.mainWindow = self
 
