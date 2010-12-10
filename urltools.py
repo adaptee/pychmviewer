@@ -34,7 +34,7 @@ def isRemoteURL(url):
     return (False, u'')
 
 
-def isjsurl(url):
+def isJSURL(url):
     '''
     check if url is a js url
     url: unicode
@@ -43,7 +43,7 @@ def isjsurl(url):
 
     return url.lower().startswith(u"javascript://")
 
-def isnewchmurl(url):
+def isNewChmURL(url):
     '''
     url:unicode
     return: tuple(bool,unicode,unicode)
@@ -61,7 +61,7 @@ def isnewchmurl(url):
         return (True, chmfile, page)
     return (False, None, None)
 
-def getaburlifneed(url):
+def getAbsoluteURLIfNeeded(url):
     '''
     url:unicode
     return: unicode. if need(not romote,js,newchm url),return
@@ -69,7 +69,7 @@ def getaburlifneed(url):
     '''
     assert isinstance(url, unicode)
 
-    if ( not isRemoteURL(url)[0] ) and ( not isjsurl(url) )  and ( not isnewchmurl(url)[0] ):
+    if ( not isRemoteURL(url)[0] ) and ( not isJSURL(url) )  and ( not isNewChmURL(url)[0] ):
         url = os.path.normpath(url)
         if url[0] != u'/':
             url = u'/' + url
