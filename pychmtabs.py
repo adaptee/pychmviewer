@@ -12,7 +12,6 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 
-import globalvalue
 from utils import getchmfile, setchmfile, getcfg, getcurrentview, setcurrentview, settabs
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser

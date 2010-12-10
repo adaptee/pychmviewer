@@ -9,7 +9,6 @@
 #########################################################################
 from PyQt4 import QtCore, QtGui
 
-import globalvalue
 from treeview import AbstractTreeView
 from utils import getchmfile, setchmfile
 from Ui_tab_index import Ui_TabIndex

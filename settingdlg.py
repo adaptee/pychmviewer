@@ -11,7 +11,6 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
-import globalvalue
 from utils import getcfg
 from Ui_settingdlg import Ui_Dialog
 

@@ -19,7 +19,6 @@ from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
 from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
-import globalvalue
 from utils import getchmfile, setchmfile, getencoding, gettabs, remove_comment
 from content_type import content_types
 

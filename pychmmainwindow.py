@@ -15,7 +15,6 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QAction, QMenu
 from PyQt4 import QtWebKit
 
-import globalvalue
 from pychmindex import PyChmIdxView
 from pychmtopics import PyChmTopicsView
 from pychmsearch import PyChmSearchView
