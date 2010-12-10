@@ -15,10 +15,10 @@ def remove_comment(text):
         return text
 
 def getchmfile():
-    return globalvalue.chmFile
+    return globalvalue.chmfile
 
 def setchmfile(chmfile):
-    globalvalue.chmFile = chmfile
+    globalvalue.chmfile = chmfile
 
 def getchmpath():
     return globalvalue.chmpath

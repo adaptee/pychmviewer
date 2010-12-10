@@ -12,7 +12,7 @@
 from option import PyChmViewerConfig as GlobalConfig
 globalcfg = GlobalConfig()
 
-chmFile        = None
+chmfile        = None
 chmpath        = None
 encoding       = "gb18030"
 mainWindow     = None
