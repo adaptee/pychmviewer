@@ -9,7 +9,7 @@
 #########################################################################
 
 #from config import GlobalConfig
-from options import PyChmViewerConfig as GlobalConfig
+from option import PyChmViewerConfig as GlobalConfig
 globalcfg = GlobalConfig()
 
 chmFile        = None
