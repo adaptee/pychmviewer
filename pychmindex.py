@@ -11,7 +11,7 @@ from PyQt4 import QtCore, QtGui
 
 import globalvalue
 from treeview import AbstractTreeView
-from utils import getchmfile
+from utils import getchmfile, setchmfile
 from Ui_tab_index import Ui_TabIndex
 
 class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
@@ -70,9 +70,9 @@ if __name__  ==  "__main__":
 
     if len(sys.argv) > 1:
 
-        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmfile = PyChmFile()
-        globalvalue.chmfile.loadFile(globalvalue.chmpath)
+        path = sys.argv[1].decode(system_encoding)
+        chmfile = PyChmFile(path)
+        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         IDX = PyChmIdxView()

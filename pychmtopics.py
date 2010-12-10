@@ -11,7 +11,7 @@ from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 import globalvalue
-from utils import remove_comment, getchmfile
+from utils import remove_comment, getchmfile, setchmfile
 from treeview import AbstractTreeView
 from Ui_tab_contents import Ui_TabContents
 
@@ -115,9 +115,11 @@ if __name__  ==  "__main__":
     from session import system_encoding
 
     if len(sys.argv) > 1:
-        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmfile = PyChmFile()
-        globalvalue.chmfile.loadFile(globalvalue.chmpath)
+
+        path = sys.argv[1].decode(system_encoding)
+        chmfile = PyChmFile(path)
+        setchmfile(chmfile)
+
         app = QtGui.QApplication(sys.argv)
         TC = PyChmTopicsView()
         TC.show()
