@@ -222,7 +222,7 @@ class PyChmWebView(QWebView):
         url = unicode(qurl.path())
         if url == u'/':
             url = chmfile.home
-        isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
+        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
         if isnew:
             ochm = os.path.join(os.path.dirname(chmpath), ochm)
             if ochm != chmpath:
@@ -260,7 +260,7 @@ class PyChmWebView(QWebView):
         url = unicode(qurl.path())
         if url == u'/':
             url = chmfile.home
-        isnew, ochm, pg = urltools.isnewchmurl(unicode(qurl.toString()))
+        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
         if isnew:
             ochm = os.path.join(os.path.dirname(chmpath), ochm)
             if ochm != chmpath:
