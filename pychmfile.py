@@ -16,7 +16,7 @@ from chm.chm import CHMFile
 from chm import chmlib
 
 import soup
-from utils import remove_comment, getencoding
+from utils import remove_comment, getencoding, getcfg
 from session import system_encoding
 
 # TODO: provide real implementation
@@ -140,10 +140,10 @@ class PyChmFile(object):
 
         return True
 
+
+
     def search(self, pattern):
-        urls = self._getsearchlist()
-        #if not urls:
-            #return
+        urls = self.getSearchableURLs()
 
         for url in urls:
 
@@ -159,9 +159,13 @@ class PyChmFile(object):
                         )
                         )
                 else:
-                    yield ""
+                    yield None
             else:
-                yield ""
+                yield None
+
+    def getSearchableURLs(self):
+        return filterByExt( self._getfilelist(), getExtensions() )
+
 
     def _getfilelist(self):
         '''
@@ -183,10 +187,11 @@ class PyChmFile(object):
         ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, paths)
         chmlib.chm_close(chmfile)
 
-        return (ok, paths)
+        if ok:
+            return paths
+        else:
+            return []
 
-    def _getsearchlist(self):
-        return filterByExt( self._getfilelist(), getExtensions() )
 
     @property
     def title(self):
