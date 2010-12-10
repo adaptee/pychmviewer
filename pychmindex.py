@@ -13,7 +13,7 @@ from treeview import AbstractTreeView
 from utils import getchmfile, setchmfile
 from Ui_tab_index import Ui_TabIndex
 
-class PyChmIdxView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
+class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
@@ -74,7 +74,7 @@ if __name__  ==  "__main__":
         setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
-        IDX = PyChmIdxView()
+        IDX = PyChmIndexView()
         IDX.show()
         sys.exit(app.exec_())
 

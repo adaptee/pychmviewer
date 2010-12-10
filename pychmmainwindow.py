@@ -15,7 +15,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QAction, QMenu
 from PyQt4 import QtWebKit
 
-from pychmindex import PyChmIdxView
+from pychmindex import PyChmIndexView
 from pychmtopics import PyChmTopicsView
 from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
@@ -116,7 +116,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabifyDockWidget(self.dockIndex, self.dockSearch)
         self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
 
-        self.indexview = PyChmIdxView(self.dockIndex)
+        self.indexview = PyChmIndexView(self.dockIndex)
         self.dockIndex.setWidget(self.indexview)
 
         #self.topicsview = PyChmTopicsView(self.dockTopics)
