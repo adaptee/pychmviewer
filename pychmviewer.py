@@ -14,7 +14,7 @@ import sys
 from PyQt4 import QtGui
 
 import globalvalue
-from utils import getchmfile, setchmfile, setchmpath, getcfg
+from utils import getchmfile, setchmfile, getcfg
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
 from session import system_encoding
@@ -31,7 +31,6 @@ if __name__ == "__main__":
         path = os.path.realpath(sys.argv[1].decode(system_encoding))
         ok = chmfile.loadFile(path)
         setchmfile(chmfile)
-        setchmpath(path)
 
     if not ok:
         if path :
@@ -44,11 +43,10 @@ if __name__ == "__main__":
                                                 u'CHM files (*.chm *.CHM)',
                                                    )
 
-        ok = chmfile.loadFile(path)
+        ok = chmfile.loadFile(unicode(path))
         if not ok:
             sys.exit(1)
 
-        setchmpath( os.path.realpath(unicode(path)) )
         setchmfile( chmfile )
 
 
