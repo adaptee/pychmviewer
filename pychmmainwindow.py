@@ -27,12 +27,12 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding, settabs, getcurrentview
+from utils import getchmfile, setchmfile, setencoding, settabs, getcurrentview, getcfg
 from Ui_window_main import Ui_MainWindow
 
 
 def setWebFont():
-    config     = globalvalue.globalcfg
+    config     = getcfg()
     fontfamily = config.fontfamily
     fontsize   = config.fontsize
 
@@ -74,6 +74,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         settabs(self.WebViewsWidget)
 
         self.initialize()
+        self.config = getcfg()
 
     def _setupPanelMenu(self):
 
@@ -198,11 +199,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.conf.lastconfdb and globalvalue.globalcfg.loadlasttime:
             ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
         if not ok:
-            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmfile.home)
-        self.indexview.loadIndex(globalvalue.chmfile.index)
+            self.WebViewsWidget.onOpenAtNewTab(getchmfile().home)
+        self.indexview.loadIndex(getchmfile().index)
         self.bookmarkview.loadBookmarks()
-        self.topicsview.loadTopics(globalvalue.chmfile.topics)
-        self.setWindowTitle(globalvalue.chmfile.title + u' PyChmViewer')
+        self.topicsview.loadTopics(getchmfile().topics)
+        self.setWindowTitle(getchmfile().title + u' PyChmViewer')
 
 
     def onOpenFile(self):
@@ -291,7 +292,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         getcurrentview().openPage(url)
 
     def onGoHome(self):
-        getcurrentview().openPage(globalvalue.chmfile.home)
+        getcurrentview().openPage(getchmfile().home)
 
     def onGoBack(self):
         getcurrentview().goBack()
