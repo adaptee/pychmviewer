@@ -77,6 +77,14 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.tree.clear()
         self.searchBox.lineEdit().clear()
 
+    def search(self):
+        text = self.searchBox.lineEdit().text()
+        text = unicode(text).strip()
+
+        if text :
+            self.searchBySelf(text)
+
+
     def searchBySelf(self, rexp):
         filenames = filterByExt( getFilenames(), getExtensions() )
         if not filenames:
@@ -121,12 +129,6 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
 
-    def search(self):
-        text = self.searchBox.lineEdit().text()
-        text = unicode(text).strip()
-
-        if text :
-            self.searchBySelf(text)
 
 
     def onDoubleClicked(self, item, _col):
