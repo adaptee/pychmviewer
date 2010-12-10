@@ -27,7 +27,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding, settabs
+from utils import getchmfile, setchmfile, setencoding, settabs, getcurrentview
 from Ui_window_main import Ui_MainWindow
 
 
@@ -243,8 +243,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onViewSource(self):
         dialog = HtmlDialog(self)
         editor = dialog.sourceEdit
-        editor.setPlainText(globalvalue.currentwebview.page().currentFrame().toHtml())
-        editor.setWindowTitle(globalvalue.currentwebview.title())
+        editor.setPlainText(getcurrentview().page().currentFrame().toHtml())
+        editor.setWindowTitle(getcurrentview().title())
         dialog.resize(800, 600)
         dialog.exec_()
 
@@ -252,15 +252,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.onAddPressed()
 
     def onCheckToolBar(self):
-        if globalvalue.currentwebview is None:
+        if getcurrentview() is None:
             self.nav_actionBack.setEnabled(False)
             self.nav_actionForward.setEnabled(False)
             return
-        if globalvalue.currentwebview.canGoBack():
+        if getcurrentview().canGoBack():
             self.nav_actionBack.setEnabled(True)
         else:
             self.nav_actionBack.setEnabled(False)
-        if globalvalue.currentwebview.canGoForward():
+        if getcurrentview().canGoForward():
             self.nav_actionForward.setEnabled(True)
         else:
             self.nav_actionForward.setEnabled(False)
@@ -272,32 +272,32 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             window.reload()
 
     def onFilePrint(self):
-        globalvalue.currentwebview.printPage()
+        getcurrentview().printPage()
 
     def onZoonIn(self):
-        globalvalue.currentwebview.zoomIn()
+        getcurrentview().zoomIn()
 
     def onZoomOut(self):
-        globalvalue.currentwebview.zoomOut()
+        getcurrentview().zoomOut()
 
     def onZoomOff(self):
-        globalvalue.currentwebview.normsize()
+        getcurrentview().normsize()
 
     def onLocateInTopics(self):
-        self.topicsview.locateUrl(globalvalue.currentwebview.openedpg)
+        self.topicsview.locateUrl(getcurrentview().openedpg)
 
     def openInCurrentTab(self, url):
         print "[debug] trying to open url: %s" % url
-        globalvalue.currentwebview.openPage(url)
+        getcurrentview().openPage(url)
 
     def onGoHome(self):
-        globalvalue.currentwebview.openPage(globalvalue.chmfile.home)
+        getcurrentview().openPage(globalvalue.chmfile.home)
 
     def onGoBack(self):
-        globalvalue.currentwebview.goBack()
+        getcurrentview().goBack()
 
     def onGoForward(self):
-        globalvalue.currentwebview.goForward()
+        getcurrentview().goForward()
 
     def onExtractCurrentCHMFile(self):
         output_dir = QtGui.QFileDialog.getExistingDirectory(self,
