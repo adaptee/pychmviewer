@@ -27,6 +27,7 @@ from extract_chm import getfilelist
 from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
+from session import system_encoding
 from Ui_window_main import Ui_MainWindow
 
 
@@ -207,19 +208,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onOpenFile(self):
         choice = QtGui.QFileDialog.getOpenFileName(None,
-                                                 u'choose file',
-                                                 globalvalue.globalcfg.lastdir,
-                                                 u'CHM files (*.chm)',
+                                                   u'choose file',
+                                                   globalvalue.globalcfg.lastdir,
+                                                   u'CHM files (*.chm)',
                                                  )
         chmpath = unicode(choice)
         chmFile = PyChmFile()
         ok = chmFile.loadFile(chmpath)
-        if not ok:
-            #mb = QtGui.QMessageBox(self)
-            #mb.setText(u'not open')
-            #mb.exec_()
-            return
-        else:
+        if ok:
             globalvalue.chmpath = chmpath
             globalvalue.chmFile = chmFile
             self.WebViewsWidget.saveTo(self.conf.lastconfdb)
@@ -307,48 +303,57 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     # FIXME; this method looks so long and messy
     def onExtractCurrentCHMFile(self):
-        od = QtGui.QFileDialog.getExistingDirectory(self,
+        output_dir = QtGui.QFileDialog.getExistingDirectory(self,
                 'select a directory to store files',
                 '',
                 QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
-        if len(od) == 0:
+        if not output_dir:
             return
+        output_dir = unicode(output_dir).encode(system_encoding)
+
         ok, filelist = getfilelist(globalvalue.chmpath)
         if not ok:
             return
-        prgrs = QtGui.QProgressDialog(u'Extract chm file', u'Abort',
-               0, len(filelist),self)
-        prgrs.forceShow()
-        od = unicode(od).encode(sys.getfilesystemencoding())
-        for i, opath in enumerate(filelist):
-            prgrs.setValue(i)
-            if i % 5 == 0:
-                if prgrs.wasCanceled():
+
+        progress = QtGui.QProgressDialog(u'Extract chm file',
+                                         u'Abort',
+                                         0,
+                                         len(filelist),
+                                         self
+                                         )
+        progress.forceShow()
+
+        for index, opath in enumerate(filelist):
+            progress.setValue(index)
+            if index % 5 == 0 and  progress.wasCanceled() :
                     break
-            fpath = opath.decode('utf-8').encode(sys.getfilesystemencoding())
+
+            # FIXME; always decode using 'utf-8'?
+            fpath = opath.decode('utf-8').encode(system_encoding)
             if fpath[0] != '/':
                 fpath = '/' + fpath
             fpath = os.path.normpath(fpath)
             fpath = fpath[1:]
-            fpath = os.path.join(od, fpath)
-            fdir, file = os.path.split(fpath)
+            fpath = os.path.join(output_dir, fpath)
+            dirname, _ = os.path.split(fpath)
             try:
-                os.makedirs(fdir)
+                os.makedirs(dirname)
             except StandardError:
                 pass
-            s = globalvalue.chmFile.getContentsByURL(opath.decode('utf-8'))
-            if not s :
-                #print 'extract',opath,'failed'
+
+            contents = globalvalue.chmFile.getContentsByURL(opath.decode('utf-8'))
+            if not contents :
                 continue
             try:
-                file = open(fpath,'wb')
-                file.write(s)
+                file = open(fpath,'wb+')
+                file.write(contents)
                 file.flush()
                 file.close()
                 print ("extract: %s" % opath.decode('utf-8') )
             except StandardError:
                 print ("cannot open %s" % fpath)
-        prgrs.setValue(len(filelist))
+
+        progress.setValue(len(filelist))
 
     def closeEvent(self, event):
         self.WebViewsWidget.saveTo(self.conf.lastconfdb)
