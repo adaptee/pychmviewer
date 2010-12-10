@@ -108,7 +108,7 @@ class PyChmWebView(QWebView):
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
-        self.normsize()
+        self.zoomOff()
         self.reload()
         self.openedpg = None
         self.currentPos = 0
@@ -127,7 +127,7 @@ class PyChmWebView(QWebView):
         self.zoom *= 1.2
         self.setTextSizeMultiplier(self.zoom)
 
-    def normsize(self):
+    def zoomOff(self):
         '''
         to make the font size normal
         '''
