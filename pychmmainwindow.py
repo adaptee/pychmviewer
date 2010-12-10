@@ -123,7 +123,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
         self.connect(self.file_Extract_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
+                QtCore.SIGNAL('triggered(bool)'), self.onExtractCurrentCHMFile)
 
     def _setupViewMenu(self):
         self.connect(self.view_Increase_font_size_action,
@@ -135,7 +135,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.view_View_HTML_source_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onViewSource)
         self.connect(self.view_Locate_in_contents_action,
-                QtCore.SIGNAL('triggered(bool)'), self.locateInTopics)
+                QtCore.SIGNAL('triggered(bool)'), self.onLocateInTopics)
 
         self._setupEncodingsSubMenu()
 
@@ -289,7 +289,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onZoomOff(self):
         globalvalue.currentwebview.normsize()
 
-    def locateInTopics(self):
+    def onLocateInTopics(self):
         self.topicsview.locateUrl(globalvalue.currentwebview.openedpg)
 
     def openInCurrentTab(self, url):
@@ -305,9 +305,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         globalvalue.currentwebview.goForward()
 
-
     # FIXME; this method looks so long and messy
-    def onExtractChm(self):
+    def onExtractCurrentCHMFile(self):
         od = QtGui.QFileDialog.getExistingDirectory(self,
                 'select a directory to store files',
                 '',
