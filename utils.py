@@ -20,9 +20,6 @@ def getchmfile():
 def setchmfile(chmfile):
     globalvalue.chmfile = chmfile
 
-#def getmainwindow():
-    #return globalvalue.mainwindow
-
 def getencoding():
     return globalvalue.encoding
 
@@ -31,12 +28,6 @@ def setencoding(encoding):
 
 def getcfg():
     return globalvalue.globalcfg
-
-def getcurrentview():
-    return globalvalue.currentwebview
-
-def setcurrentview(view):
-    globalvalue.currentwebview = view
 
 def gettabs():
     return  globalvalue.tabs
