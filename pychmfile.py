@@ -136,7 +136,7 @@ class PyChmFile(object):
         urls = self.getSearchableURLs()
 
         for url in urls:
-            contents = self.getContentssByURL(url.decode('utf-8', 'ignore'))
+            contents = self.getContentsByURL(url.decode('utf-8', 'ignore'))
             if contents:
                 encoding = guessEncoding(contents)
                 contents = unicode(contents, encoding)
