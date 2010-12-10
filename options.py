@@ -187,7 +187,8 @@ class ConfigMapper(object):
                 conf_obj.add_section(v.section)
             conf_obj.set(v.section, k, v.outconv(v.value))
 
-        fn = fn or "/homw/whodare/.pychmviewer/pychmviewer.cfg"
+        #FIXME ; dity
+        fn = fn or "/home/whodare/.pychmviewer/pychmviewer.cfg"
 
         with open(fn, "w") as fd:
             conf_obj.write(fd)
@@ -200,7 +201,7 @@ class PyChmViewerConfig(ConfigMapper):
     """
 
     fontfamily   = StringConfigItem("userconfig", "")
-    fontsize     = StringConfigItem("userconfig", 10)
+    fontsize     = IntegerConfigItem("userconfig", 10)
     loadlasttime = YesNoConfigItem("userconfig", True)
     openremote   = YesNoConfigItem("userconfig", True)
 
@@ -212,13 +213,21 @@ class PyChmViewerConfig(ConfigMapper):
     css  = YesNoConfigItem("searchtxt", False)
     js   = YesNoConfigItem("searchtxt", False)
 
-    def __init__(self, config_fn="pychmviewer.cfg"):
+    def __init__(self, config_fn=None):
+
+        # FIXME; dirty
+        config_fn = config_fn or "/home/whodare/.pychmviewer/pychmviewer.cfg"
         fileobj = open(config_fn)
 
-        super(PyChmViewerConfig, self).__init__(
-            fileobj,
-        )
+        super(PyChmViewerConfig, self).__init__( fileobj )
 
+        # FIXME ; dirty hack
+        self.searchext = { "htm" : self.htm,
+                            "html":  self.html,
+                            "txt": self.txt,
+                            'css': self.css,
+                            "js": self.js,
+                         }
     def __str__(self):
         """Showing all config options"""
         o  = "Showing all Configuration options:\n"
@@ -228,12 +237,3 @@ class PyChmViewerConfig(ConfigMapper):
 
         return o
 
-    # FIXME ; dirty hack
-    @property
-    def searchext(self):
-        return { "htm" : self.htm,
-                 "html":  self.html,
-                 "txt": self.txt,
-                 'css': self.css,
-                 "js": self.js,
-               }
