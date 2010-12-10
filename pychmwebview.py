@@ -20,7 +20,7 @@ from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
 import globalvalue
-from utils import getchmfile, setchmfile, getencoding, remove_comment
+from utils import getchmfile, setchmfile, getencoding, gettabs, remove_comment
 from content_type import content_types
 
 
@@ -153,7 +153,7 @@ class PyChmWebView(QWebView):
         if ok:
             self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
             self.currentPos = 0
-            globalvalue.tabs.setTabName(self)
+            gettabs().setTabName(self)
         else:
             print 'file not found'
 
@@ -279,7 +279,7 @@ class PyChmWebView(QWebView):
             url = unicode(url)
         if url[0:4] == 'http':
             self.load(QtCore.QUrl(url))
-            globalvalue.tabs.setTabName(self)
+            gettabs().setTabName(self)
             self.openedpg = url
             return
         if url == u'/':
@@ -299,7 +299,7 @@ class PyChmWebView(QWebView):
             url = u'ms-its://' + url
         print ("[debug] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
-        globalvalue.tabs.setTabName(self)
+        gettabs().setTabName(self)
         self.openedpg = url[9:]
         return True
 
