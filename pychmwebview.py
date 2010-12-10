@@ -109,7 +109,7 @@ class PyChmWebView(QWebView):
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
         #self.setUrl(QtCore.QUrl('http://www.baidu.com'))
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
-#        self.connect(self.zob, QtCore.SIGNAL('clicked()'), self.zoomout)
+#        self.connect(self.zob, QtCore.SIGNAL('clicked()'), self.zoomOut)
 #        self.connect(self.zib, QtCore.SIGNAL('clicked()'), self.zoomin)
 #        self.connect(self.normb, QtCore.SIGNAL('clicked()'), self.normsize)
 #        self.connect(self.bb, QtCore.SIGNAL('clicked()'), self.back)
@@ -121,7 +121,7 @@ class PyChmWebView(QWebView):
         self.openedpg = None
         self.scrolltopos = 0
 
-    def zoomout(self):
+    def zoomOut(self):
         '''
         zoom out fontsize
         '''
@@ -189,7 +189,7 @@ class PyChmWebView(QWebView):
         link = self.anchorAt(event.pos())
         if link :
             self.keepnewtaburl = link
-            menu.addAction(u'在新标签页打开', self.openinnewtab)
+            menu.addAction(u'在新标签页打开', self.openAtNewPage)
             menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
             menu.addAction(u'复制', self.copyToClipboard)
@@ -242,7 +242,7 @@ class PyChmWebView(QWebView):
         url = os.path.normpath(url)
         return url
 
-    def openinnewtab(self):
+    def openAtNewPage(self):
         '''
         inner method
         '''
