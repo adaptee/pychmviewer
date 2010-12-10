@@ -72,9 +72,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         # FIXME ; these 2 lines are so dirty and evil
         # that it must die! ASAP!
         settabs(self.WebViewsWidget)
+        self.config = getcfg()
 
         self.initialize()
-        self.config = getcfg()
 
     def _setupPanelMenu(self):
 
@@ -190,13 +190,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     )
 
     def initialize(self):
-        globalvalue.globalcfg.lastdir = os.path.dirname(getchmfile().path)
-        globalvalue.globalcfg.save_into_file()
+        self.config.lastdir = os.path.dirname(getchmfile().path)
+        self.config.save_into_file()
         self.conf = PyChmConfig(getchmfile().path)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
         self.WebViewsWidget.closeAll()
-        if self.conf.lastconfdb and globalvalue.globalcfg.loadlasttime:
+        if self.conf.lastconfdb and self.config.loadlasttime:
             ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
         if not ok:
             self.WebViewsWidget.onOpenAtNewTab(getchmfile().home)
@@ -209,7 +209,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onOpenFile(self):
         choice = QtGui.QFileDialog.getOpenFileName(None,
                                                    u'choose file',
-                                                   globalvalue.globalcfg.lastdir,
+                                                   self.config.lastdir,
                                                    u'CHM files (*.chm)',
                                                  )
         chmpath = unicode(choice)
@@ -231,12 +231,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onSetting(self):
         dialog = SettingDlg(self)
         if dialog.exec_() == QtGui.QDialog.Accepted:
-            globalvalue.globalcfg.loadlasttime = dialog.loadlasttime
-            globalvalue.globalcfg.fontfamily = unicode(dialog.fontfamily)
-            globalvalue.globalcfg.fontsize = dialog.fontsize
-            globalvalue.globalcfg.openremote = dialog.openremote
-            globalvalue.globalcfg.searchext = dialog.searchext
-            globalvalue.globalcfg.save_into_file()
+            self.config.loadlasttime = dialog.loadlasttime
+            self.config.fontfamily = unicode(dialog.fontfamily)
+            self.config.fontsize = dialog.fontsize
+            self.config.openremote = dialog.openremote
+            self.config.searchext = dialog.searchext
+            self.config.save_into_file()
             setWebFont()
             for window in self.WebViewsWidget.windows:
                 window.reload()
