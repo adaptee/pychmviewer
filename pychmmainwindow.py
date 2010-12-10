@@ -268,10 +268,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         globalvalue.currentwebview.openPage(globalvalue.chmFile.home)
 
     def viewBack(self):
-        globalvalue.currentwebview.back()
+        globalvalue.currentwebview.goBack()
 
     def viewForward(self):
-        globalvalue.currentwebview.forward()
+        globalvalue.currentwebview.goForward()
 
     def closeEvent(self, e):
         self.WebViewsWidget.saveTo(self.conf.lastconfdb)
