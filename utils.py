@@ -26,6 +26,9 @@ def setchmfile(chmfile):
 def getencoding():
     return globalvalue.encoding
 
+def setencoding(encoding):
+    globalvalue.encoding = encoding
+
 def getcfg():
     return globalvalue.globalcfg
 
