@@ -13,7 +13,6 @@ import sys
 
 from PyQt4 import QtGui
 
-import globalvalue
 from utils import getchmfile, setchmfile, getcfg
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow

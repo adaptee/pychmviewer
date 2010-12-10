@@ -11,7 +11,6 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-import globalvalue
 from utils import getchmfile, setchmfile
 from Ui_tab_search import Ui_TabSearch
 

@@ -10,7 +10,6 @@
 from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-import globalvalue
 from utils import remove_comment, getchmfile, setchmfile
 from treeview import AbstractTreeView
 from Ui_tab_contents import Ui_TabContents
