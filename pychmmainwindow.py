@@ -57,31 +57,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self._setupPanelMenu()
+        self._setupPanelDock()
 
         # FIXME ; these 2 lines are so dirty and evil
         # it must die!
         globalvalue.tabs = self.WebViewsWidget
         globalvalue.mainWindow = self
-
-        self.tabifyDockWidget(self.dockIndex, self.dockTopics)
-        self.tabifyDockWidget(self.dockIndex, self.dockSearch)
-        self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
-
-        self.indexview = PyChmIdxView(self.dockIndex)
-        self.dockIndex.setWidget(self.indexview)
-
-        self.topicsview = PyChmTopicsView(self.dockTopics)
-        self.dockTopics.setWidget(self.topicsview)
-
-        self.searchview = PyChmSearchView(self.dockSearch)
-        self.dockSearch.setWidget(self.searchview)
-
-        self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
-        self.dockBookmark.setWidget(self.bookmarkview)
-
-        self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
-        self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
-        self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
 
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
@@ -117,7 +98,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'), self.onAbout)
 
         self.addEncoding()
-        self.inital()
+        self.initialize()
         setWebFont()
 
     def _setupPanelMenu(self):
@@ -141,6 +122,28 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.actionBookmark.setCheckable(True)
         self.actionBookmark.setChecked(True)
         self.menu_Panels.addAction(self.actionBookmark)
+
+    def _setupPanelDock(self):
+
+        self.tabifyDockWidget(self.dockIndex, self.dockTopics)
+        self.tabifyDockWidget(self.dockIndex, self.dockSearch)
+        self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
+
+        self.indexview = PyChmIdxView(self.dockIndex)
+        self.dockIndex.setWidget(self.indexview)
+
+        self.topicsview = PyChmTopicsView(self.dockTopics)
+        self.dockTopics.setWidget(self.topicsview)
+
+        self.searchview = PyChmSearchView(self.dockSearch)
+        self.dockSearch.setWidget(self.searchview)
+
+        self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
+        self.dockBookmark.setWidget(self.bookmarkview)
+
+        self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+        self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+        self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
 
 
     def addEncoding(self):
@@ -170,7 +173,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onEncodingChanged,
                     )
 
-    def inital(self):
+    def initialize(self):
         globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
         globalvalue.globalcfg.savecfg()
         self.conf = PyChmConfig(globalvalue.chmpath)
@@ -209,7 +212,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.bookmarkview.dataloaded = False
             self.topicsview.clear()
             self.searchview.clear()
-            self.inital()
+            self.initialize()
 
     def onAbout(self):
         dialog = AboutDialog(self)
