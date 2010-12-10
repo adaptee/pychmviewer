@@ -199,11 +199,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.conf.lastconfdb and globalvalue.globalcfg.loadlasttime:
             ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
         if not ok:
-            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
-        self.indexview.loadIndex(globalvalue.chmFile.index)
+            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmfile.home)
+        self.indexview.loadIndex(globalvalue.chmfile.index)
         self.bookmarkview.loadBookmarks()
-        self.topicsview.loadTopics(globalvalue.chmFile.topics)
-        self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
+        self.topicsview.loadTopics(globalvalue.chmfile.topics)
+        self.setWindowTitle(globalvalue.chmfile.title + u' PyChmViewer')
 
 
     def onOpenFile(self):
@@ -213,11 +213,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                                    u'CHM files (*.chm)',
                                                  )
         chmpath = unicode(choice)
-        chmFile = PyChmFile()
-        ok = chmFile.loadFile(chmpath)
+        chmfile = PyChmFile()
+        ok = chmfile.loadFile(chmpath)
         if ok:
             globalvalue.chmpath = chmpath
-            globalvalue.chmFile = chmFile
+            globalvalue.chmfile = chmfile
             self.WebViewsWidget.saveTo(self.conf.lastconfdb)
             self.indexview.dataloaded = False
             self.bookmarkview.dataloaded = False
@@ -293,7 +293,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         globalvalue.currentwebview.openPage(url)
 
     def onGoHome(self):
-        globalvalue.currentwebview.openPage(globalvalue.chmFile.home)
+        globalvalue.currentwebview.openPage(globalvalue.chmfile.home)
 
     def onGoBack(self):
         globalvalue.currentwebview.goBack()

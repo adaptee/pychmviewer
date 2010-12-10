@@ -248,13 +248,13 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
 
         globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmFile = PyChmFile()
-        globalvalue.chmFile.loadFile(globalvalue.chmpath)
+        globalvalue.chmfile = PyChmFile()
+        globalvalue.chmfile.loadFile(globalvalue.chmpath)
 
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()
         globalvalue.tabs = Form
-        Form.onOpenAtNewTab(globalvalue.chmFile.home)
+        Form.onOpenAtNewTab(globalvalue.chmfile.home)
         Form.show()
         sys.exit(app.exec_())
 
