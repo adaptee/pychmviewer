@@ -205,7 +205,7 @@ class PyChmFile(object):
 
             if contents:
                 try :
-                    with open(fullpath, 'wb+') as writer:
+                    with open(fullpath, 'w') as writer:
                         writer.write(contents)
                     yield ( True,  u"[success] %s" % url )
                 except StandardError :
