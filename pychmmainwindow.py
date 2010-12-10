@@ -23,7 +23,6 @@ from pychmbookmarks import PyChmBookmarksView
 from config import PyChmConfig
 from pychmfile import PyChmFile
 from encodinglist import encodings
-from extract_chm import getfilelist
 from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
