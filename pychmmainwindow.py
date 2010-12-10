@@ -95,17 +95,18 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
-        self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
-        self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
-        self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openincurrenttab)
-        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.openFile)
+        self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+        self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+        self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+
+        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
         self.connect(self.view_Increase_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.zoomInView)
+                QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
         self.connect(self.view_Decrease_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.zoomOutView)
+                QtCore.SIGNAL('triggered(bool)'), self.onZoomOut)
         self.connect(self.view_norm_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.normview)
+                QtCore.SIGNAL('triggered(bool)'), self.onZoomOff)
         self.connect(self.view_Locate_in_contents_action,
                 QtCore.SIGNAL('triggered(bool)'), self.locateInTopics)
         self.connect(self.nav_actionHome,
@@ -130,6 +131,74 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.addEncoding()
         self.inital()
         setWebFont()
+
+    def addEncoding(self):
+        encodings_menu = QMenu(self)
+        self.genc = QtGui.QActionGroup(self)
+
+        action = QAction(self)
+        action.setText(u'auto')
+        action.encoding = None
+        action.setCheckable(True)
+        action.setChecked(True)
+
+        self.genc.addAction(action)
+        encodings_menu.addAction(action)
+
+        for language, encoding in encodings:
+            action = QAction(self)
+            action.setText(language + '-*- ' + encoding)
+            action.encoding = encoding
+            action.setCheckable(True)
+            self.genc.addAction(action)
+            encodings_menu.addAction(action)
+
+        self.view_Set_encoding_action.setMenu(encodings_menu)
+        self.connect(self.genc,
+                     QtCore.SIGNAL('triggered(QAction*)'),
+                     self.onEncodingChanged,
+                    )
+
+    def inital(self):
+        globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
+        globalvalue.globalcfg.savecfg()
+        self.conf = PyChmConfig(globalvalue.chmpath)
+        self.bookmarkview.db = self.conf.bookmarkdb
+        ok = False
+        self.WebViewsWidget.closeAll()
+        if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
+            ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
+        if not ok:
+            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
+        self.indexview.loadIndex(globalvalue.chmFile.index)
+        self.bookmarkview.loadBookmarks()
+        self.topicsview.loadTopics(globalvalue.chmFile.topics)
+        self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
+
+
+    def onOpenFile(self):
+        choice = QtGui.QFileDialog.getOpenFileName(None,
+                                                 u'choose file',
+                                                 globalvalue.globalcfg.lastdir,
+                                                 u'CHM files (*.chm)',
+                                                 )
+        chmpath = unicode(choice)
+        chmFile = PyChmFile()
+        ok = chmFile.loadFile(chmpath)
+        if not ok:
+            mb = QtGui.QMessageBox(self)
+            mb.setText(u'not open')
+            mb.exec_()
+            return
+        else:
+            globalvalue.chmpath = chmpath
+            globalvalue.chmFile = chmFile
+            self.WebViewsWidget.saveTo(self.conf.lastconfdb)
+            self.indexview.dataloaded = False
+            self.bookmarkview.dataloaded = False
+            self.topicsview.clear()
+            self.searchview.clear()
+            self.inital()
 
     def onAbout(self):
         dialog = aboutdlg(self)
@@ -173,94 +242,29 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.nav_actionForward.setEnabled(False)
 
-    def addEncoding(self):
-        encodings_menu = QMenu(self)
-        self.genc = QtGui.QActionGroup(self)
-
-        action = QAction(self)
-        action.setText(u'auto')
-        action.encoding = None
-        action.setCheckable(True)
-        action.setChecked(True)
-
-        self.genc.addAction(action)
-        encodings_menu.addAction(action)
-
-        for language, encoding in encodings:
-            action = QAction(self)
-            action.setText(language + '-*- ' + encoding)
-            action.encoding = encoding
-            action.setCheckable(True)
-            self.genc.addAction(action)
-            encodings_menu.addAction(action)
-
-        self.view_Set_encoding_action.setMenu(encodings_menu)
-        self.connect(self.genc,
-                     QtCore.SIGNAL('triggered(QAction*)'),
-                     self.onEncodingChanged,
-                    )
 
     def onEncodingChanged(self, action):
         globalvalue.encoding = action.encoding
         for window in self.WebViewsWidget.windows:
             window.reload()
 
-    def inital(self):
-        globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
-        globalvalue.globalcfg.savecfg()
-        self.conf = PyChmConfig(globalvalue.chmpath)
-        self.bookmarkview.db = self.conf.bookmarkdb
-        ok = False
-        self.WebViewsWidget.closeAll()
-        if len(self.conf.lastconfdb) != 0 and globalvalue.globalcfg.loadlasttime:
-            ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
-        if not ok:
-            self.WebViewsWidget.onOpenAtNewTab(globalvalue.chmFile.home)
-        self.indexview.loadIndex(globalvalue.chmFile.index)
-        self.bookmarkview.loadBookmarks()
-        self.topicsview.loadTopics(globalvalue.chmFile.topics)
-        self.setWindowTitle(globalvalue.chmFile.title + u' PyChmViewer')
-
-    def openFile(self):
-        choice = QtGui.QFileDialog.getOpenFileName(None,
-                                                 u'choose file',
-                                                 globalvalue.globalcfg.lastdir,
-                                                 u'CHM files (*.chm)',
-                                                 )
-        chmpath = unicode(choice)
-        chmFile = PyChmFile()
-        ok = chmFile.loadFile(chmpath)
-        if not ok:
-            mb = QtGui.QMessageBox(self)
-            mb.setText(u'not open')
-            mb.exec_()
-            return
-        else:
-            globalvalue.chmpath = chmpath
-            globalvalue.chmFile = chmFile
-            self.WebViewsWidget.saveTo(self.conf.lastconfdb)
-            self.indexview.dataloaded = False
-            self.bookmarkview.dataloaded = False
-            self.topicsview.clear()
-            self.searchview.clear()
-            self.inital()
 
     def onFilePrint(self):
         globalvalue.currentwebview.printPage()
 
-    def zoomInView(self):
+    def onZoonIn(self):
         globalvalue.currentwebview.zoomIn()
 
-    def zoomOutView(self):
+    def onZoomOut(self):
         globalvalue.currentwebview.zoomOut()
 
-    def normview(self):
+    def onZoomOff(self):
         globalvalue.currentwebview.normsize()
 
     def locateInTopics(self):
         self.topicsview.locateUrl(globalvalue.currentwebview.openedpg)
 
-    def openincurrenttab(self, url):
+    def openInCurrentTab(self, url):
         print "[debug] trying to open url: %s" % url
         globalvalue.currentwebview.openPage(url)
 
