@@ -7,7 +7,6 @@
 # File Name: pychmsearch.py
 # Description:
 #########################################################################
-import re
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
@@ -26,6 +25,10 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.connect(self.go, QtCore.SIGNAL('clicked()'), self.search)
         self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.search)
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
+
+    def onDoubleClicked(self, item, _col):
+        if item :
+            self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
     def clear(self):
         self.tree.clear()
@@ -58,7 +61,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             progress.setValue(counter)
             counter += 1
             if counter % 16 == 0 and progress.wasCanceled() :
-                    break
+                break
 
             if result:
                 matches.append(result)
@@ -74,9 +77,6 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             item.setText(1, url)
         self.tree.update()
 
-    def onDoubleClicked(self, item, _col):
-        if item :
-            self.emit(QtCore.SIGNAL('openUrl'), item.url)
 
 if __name__ == "__main__":
 
