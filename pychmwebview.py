@@ -113,6 +113,9 @@ class PyChmWebView(QWebView):
         self.openedpg = None
         self.currentPos = 0
 
+        #FIXME ; dirty hack
+        self.tabsmanager = gettabs()
+
     def zoomOut(self):
         '''
         zoom out fontsize
@@ -153,7 +156,7 @@ class PyChmWebView(QWebView):
         if ok:
             self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
             self.currentPos = 0
-            gettabs().setTabName(self)
+            self.tabsmanager.setTabName(self)
         else:
             print 'file not found'
 
@@ -279,7 +282,8 @@ class PyChmWebView(QWebView):
             url = unicode(url)
         if url[0:4] == 'http':
             self.load(QtCore.QUrl(url))
-            gettabs().setTabName(self)
+            self.tabsmanager.setTabName(self)
+
             self.openedpg = url
             return
         if url == u'/':
@@ -299,7 +303,7 @@ class PyChmWebView(QWebView):
             url = u'ms-its://' + url
         print ("[debug] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
-        gettabs().setTabName(self)
+        self.tabsmanager.setTabName(self)
         self.openedpg = url[9:]
         return True
 
