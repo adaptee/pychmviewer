@@ -13,7 +13,7 @@ globalcfg = GlobalConfig()
 
 chmFile        = None
 chmpath        = None
-encoding       = None
+encoding       = "gb18030"
 mainWindow     = None
 currentwebview = None
 tabs           = None
