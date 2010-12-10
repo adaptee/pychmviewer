@@ -110,7 +110,7 @@ class PyChmWebView(QWebView):
         #self.setUrl(QtCore.QUrl('http://www.baidu.com'))
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
 #        self.connect(self.zob, QtCore.SIGNAL('clicked()'), self.zoomOut)
-#        self.connect(self.zib, QtCore.SIGNAL('clicked()'), self.zoomin)
+#        self.connect(self.zib, QtCore.SIGNAL('clicked()'), self.zoomIn)
 #        self.connect(self.normb, QtCore.SIGNAL('clicked()'), self.normsize)
 #        self.connect(self.bb, QtCore.SIGNAL('clicked()'), self.back)
 #        self.connect(self.fb, QtCore.SIGNAL('clicked()'), self.forward)
@@ -128,7 +128,7 @@ class PyChmWebView(QWebView):
         self.zoom /= 1.2
         self.setTextSizeMultiplier(self.zoom)
 
-    def zoomin(self):
+    def zoomIn(self):
         '''
         zoom in the fontsize
         '''

@@ -101,7 +101,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.openFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
         self.connect(self.view_Increase_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.zoominview)
+                QtCore.SIGNAL('triggered(bool)'), self.zoomInView)
         self.connect(self.view_Decrease_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.zoomOutView)
         self.connect(self.view_norm_font_size_action,
@@ -248,8 +248,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onFilePrint(self):
         globalvalue.currentwebview.printPage()
 
-    def zoominview(self):
-        globalvalue.currentwebview.zoomin()
+    def zoomInView(self):
+        globalvalue.currentwebview.zoomIn()
 
     def zoomOutView(self):
         globalvalue.currentwebview.zoomOut()
