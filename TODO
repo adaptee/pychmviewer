@@ -1,5 +1,20 @@
+* high priority *
+
 [ ] cleanup code and refactor, with the help of pylint
 [ ] make encoding per document, not a global one.
+[ ] git rid of the evil module: globalvalue
 [ ] support 'Ctrl-A' for select all
-[ ] support vi-style keybindings
+[ ] support showing icon with tree item
+[ ] refine context menu
+
+* low priority *
+
 [ ] sort the search result in `natural` way
+[ ] sort index in `natural` way
+[ ] support fullscreen mode(like kchmviwer)
+[ ] support hiding side panel(kchmviewer)
+[ ] support i18N and l10N
+[ ] add support for user-defined keybindings, with the help of kde platform
+
+* idea *
+[ ] support vi-style keybindings
