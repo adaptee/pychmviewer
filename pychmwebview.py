@@ -163,9 +163,6 @@ class PyChmWebView(QWebView):
             self.scrolltopos = 0
             globalvalue.tabs.setTabName(self)
         else:
-#            mb=QtGui.QMessageBox(self)
-#            mb.setText(u'file not found')
-#            mb.exec_()
             print 'file not found'
 
     def printPage(self):
@@ -262,7 +259,6 @@ class PyChmWebView(QWebView):
 
 
         if qurl.scheme() == 'http' or qurl.scheme() == 'https':
-            #self.openPage(unicode(qurl.toString())) #delete this and emit the url #######################################
             self.emit(QtCore.SIGNAL('openRemoteUrl'), unicode(qurl.toString()))
             return
         if qurl.scheme() != 'ms-its':
@@ -278,7 +274,6 @@ class PyChmWebView(QWebView):
             else:
                 return
         url = os.path.normpath(url)
-        #self.openPage(url) #delete this and emit the url #######################################
         self.emit(QtCore.SIGNAL('openUrl'), url)
 
     def openPage(self, url):
@@ -308,10 +303,8 @@ class PyChmWebView(QWebView):
 
         if not url.lower().startswith(u'ms-its://'):
             url = u'ms-its://' + url
-        #self.setUrl(QtCore.QUrl(url))
         print ("[debug] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
-        #set title on tab
         globalvalue.tabs.setTabName(self)
         self.openedpg = url[9:]
         return True
@@ -350,7 +343,6 @@ if __name__ == '__main__':
 
         app = QtGui.QApplication(sys.argv)
         Form = PyChmWebView()
-    #    Form.code = 'gbk'
         Form.openPage(globalvalue.chmFile.home)
         Form.show()
         sys.exit(app.exec_())
