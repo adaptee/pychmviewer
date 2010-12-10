@@ -13,7 +13,7 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 
 import globalvalue
-from utils import getchmfile, getcfg, getcurrentview, setcurrentview
+from utils import getchmfile, setchmfile, getcfg, getcurrentview, setcurrentview
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -247,14 +247,14 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
 
-        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmfile = PyChmFile()
-        globalvalue.chmfile.loadFile(globalvalue.chmpath)
+        path = sys.argv[1].decode(system_encoding)
+        chmfile = PyChmFile(path)
+        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()
         globalvalue.tabs = Form
-        Form.onOpenAtNewTab(globalvalue.chmfile.home)
+        Form.onOpenAtNewTab(chmfile.home)
         Form.show()
         sys.exit(app.exec_())
 

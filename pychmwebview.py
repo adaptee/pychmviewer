@@ -20,7 +20,7 @@ from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
 import globalvalue
-from utils import getchmfile, getencoding, remove_comment
+from utils import getchmfile, setchmfile, getencoding, remove_comment
 from content_type import content_types
 
 
@@ -331,12 +331,12 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
 
-        globalvalue.chmpath = sys.argv[1].decode(system_encoding)
-        globalvalue.chmfile = PyChmFile()
-        globalvalue.chmfile.loadFile(globalvalue.chmpath)
+        path = sys.argv[1].decode(system_encoding)
+        chmfile = PyChmFile(path)
+        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         Form = PyChmWebView()
-        Form.openPage(globalvalue.chmfile.home)
+        Form.openPage(chmfile.home)
         Form.show()
         sys.exit(app.exec_())

@@ -27,7 +27,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile
+from utils import getchmfile, setchmfile
 from Ui_window_main import Ui_MainWindow
 
 
@@ -190,7 +190,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     )
 
     def initialize(self):
-        globalvalue.globalcfg.lastdir = os.path.dirname(globalvalue.chmpath)
+        globalvalue.globalcfg.lastdir = os.path.dirname(getchmfile().path)
         globalvalue.globalcfg.save_into_file()
         self.conf = PyChmConfig(getchmfile().path)
         self.bookmarkview.db = self.conf.bookmarkdb
@@ -216,8 +216,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         chmfile = PyChmFile()
         ok = chmfile.loadFile(chmpath)
         if ok:
-            globalvalue.chmpath = chmpath
-            globalvalue.chmfile = chmfile
+            setchmfile(chmfile)
             self.WebViewsWidget.saveTo(self.conf.lastconfdb)
             self.indexview.dataloaded = False
             self.bookmarkview.dataloaded = False
