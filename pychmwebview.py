@@ -164,10 +164,10 @@ class PyChmWebView(QWebView):
             return
         self.print_(printer)
 
-    def back(self):
+    def goBack(self):
         self.history().back()
 
-    def forward(self):
+    def goForward(self):
         self.history().forward()
 
     def contextMenuEvent(self, event):
