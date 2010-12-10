@@ -38,3 +38,9 @@ def getcurrentview():
 def setcurrentview(view):
     globalvalue.currentwebview = view
 
+def gettabs():
+    return  globalvalue.tabs
+
+def settabs(tabs):
+    globalvalue.tabs = tabs
+
