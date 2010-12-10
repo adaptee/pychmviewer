@@ -26,7 +26,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding, settabs, getcurrentview, getcfg
+from utils import getchmfile, setchmfile, setencoding, settabs, getcfg
 from Ui_window_main import Ui_MainWindow
 
 
@@ -82,6 +82,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.initialize()
 
+    @property
+    def currentView(self):
+        return self.tabmanager.currentView
+
 
     def _setupPanelMenu(self):
 
@@ -120,7 +124,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.searchview = PyChmSearchView(self.dockSearch)
         self.dockSearch.setWidget(self.searchview)
 
-        self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
+        #self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
+        self.bookmarkview = PyChmBookmarksView(mainwin=self, parent=self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
         self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
@@ -251,8 +256,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onViewSource(self):
         dialog = HtmlDialog(self)
         editor = dialog.sourceEdit
-        editor.setPlainText(getcurrentview().page().currentFrame().toHtml())
-        editor.setWindowTitle(getcurrentview().title())
+        editor.setPlainText(self.currentView.page().currentFrame().toHtml())
+        editor.setWindowTitle(self.currentView.title())
         dialog.resize(800, 600)
         dialog.exec_()
 
@@ -260,15 +265,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.onAddPressed()
 
     def onCheckToolBar(self):
-        if getcurrentview() is None:
+        if self.currentView is None:
             self.nav_actionBack.setEnabled(False)
             self.nav_actionForward.setEnabled(False)
             return
-        if getcurrentview().canGoBack():
+        if self.currentView.canGoBack():
             self.nav_actionBack.setEnabled(True)
         else:
             self.nav_actionBack.setEnabled(False)
-        if getcurrentview().canGoForward():
+        if self.currentView.canGoForward():
             self.nav_actionForward.setEnabled(True)
         else:
             self.nav_actionForward.setEnabled(False)
@@ -280,32 +285,32 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             window.reload()
 
     def onFilePrint(self):
-        getcurrentview().printPage()
+        self.currentView.printPage()
 
     def onZoonIn(self):
-        getcurrentview().zoomIn()
+        self.currentView.zoomIn()
 
     def onZoomOut(self):
-        getcurrentview().zoomOut()
+        self.currentView.zoomOut()
 
     def onZoomOff(self):
-        getcurrentview().normsize()
+        self.currentView.normsize()
 
     def onLocateInTopics(self):
-        self.topicsview.locateUrl(getcurrentview().openedpg)
+        self.topicsview.locateUrl(self.currentView.openedpg)
 
     def openInCurrentTab(self, url):
         print "[debug] trying to open url: %s" % url
-        getcurrentview().openPage(url)
+        self.currentView.openPage(url)
 
     def onGoHome(self):
-        getcurrentview().openPage(getchmfile().home)
+        self.currentView.openPage(getchmfile().home)
 
     def onGoBack(self):
-        getcurrentview().goBack()
+        self.currentView.goBack()
 
     def onGoForward(self):
-        getcurrentview().goForward()
+        self.currentView.goForward()
 
     def onExtractCurrentCHMFile(self):
         output_dir = QtGui.QFileDialog.getExistingDirectory(self,

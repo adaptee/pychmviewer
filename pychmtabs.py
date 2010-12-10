@@ -12,7 +12,7 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 
-from utils import getchmfile, setchmfile, getcfg, getcurrentview, setcurrentview, settabs
+from utils import getchmfile, setchmfile, getcfg, settabs
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -52,6 +52,13 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
 
         self.windows = []
+
+        #experimental
+        self.currentView = None
+
+    #def currentView(self):
+        #return self.currentView
+
 
     def _setupCloseButton(self):
 
@@ -116,14 +123,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.tabWidget.setCurrentWidget(view)
 
             #set the current web view, so other part will know
-            setcurrentview(view)
+            self.currentView = view
 
-        self.connect(view, QtCore.SIGNAL('openUrl'), getcurrentview().openPage)
+        self.connect(view, QtCore.SIGNAL('openUrl'), self.currentView.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
 
         if getcfg().openremote:
-            self.connect(view, QtCore.SIGNAL('openRemoteUrl'), getcurrentview().openPage)
+            self.connect(view, QtCore.SIGNAL('openRemoteUrl'), self.currentView.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
         self.emit(QtCore.SIGNAL('newtabadded'), view)
@@ -167,8 +174,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onTabChanged(self, tabnum):
         if tabnum == -1:
             return
-        setcurrentview( self.tabWidget.widget(tabnum) )
-        getcurrentview().setFocus()
+        self.currentView = self.tabWidget.widget(tabnum)
+
+        self.currentView.setFocus()
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def closeAll(self):
@@ -181,7 +189,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             return
 
         self.closeTab(self.tabWidget.currentWidget())
-        setcurrentview(self.tabWidget.currentWidget() )
+
+        self.currentView = self.tabWidget.currentWidget()
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg

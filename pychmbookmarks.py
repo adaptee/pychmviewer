@@ -12,7 +12,6 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
-from utils import getcurrentview
 from Ui_tab_bookmarks import Ui_TabBookmarks
 
 class PyChmBookmarkItem(QListWidgetItem):
@@ -40,7 +39,7 @@ class PyChmBookmarkItem(QListWidgetItem):
         self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
-    def __init__(self, parent=None, db=None):
+    def __init__(self, mainwin=None, parent=None, ):
         '''
         attrs:
            db: a bsddb , the bookmarks stored in it
@@ -48,7 +47,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        self.db = db
+        self.mainwin = mainwin
+
+        self.db = None
         self.dataloaded = False
 
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
@@ -106,8 +107,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         inner method
         '''
-
-        webview = getcurrentview()
+        webview = self.mainwin.currentView
 
         url   = webview.openedpg
         title = webview.title()
@@ -186,7 +186,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         if not item :
             return
 
-        webview = getcurrentview()
+        webview = self.mainwin.currentView
 
         if webview.openedpg != item.url:
             webview.openPage(item.url)
