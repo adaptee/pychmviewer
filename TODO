@@ -1,2 +1,3 @@
 [ ] cleanup code and refactor, with the help of pylint
 [ ] make encoding per document, not a global one.
+[ ] support 'Ctrl-A' for select all
