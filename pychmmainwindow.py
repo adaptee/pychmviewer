@@ -56,26 +56,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
-        self.actionIndex = self.dockIndex.toggleViewAction()
-        self.actionIndex.setCheckable(True)
-        self.actionIndex.setChecked(True)
-        self.menu_Windows.addAction(self.actionIndex)
+        self._setupPanelMenu()
 
-        self.actionTopics = self.dockTopics.toggleViewAction()
-        self.actionTopics.setCheckable(True)
-        self.actionTopics.setChecked(True)
-        self.menu_Windows.addAction(self.actionTopics)
-
-        self.actionSearch = self.dockSearch.toggleViewAction()
-        self.actionSearch.setCheckable(True)
-        self.actionSearch.setChecked(True)
-        self.menu_Windows.addAction(self.actionSearch)
-
-        self.actionBookmark = self.dockBookmark.toggleViewAction()
-        self.actionBookmark.setCheckable(True)
-        self.actionBookmark.setChecked(True)
-        self.menu_Windows.addAction(self.actionBookmark)
-
+        # FIXME ; these 2 lines are so dirty and evil
+        # it must die!
         globalvalue.tabs = self.WebViewsWidget
         globalvalue.mainWindow = self
 
@@ -101,6 +85,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
+        self.connect(self.file_Extract_action,
+                QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
 
         self.connect(self.view_Increase_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
@@ -129,12 +115,33 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'), self.onSetting)
         self.connect(self.actionAbout,
                 QtCore.SIGNAL('triggered(bool)'), self.onAbout)
-        self.connect(self.actionextract,
-                QtCore.SIGNAL('triggered(bool)'), self.onExtractChm)
 
         self.addEncoding()
         self.inital()
         setWebFont()
+
+    def _setupPanelMenu(self):
+
+        self.actionIndex = self.dockIndex.toggleViewAction()
+        self.actionIndex.setCheckable(True)
+        self.actionIndex.setChecked(True)
+        self.menu_Panels.addAction(self.actionIndex)
+
+        self.actionTopics = self.dockTopics.toggleViewAction()
+        self.actionTopics.setCheckable(True)
+        self.actionTopics.setChecked(True)
+        self.menu_Panels.addAction(self.actionTopics)
+
+        self.actionSearch = self.dockSearch.toggleViewAction()
+        self.actionSearch.setCheckable(True)
+        self.actionSearch.setChecked(True)
+        self.menu_Panels.addAction(self.actionSearch)
+
+        self.actionBookmark = self.dockBookmark.toggleViewAction()
+        self.actionBookmark.setCheckable(True)
+        self.actionBookmark.setChecked(True)
+        self.menu_Panels.addAction(self.actionBookmark)
+
 
     def addEncoding(self):
         encodings_menu = QMenu(self)
