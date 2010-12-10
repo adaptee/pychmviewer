@@ -101,20 +101,24 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
+
         self.connect(self.view_Increase_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
         self.connect(self.view_Decrease_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onZoomOut)
         self.connect(self.view_norm_font_size_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onZoomOff)
+
         self.connect(self.view_Locate_in_contents_action,
                 QtCore.SIGNAL('triggered(bool)'), self.locateInTopics)
+
         self.connect(self.nav_actionHome,
-                QtCore.SIGNAL('triggered(bool)'), self.viewHome)
+                QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
         self.connect(self.nav_actionBack,
-                QtCore.SIGNAL('triggered(bool)'), self.viewBack)
+                QtCore.SIGNAL('triggered(bool)'), self.onGoBack)
         self.connect(self.nav_actionForward,
-                QtCore.SIGNAL('triggered(bool)'), self.viewForward)
+                QtCore.SIGNAL('triggered(bool)'), self.onGoForward)
+
         self.connect(self.WebViewsWidget,
                 QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
         self.connect(self.bookmark_AddAction,
@@ -268,13 +272,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         print "[debug] trying to open url: %s" % url
         globalvalue.currentwebview.openPage(url)
 
-    def viewHome(self):
+    def onGoHome(self):
         globalvalue.currentwebview.openPage(globalvalue.chmFile.home)
 
-    def viewBack(self):
+    def onGoBack(self):
         globalvalue.currentwebview.goBack()
 
-    def viewForward(self):
+    def onGoForward(self):
         globalvalue.currentwebview.goForward()
 
     def closeEvent(self, e):
