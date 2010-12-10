@@ -16,18 +16,18 @@ from PyQt4.QtGui import QAction, QMenu
 from PyQt4 import QtWebKit
 
 import globalvalue
-from Ui_window_main import Ui_MainWindow
 from pychmindex import PyChmIdxView
 from pychmtopics import PyChmTopicsView
 from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
 from config import PyChmConfig
 from pychmfile import PyChmFile
-from htmldlg import HtmlDialog
 from encodinglist import encodings
-from settingdlg import SettingDlg
-from about import AboutDialog
 from extract_chm import getfilelist
+from settingdlg import SettingDlg
+from htmldlg import HtmlDialog
+from about import AboutDialog
+from Ui_window_main import Ui_MainWindow
 
 
 def setWebFont():
@@ -138,7 +138,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def addEncoding(self):
         encodings_menu = QMenu(self)
-        self.genc = QtGui.QActionGroup(self)
+        self.groupOfEncodings = QtGui.QActionGroup(self)
 
         action = QAction(self)
         action.setText(u'auto')
@@ -146,19 +146,19 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         action.setCheckable(True)
         action.setChecked(True)
 
-        self.genc.addAction(action)
+        self.groupOfEncodings.addAction(action)
         encodings_menu.addAction(action)
 
         for language, encoding in encodings:
             action = QAction(self)
-            action.setText(language + '-*- ' + encoding)
+            action.setText( u"%s ( %s )" % (language, encoding) )
             action.encoding = encoding
             action.setCheckable(True)
-            self.genc.addAction(action)
+            self.groupOfEncodings.addAction(action)
             encodings_menu.addAction(action)
 
         self.view_Set_encoding_action.setMenu(encodings_menu)
-        self.connect(self.genc,
+        self.connect(self.groupOfEncodings,
                      QtCore.SIGNAL('triggered(QAction*)'),
                      self.onEncodingChanged,
                     )
