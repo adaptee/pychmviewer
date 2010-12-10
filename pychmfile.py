@@ -229,6 +229,11 @@ class PyChmFile(object):
         return self._encoding
 
     @property
+    def path(self):
+        "Encoding of this chm file"
+        return self._fullpath
+
+    @property
     def index(self):
         "Index of this chm file"
         if self._index_table :
