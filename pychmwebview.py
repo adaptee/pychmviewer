@@ -194,12 +194,13 @@ class PyChmWebView(QWebView):
         if event.button() != QtCore.Qt.MidButton:
             QWebView.mousePressEvent(self, event)
             return
+
         self.keepnewtaburl = self.anchorAt(event.pos())
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
                 self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
-                return
-            self.emit(QtCore.SIGNAL('openatnewtab'), self.keepnewtaburl)
+            else:
+                self.emit(QtCore.SIGNAL('openatnewtab'), self.keepnewtaburl)
 
 
     def anchorAt(self, pos):
@@ -228,6 +229,7 @@ class PyChmWebView(QWebView):
                 url = pg
             else:
                 return None
+
         url = os.path.normpath(url)
         return url
 
