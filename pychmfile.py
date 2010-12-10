@@ -13,9 +13,11 @@ import re
 import os.path
 
 from chm.chm import CHMFile
+from chm import chmlib
 
 import soup
-from utils import remove_comment
+from utils import remove_comment, getencoding
+from session import system_encoding
 
 # TODO: provide real implementation
 def codepage2encoding(codepage):
@@ -43,6 +45,46 @@ def normalize_url(url):
 
     return os.path.normpath(url)
 
+def getExtensions():
+    extensions= []
+
+    for ext, enable in getcfg().searchext.iteritems():
+        if enable:
+            extensions.append(a)
+
+    return extensions
+
+def filterByExt(filenames, exts):
+    if not filenames or not exts:
+        return filenames
+
+    filenames = [ filename.lower() for filename in filenames  ]
+    exts      = [ ext.lower() for ext in exts  ]
+    results   = [ ]
+
+    for filename in filenames:
+        for ext in exts:
+            if filename.endswith(ext):
+                results.append(filename)
+
+    return results
+
+
+def guessEncoding(contents):
+    meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
+
+    match = meta_charset.search(contents)
+    if match:
+        encoding = match.group(1)
+    elif getencoding():
+        encoding = getencoding()
+    else:
+        encoding = "utf-8"
+
+    return encoding
+
+
+
 class PyChmFile(object):
     #self._chm.filename
 
@@ -60,6 +102,7 @@ class PyChmFile(object):
         self._encoding      = u""
         self._content_table = [ ]
         self._index_table   = [ ]
+        self._fullpath      = ""
 
     def reset(self):
         self._chm.CloseCHM()
@@ -75,7 +118,7 @@ class PyChmFile(object):
         assert isinstance(filename, unicode)
         self.reset()
 
-        if not self._chm.LoadCHM(filename.encode(sys.getfilesystemencoding())):
+        if not self._chm.LoadCHM(filename.encode(system_encoding)):
             print ("load file failed")
             return False
 
@@ -88,7 +131,62 @@ class PyChmFile(object):
         self._homeurl = normalize_url( chm.home.decode(encoding) )
         self._title   = chm.title.decode(encoding)
 
+        def getFullPath(filename):
+            filename = filename.encode(system_encoding)
+            fullpath = os.path.realpath(filename)
+            return fullpath.decode(system_encoding)
+
+        self._fullpath = getFullPath(filename)
+
         return True
+
+    def search(self, pattern):
+        urls = self._getsearchlist()
+        #if not urls:
+            #return
+
+        for url in urls:
+
+            file_content = self.getContentsByURL(url.decode('utf-8', 'ignore'))
+            if file_content:
+                encoding = guessEncoding(file_content)
+
+                rc = re.compile(unicode(pattern).encode(self.encoding))
+                match = rc.search(file_content)
+                if match:
+                    yield( ( url.decode('utf-8', 'ignore'),
+                            match.group(0).decode(encoding, 'ignore'),
+                        )
+                        )
+                else:
+                    yield ""
+            else:
+                yield ""
+
+    def _getfilelist(self):
+        '''
+        get filelist of the given path chm file
+        return (bool,fileurllist)
+        '''
+
+        def callback(cf, ui, paths):
+            '''
+            innermethod
+            '''
+            paths.append(ui.path)
+            return chmlib.CHM_ENUMERATOR_CONTINUE
+
+
+        chmfile = chmlib.chm_open( self._fullpath.encode(system_encoding) )
+
+        paths = []
+        ok = chmlib.chm_enumerate(chmfile, chmlib.CHM_ENUMERATE_ALL, callback, paths)
+        chmlib.chm_close(chmfile)
+
+        return (ok, paths)
+
+    def _getsearchlist(self):
+        return filterByExt( self._getfilelist(), getExtensions() )
 
     @property
     def title(self):
@@ -126,6 +224,9 @@ class PyChmFile(object):
             self._index_table = tree
 
             return tree
+
+
+
 
     @property
     def topics(self):
