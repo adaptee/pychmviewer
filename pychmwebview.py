@@ -20,7 +20,7 @@ from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
 import globalvalue
-from utils import getchmfile, getchmpath, getencoding, remove_comment
+from utils import getchmfile, getencoding, remove_comment
 from content_type import content_types
 
 
@@ -209,7 +209,7 @@ class PyChmWebView(QWebView):
         '''
 
         chmfile = getchmfile()
-        chmpath = getchmpath()
+        chmpath = chmfile.path
 
         res = self.page().currentFrame().hitTestContent(pos)
         if not res.linkUrl().isValid():
@@ -249,7 +249,7 @@ class PyChmWebView(QWebView):
         '''
 
         chmfile = getchmfile()
-        chmpath = getchmpath()
+        chmpath = chmfile.path
 
 
         if qurl.scheme() == 'http' or qurl.scheme() == 'https':
