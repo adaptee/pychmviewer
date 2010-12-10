@@ -89,7 +89,6 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 
     def createRequest(self, op, request, outgoingdata):
         scheme = request.url().scheme()
-#        print unicode(request.url().path())
         if scheme == QLatin1String('ms-its'):
             return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
         return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
@@ -115,8 +114,7 @@ class PyChmWebView(QWebView):
 #        self.connect(self.bb, QtCore.SIGNAL('clicked()'), self.back)
 #        self.connect(self.fb, QtCore.SIGNAL('clicked()'), self.forward)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
-        self.zoom = 1.0
-        self.setTextSizeMultiplier(1.0)
+        self.normsize()
         self.reload()
         self.openedpg = None
         self.scrolltopos = 0
