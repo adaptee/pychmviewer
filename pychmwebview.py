@@ -111,7 +111,7 @@ class PyChmWebView(QWebView):
         self.normsize()
         self.reload()
         self.openedpg = None
-        self.scrolltopos = 0
+        self.currentPos = 0
 
     def zoomOut(self):
         '''
@@ -151,8 +151,8 @@ class PyChmWebView(QWebView):
         inner method
         '''
         if ok:
-            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.scrolltopos)
-            self.scrolltopos = 0
+            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
+            self.currentPos = 0
             globalvalue.tabs.setTabName(self)
         else:
             print 'file not found'
@@ -313,7 +313,7 @@ class PyChmWebView(QWebView):
         '''
         set current pos of the frame
         '''
-        self.scrolltopos = pos
+        self.currentPos = pos
         self.page().currentFrame().setScrollBarValue(Qt.Vertical, pos)
 
     def canGoBack(self):
