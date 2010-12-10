@@ -8,7 +8,8 @@
 # Description:
 #########################################################################
 
-from config import GlobalConfig
+#from config import GlobalConfig
+from options import PyChmViewerConfig as GlobalConfig
 globalcfg = GlobalConfig()
 
 chmFile        = None
@@ -17,3 +18,4 @@ encoding       = "gb18030"
 mainWindow     = None
 currentwebview = None
 tabs           = None
+
