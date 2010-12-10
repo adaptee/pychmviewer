@@ -43,7 +43,7 @@ def filterByExt(filenames, exts):
 
     for filename in filenames:
         for ext in exts:
-            if filename.lower().endswith(ext.lower()):
+            if filename.endswith(ext):
                 results.append(filename)
 
     return results
