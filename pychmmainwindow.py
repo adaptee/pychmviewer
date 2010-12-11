@@ -232,10 +232,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         event.accept()
 
     def onTabSwitched(self):
-        self.onCheckToolBar()
-        self.setWindowTitle( u"%s - PyChmViewer" %
-                             self.currentView.chmfile.title
-                           )
+        if self.currentView:
+            self.onCheckToolBar()
+            self.setWindowTitle( u"%s - PyChmViewer" %
+                                self.currentView.chmfile.title
+                               )
 
 
     def onOpenFile(self):

@@ -79,8 +79,11 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
             parent = parent.parent()
 
     def onTabSwitched(self):
-        chmfile = self.mainwin.currentView.chmfile
-        self.loadTopics(chmfile.topics)
+        self.clear()
+
+        if self.mainwin.currentView:
+            chmfile = self.mainwin.currentView.chmfile
+            self.loadTopics(chmfile.topics)
 
     def clear(self):
         '''

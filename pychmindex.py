@@ -33,8 +33,11 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
         self.lastitem = None
 
     def onTabSwitched(self):
-        chmfile = self.mainwin.currentView.chmfile
-        self.loadIndex(chmfile.index)
+        self.clear()
+
+        if self.mainwin.currentView:
+            chmfile = self.mainwin.currentView.chmfile
+            self.loadIndex(chmfile.index)
 
     def clear(self):
         '''

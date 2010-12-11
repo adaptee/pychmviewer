@@ -30,7 +30,8 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
 
     def onTabSwitched(self):
         #FIXME; currently, I have no good idea about what to do.
-        pass
+        return
+        self.clear()
 
 
     def clear(self):

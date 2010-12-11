@@ -108,10 +108,12 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         return name
 
     def onTabSwitched(self):
+        self.clear()
 
-        chmfile = self._getCurrentChmFile()
-        self.db = chmfile.bookmarkdb or { }
-        self.loadBookmarks()
+        if self.mainwin.currentView:
+            chmfile = self._getCurrentChmFile()
+            self.db = chmfile.bookmarkdb or { }
+            self.loadBookmarks()
 
     def loadBookmarks(self):
         '''
