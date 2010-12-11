@@ -29,6 +29,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.mainwin = mainwin
         self.config  = mainwin.config
+        self.session = mainwin.session
 
 
         # FIXME; without this strange line

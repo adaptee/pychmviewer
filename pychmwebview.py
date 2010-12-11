@@ -114,9 +114,9 @@ class PyChmWebView(QWebView):
         self.openedpg = None
         self.currentPos = 0
 
-        #experimental
         self.tabmanager = tabmanager
-        self.chmfile = PyChmFile()
+        self.session    = tabmanager.session
+        self.chmfile = PyChmFile(self.session )
         self.encoding = "gb18030"
         self.url = None
 
@@ -125,7 +125,7 @@ class PyChmWebView(QWebView):
         view = PyChmWebView(tabmanager=self.tabmanager,
                             parent=self.parent() )
 
-        view.chmfile = PyChmFile(self.chmfile.path)
+        view.chmfile = PyChmFile(self.session, self.chmfile.path)
         view.enocding = self.encoding
         view.url = self.url
 
