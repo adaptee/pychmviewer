@@ -16,7 +16,7 @@ from chm.chm import CHMFile
 from chm import chmlib
 
 import soup
-from utils import remove_comment, getcfg
+from utils import remove_comment
 from session import system_encoding
 
 # TODO: provide real implementation
@@ -46,29 +46,7 @@ def normalize_url(url):
 
     return os.path.normpath(url)
 
-def getextensions():
-    exts= []
 
-    for ext, enable in getcfg().searchext.iteritems():
-        if enable:
-            exts.append(ext)
-
-    return exts
-
-def filterByExt(names, exts):
-    if not names or not exts:
-        return names
-
-    names   = [ name.lower() for name in names  ]
-    exts    = [ ext.lower() for ext in exts  ]
-    results = [ ]
-
-    for name in names:
-        for ext in exts:
-            if name.endswith(ext):
-                results.append(name)
-
-    return results
 
 
 
@@ -127,7 +105,6 @@ class PyChmFile(object):
         return True
 
     def search(self, pattern):
-
         def guessEncoding(contents):
             meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
@@ -136,10 +113,7 @@ class PyChmFile(object):
                 encoding = match.group(1)
             else :
                 encoding = self.encoding
-
-            print "[debug] encoding: %s" % encoding
             return encoding
-
 
         urls = self.getSearchableURLs()
 
@@ -159,6 +133,31 @@ class PyChmFile(object):
                 yield None
 
     def getSearchableURLs(self):
+
+        def getextensions():
+            exts= []
+
+            for ext, enable in self.session.config.searchext.iteritems():
+                if enable:
+                    exts.append(ext)
+            return exts
+
+
+        def filterByExt(names, exts):
+            if not names or not exts:
+                return names
+
+            names   = [ name.lower() for name in names  ]
+            exts    = [ ext.lower() for ext in exts  ]
+            results = [ ]
+
+            for name in names:
+                for ext in exts:
+                    if name.endswith(ext):
+                        results.append(name)
+
+            return results
+
         return filterByExt( self.getURLs(), getextensions() )
 
     def getURLs(self):

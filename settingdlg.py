@@ -11,7 +11,6 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
-from utils import getcfg
 from Ui_settingdlg import Ui_Dialog
 
 # FIXME; ugly name and location
@@ -27,11 +26,13 @@ def stringlize_font_info(family, size):
 
 
 class SettingDlg(QtGui.QDialog, Ui_Dialog):
-    def __init__(self, parent=None):
+    def __init__(self, mainwin=None, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
 
-        self.config = getcfg()
+        self.mainwin = mainwin
+        self.config = mainwin.session.config
+
         self.loadlastCheckbox.setChecked(self.config.loadlasttime)
         self.openRemoteCheckbox.setChecked(self.config.openremote)
 

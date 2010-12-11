@@ -26,9 +26,6 @@ class Ui_MainWindow(object):
         self.widget.setObjectName(_fromUtf8("widget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.WebViewsWidget = PyChmTabs(self.widget)
-        self.WebViewsWidget.setObjectName(_fromUtf8("WebViewsWidget"))
-        self.horizontalLayout.addWidget(self.WebViewsWidget)
         MainWindow.setCentralWidget(self.widget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 873, 23))
@@ -307,7 +304,6 @@ class Ui_MainWindow(object):
         self.file_Extract_action.setToolTip(QtGui.QApplication.translate("MainWindow", "Extract current CHM file", None, QtGui.QApplication.UnicodeUTF8))
         self.file_Extract_action.setWhatsThis(QtGui.QApplication.translate("MainWindow", "Extract current CHM ", None, QtGui.QApplication.UnicodeUTF8))
 
-from pychmtabs import PyChmTabs
 import images_rc
 
 if __name__ == "__main__":

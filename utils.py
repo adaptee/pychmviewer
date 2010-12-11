@@ -20,6 +20,3 @@ def getchmfile():
 def setchmfile(chmfile):
     globalvalue.chmfile = chmfile
 
-def getcfg():
-    return globalvalue.globalcfg
-

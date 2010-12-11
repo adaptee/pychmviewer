@@ -15,7 +15,7 @@ from PyQt4 import QtGui
 
 from session import Session
 
-from utils import getchmfile, setchmfile, getcfg
+from utils import getchmfile, setchmfile
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
 from session import system_encoding
@@ -23,8 +23,11 @@ from session import system_encoding
 if __name__ == "__main__":
 
     app = QtGui.QApplication(sys.argv)
+    session = Session()
 
     chmfile = PyChmFile()
+    #FIXME; dirty hack
+    chmfile.session = session
     path = ""
     ok = False
 
@@ -40,7 +43,7 @@ if __name__ == "__main__":
         path = QtGui.QFileDialog.getOpenFileName(
                                                 None,
                                                 u'choose file',
-                                                getcfg().lastdir,
+                                                session.config.lastdir,
                                                 u'CHM files (*.chm *.CHM)',
                                                    )
 
@@ -48,10 +51,9 @@ if __name__ == "__main__":
         if not ok:
             sys.exit(1)
 
+
         setchmfile( chmfile )
 
-    # experimental
-    session = Session()
 
     mainwin = PyChmMainWindow(session)
     mainwin.show()
