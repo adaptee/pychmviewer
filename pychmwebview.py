@@ -116,6 +116,7 @@ class PyChmWebView(QWebView):
         self.tabsmanager = tabmanager
         self.chmfile = None
         self.encoding = "gb18030"
+        self.url = None
 
     def zoomOut(self):
         '''
