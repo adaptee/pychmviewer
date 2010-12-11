@@ -27,25 +27,26 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
-        self.mainwin = mainwin
-        self.config  = mainwin.config
-        self.session = mainwin.session
+        self.mainwin     = mainwin
+        self.config      = mainwin.config
+        self.session     = mainwin.session
+        self.webviews    = []
+        self.currentView = None
 
+        print "[tabmanager] %d tabs exists right after __init__()" % self.tabWidget.count()
+        ## FIXME; without this strange line
+        ## we will have a extra and weird 'Untitled' tab
+        #if self.tabWidget.count() > 0:
+            #self.tabWidget.removeTab(0)
 
-        # FIXME; without this strange line
-        # we will have a extra and weird 'Untitled' tab
-        if self.tabWidget.count() > 0:
-            self.tabWidget.removeTab(0)
+        self._setupCloseButton()
+        self._setupNewButton()
+        self.frameFind.setVisible(False)
 
         self.connect(self.tabWidget,
                      QtCore.SIGNAL('currentChanged(int)'),
                      self.onTabSwitched
                     )
-
-        self._setupCloseButton()
-        self._setupNewButton()
-
-        self.frameFind.setVisible(False)
 
         self.connect(self.editFind, QtCore.SIGNAL('textEdited(const QString&)'),
                 self.onTextEdited)
@@ -55,10 +56,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(self.toolPrevious, QtCore.SIGNAL('clicked()'), self.onFindPrevious)
         self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
 
-        self.webviews = []
-
-        #experimental
-        self.currentView = None
 
 
     def _setupCloseButton(self):
@@ -91,33 +88,26 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         button.setAutoRaise(True)
         button.setIcon(icon)
         button.setToolTip(tooltip)
-
         return button
 
-    # called when keyboard is pressed
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Find):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0, len(self.editFind.text()))
-        if event.matches(QtGui.QKeySequence.Copy):
+        elif event.matches(QtGui.QKeySequence.Copy):
             selectedText = self.tabWidget.currentWidget().selectedText()
             if not selectedText.isEmpty():
                 QtGui.QApplication.clipboard().setText(selectedText)
         elif event.matches(QtGui.QKeySequence.SelectAll):
-            # TODO ; implement this in more serious way
-            print ("[debug] keyboard event: SelectAll")
-            pass
-
-
-    def onFindReturnPressed(self):
-        self.find()
+            raise NotImplementedError("Ctrl-A to select All is not done yet.")
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg
         self.onOpenAtNewTab(url)
 
     def onOpenAtNewTab(self, url):
+        # FIXME; should add a new param representing True/False
         # 'True' means forcc opening new tab at foregound.
         view = self.addNewTab(True)
         view.openPage(url)
@@ -133,14 +123,15 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.webviews.append(view)
         self.tabWidget.addTab(view, '')
+
         self.editFind.installEventFilter(self)
 
         self.connect(view, QtCore.SIGNAL('openURL'), self.currentView.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
-        self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
+        self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
         if self.config.openremote:
-            self.connect(view, QtCore.SIGNAL('openRemoteUrl'), self.currentView.openPage)
+            self.connect(view, QtCore.SIGNAL('openRemoteURL'), self.currentView.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
         self.emit(QtCore.SIGNAL('newtabadded'), view)
@@ -152,8 +143,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         return view
 
-    def emitCheckToolBar(self):
-        self.emit(QtCore.SIGNAL('checkToolBar'))
+
+    def closeAll(self):
+        for webview in self.webviews:
+            self.closeTab(webview)
 
     def closeTab(self, view):
         pos = -1
@@ -169,27 +162,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
         self.updateCloseButton()
 
-    def find(self):
-        self.tabWidget.currentWidget().find(self.editFind.text(),
-                                            False, self.checkCase.isChecked())
-        if not self.frameFind.isVisible():
-            self.frameFind.show()
 
     def updateCloseButton(self):
         enable = len(self.webviews) > 1
         self.closeButton.setEnabled(enable)
-
-    def onTabSwitched(self, tabnum):
-        if tabnum == -1:
-            return
-        self.currentView = self.tabWidget.widget(tabnum)
-        self.currentView.setFocus()
-
-        self.emit(QtCore.SIGNAL('tabSwitched'))
-
-    def closeAll(self):
-        for webview in self.webviews:
-            self.closeTab(webview)
 
     def onCloseCurrentTab(self):
         # FIXME; prevent closing the only tab
@@ -201,15 +177,16 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.currentView = self.tabWidget.currentWidget()
 
 
-    def onTextEdited(self, _):
-        self.find()
+    def onTabSwitched(self, tabnum):
+        if tabnum == -1:
+            return
+        self.currentView = self.tabWidget.widget(tabnum)
+        self.currentView.setFocus()
 
-    def onFindPrevious(self):
-        self.tabWidget.currentWidget().find(self.editFind.text(),
-                                            True, self.checkCase.isChecked())
-    def onFindNext(self):
-        self.tabWidget.currentWidget().find(self.editFind.text(),
-                                          False  , self.checkCase.isChecked())
+        self.emit(QtCore.SIGNAL('tabSwitched'))
+
+    def onLoadFinished(self):
+        self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def setTabName(self, view):
         index = self.tabWidget.indexOf(view)
@@ -220,6 +197,28 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if len(title) > 15:
             title = title[0:12] + u'...'
         self.tabWidget.setTabText(index, title)
+
+
+
+    def onFindReturnPressed(self):
+        self.find()
+
+    def onTextEdited(self, _text):
+        self.find()
+
+    def find(self):
+        self.tabWidget.currentWidget().find(self.editFind.text(),
+                                            False, self.checkCase.isChecked())
+        if not self.frameFind.isVisible():
+            self.frameFind.show()
+
+    def onFindPrevious(self):
+        self.tabWidget.currentWidget().find(self.editFind.text(),
+                                            True, self.checkCase.isChecked())
+    def onFindNext(self):
+        self.tabWidget.currentWidget().find(self.editFind.text(),
+                                          False  , self.checkCase.isChecked())
+
 
     def saveTo(self, db):
         db.clear()

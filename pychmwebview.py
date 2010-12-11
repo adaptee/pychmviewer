@@ -102,7 +102,7 @@ class PyChmWebView(QWebView):
         signal 'openURL' will be emited(with param url:unicode)
         signal 'openatnewtab' will be emited(with param url:unicode)
         signal 'openremoteatnewtab' will be emited(with param url:unicode)
-        signal 'openRemoteUrl' will be emited(with param url:unicode)
+        signal 'openRemoteURL' will be emited(with param url:unicode)
         '''
         QWebView.__init__(self, parent)
         self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
@@ -285,7 +285,7 @@ class PyChmWebView(QWebView):
 
 
         if qurl.scheme() == 'http' or qurl.scheme() == 'https':
-            self.emit(QtCore.SIGNAL('openRemoteUrl'), unicode(qurl.toString()))
+            self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
             return
         if qurl.scheme() != 'ms-its':
             return
