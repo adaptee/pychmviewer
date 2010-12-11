@@ -278,7 +278,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.openremote = dialog.openremote
             self.config.searchext = dialog.searchext
             self.config.save_into_file()
-            setWebFont()
+
+            self.setWebFont()
             for window in self.tabmanager.windows:
                 window.reload()
 
@@ -303,12 +304,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def onEncodingChanged(self, action):
-        view = self.currentView
-        view.onEncodingChanged(action.encoding)
-
-        # FIXME; this should be removed once refactor is done
-        for window in self.tabmanager.windows:
-            window.reload()
+        self.currentView.onEncodingChanged(action.encoding)
 
     def onFilePrint(self):
         self.currentView.printPage()
@@ -320,7 +316,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.currentView.zoomOut()
 
     def onZoomOff(self):
-        self.currentView.normsize()
+        self.currentView.zoomOff()
 
     def onLocateInTopics(self):
         self.topicsview.locateUrl(self.currentView.openedpg)

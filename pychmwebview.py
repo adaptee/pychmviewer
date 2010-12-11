@@ -141,8 +141,6 @@ class PyChmWebView(QWebView):
 
         self.reload()
 
-    def goHome(self):
-        self.openPage(self.chmfile.home)
 
     def zoomOut(self):
         '''
@@ -194,6 +192,9 @@ class PyChmWebView(QWebView):
         if dialog.exec_() != QtGui.QDialog.Accepted:
             return
         self.print_(printer)
+
+    def goHome(self):
+        self.openPage(self.chmfile.home)
 
     def goBack(self):
         self.history().back()
