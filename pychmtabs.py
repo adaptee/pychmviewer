@@ -135,7 +135,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.tabWidget.addTab(view, '')
         self.editFind.installEventFilter(self)
 
-        self.connect(view, QtCore.SIGNAL('openUrl'), self.currentView.openPage)
+        self.connect(view, QtCore.SIGNAL('openURL'), self.currentView.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
 

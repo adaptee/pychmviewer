@@ -14,7 +14,7 @@ from Ui_tab_index import Ui_TabIndex
 
 class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
     '''
-    signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
+    signal 'openURL' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
     def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -64,7 +64,7 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
         '''
         if self.lastitem :
             item = self.lastitem
-            self.emit(QtCore.SIGNAL('openUrl'), item.entry.url)
+            self.emit(QtCore.SIGNAL('openURL'), item.entry.url)
 
 
 if __name__  ==  "__main__":
