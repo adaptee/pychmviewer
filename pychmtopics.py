@@ -113,20 +113,4 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
             prev = item
 
 if __name__  ==  "__main__":
-
-    import sys
-
-    from pychmfile import PyChmFile
-    from session import system_encoding
-
-    if len(sys.argv) > 1:
-
-        path = sys.argv[1].decode(system_encoding)
-        chmfile = PyChmFile(path)
-
-        app = QtGui.QApplication(sys.argv)
-        TC = PyChmTopicsView()
-        TC.show()
-        sys.exit(app.exec_())
-
-
+    raise NotImplementedError()

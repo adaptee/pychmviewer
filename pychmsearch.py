@@ -85,20 +85,5 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
 
 
 if __name__ == "__main__":
-
-    import sys
-
-    from pychmfile import PyChmFile
-    from session import system_encoding
-
-    if len(sys.argv) > 1:
-
-        path = sys.argv[1].decode(system_encoding)
-        chmfile = PyChmFile(path)
-
-        app = QtGui.QApplication(sys.argv)
-        sch = PyChmSearchView()
-        sch.show()
-        sys.exit(app.exec_())
-
+    raise NotImplementedError()
 
