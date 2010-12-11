@@ -103,6 +103,9 @@ class PyChmFile(object):
             fullpath = os.path.realpath(filename)
             return fullpath.decode(system_encoding)
 
+        def getBookmarkDB(md5sum):
+            pass
+
         self._fullpath = getFullPath(filename)
 
         self._md5sum = md5sum(self._fullpath)
