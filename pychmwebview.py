@@ -127,6 +127,9 @@ class PyChmWebView(QWebView):
 
         self.reload()
 
+    def goHome(self):
+        self.openPage(self.chmfile.home)
+
     def zoomOut(self):
         '''
         zoom out fontsize
