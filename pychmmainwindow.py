@@ -190,6 +190,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('tabSwitched'), self.onTabSwitched)
 
         self.connect(self.tabmanager,
+                QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
+
+        self.connect(self.tabmanager,
                      QtCore.SIGNAL('tabSwitched'),
                      self.topicsview.onTabSwitched,
                     )
