@@ -11,6 +11,7 @@
 import sys
 import re
 import os.path
+import bsddb
 
 from chm.chm import CHMFile
 from chm import chmlib
@@ -51,20 +52,22 @@ def normalize_url(url):
 class PyChmFile(object):
     def __init__(self, path=None, force_encoding=None):
         # FIXME; should _force_encoding also be reset in initialize()?
-        self._force_encoding = force_encoding
         self.initialize()
+        self._force_encoding = force_encoding
         if path:
             self.loadFile(path, force_encoding)
 
     def initialize(self):
-        self._chm           = CHMFile()
-        self._title         = u""
-        self._homeurl       = u""
-        self._encoding      = u""
-        self._content_table = [ ]
-        self._index_table   = [ ]
-        self._fullpath      = ""
-        self._md5sum        = None
+        self._chm            = CHMFile()
+        self._title          = u""
+        self._homeurl        = u""
+        self._encoding       = u""
+        self._force_encoding = u""
+        self._fullpath       = u""
+        self._md5sum         = None
+        self._bookmarkdb     = None
+        self._content_table  = [ ]
+        self._index_table    = [ ]
 
     def reset(self):
         self._chm.CloseCHM()

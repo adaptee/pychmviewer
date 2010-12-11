@@ -120,6 +120,7 @@ class PyChmWebView(QWebView):
         self.encoding = "gb18030"
         self.url = None
 
+    # FIXME; maybe not needed?
     def clone(self):
         view = PyChmWebView(tabmanager=self.tabmanager,
                             parent=self.parent() )
