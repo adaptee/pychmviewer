@@ -40,7 +40,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.session = session
-        self.config = session.config
+        self.config  = session.config
 
         # FIXME; 3 lines should be put into Ui_xxxx.py, not here
         self.WebViewsWidget = PyChmTabs(mainwin=self, parent=self.widget)
@@ -60,20 +60,23 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupSettingsMenu()
         self._setupHelpMenu()
         self._setupMiscActions()
-
         self.setWebFont()
 
-        self.initialize()
+        if paths:
+            self._startUpWithPathsGiven(paths)
+        else:
+            self._startUpWithPathsNotGiven()
 
     def _startUpCommon(self):
         pass
 
-    def _startUpWithPathsGiven(self):
-        pass
+    def _startUpWithPathsGiven(self, paths):
+        for path in paths:
+            self.openFile(path)
 
     def _startUpWithPathsNotGiven(self):
-        pass
-
+        if self.config.loadlasttime:
+            self.tabmanager.loadFrom(self.session.snapshot)
 
     @property
     def currentView(self):
@@ -236,25 +239,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onEncodingChanged,
                     )
 
-    def initialize(self):
-
-        # FIXME ; dirty hack; to be removed after refactor is done
-
-        hardcoded_chmfile = PyChmFile(u"/home/whodare/code/pychmviewer/bad.chm")
-        hardcoded_chmfile.session = self.session
-
-        #self.tabmanager.closeAll()
-
-        ok = False
-        if self.config.loadlasttime:
-            ok = self.tabmanager.loadFrom(self.session.snapshot)
-        if not ok:
-            self.tabmanager.onOpenAtNewTab(hardcoded_chmfile.home)
-
-        # FIXME; too dirty; last resort ; to be deleted
-        view = self.currentView
-        view.chmfile = hardcoded_chmfile
-        self.topicsview.loadTopics(hardcoded_chmfile.topics)
 
 
     def onTabSwitched(self):
@@ -273,14 +257,18 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         path = unicode(path)
 
         try:
-            chmfile = PyChmFile(path)
-            # FIXME; dirty hack; to be deleted
-            chmfile.session = self.session
-
-            view = self.tabmanager.onOpenAtNewTab(chmfile.home)
-            view.chmfile = chmfile
+            self.openFile(path)
         except StandardError:
             print ("[Error] failed to open: %s" % path)
+
+    def openFile(self, path):
+
+        chmfile = PyChmFile(path)
+        # FIXME; dirty hack; to be deleted
+        chmfile.session = self.session
+
+        view = self.tabmanager.onOpenAtNewTab(chmfile.home)
+        view.chmfile = chmfile
 
 
     def onAbout(self):
