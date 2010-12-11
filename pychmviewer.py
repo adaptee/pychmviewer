@@ -15,7 +15,6 @@ from argparse import ArgumentParser
 from PyQt4 import QtGui
 
 from session import Session
-from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
 
 def getRealPath(path):
