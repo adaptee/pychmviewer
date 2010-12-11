@@ -54,13 +54,13 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
         QtGui.QWidget.__init__(self, parent)
         AbstractTreeView.__init__(self)
 
-        self.url2item = PyChmTopicsView.URLDict()
-
         self.mainwin = mainwin
+        if mainwin.currentView:
+            chmfile = mainwin.currentView.chmfile
+            if chmfile and chmfile.index :
+                self.loadTopics(chmfile.index)
 
-        chmfile = mainwin.currentView.chmfile
-        if chmfile and chmfile.topics:
-            self.loadTopics(chmfile.topics)
+        self.url2item = PyChmTopicsView.URLDict()
 
     def locateUrl(self, url):
         '''
