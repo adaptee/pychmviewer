@@ -221,6 +221,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             encodings_menu.addAction(action)
 
         self.view_Set_encoding_action.setMenu(encodings_menu)
+
         self.connect(self.groupOfEncodings,
                      QtCore.SIGNAL('triggered(QAction*)'),
                      self.onEncodingChanged,
@@ -229,7 +230,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         self.tabmanager.saveTo(self.session.snapshot)
         event.accept()
-
 
     def onTabSwitched(self):
         self.onCheckToolBar()
@@ -350,13 +350,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         counter = 1
         for report in reports:
+            logs.append(report)
             progress.setValue(counter)
             counter += 1
             if counter % 16 == 0 and progress.wasCanceled() :
                 break
-            logs.append(report)
-
-
 
 if __name__  ==  "__main__":
     raise NotImplementedError("")
