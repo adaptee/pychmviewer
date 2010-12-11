@@ -113,7 +113,7 @@ class PyChmWebView(QWebView):
         self.currentPos = 0
 
         #experimental
-        self.tabsmanager = tabmanager
+        self.tabmanager = tabmanager
         self.chmfile = None
         self.encoding = "gb18030"
         self.url = None
@@ -164,7 +164,7 @@ class PyChmWebView(QWebView):
         if ok:
             self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
             self.currentPos = 0
-            self.tabsmanager.setTabName(self)
+            self.tabmanager.setTabName(self)
         else:
             print 'file not found'
 
@@ -290,7 +290,7 @@ class PyChmWebView(QWebView):
             url = unicode(url)
         if url[0:4] == 'http':
             self.load(QtCore.QUrl(url))
-            self.tabsmanager.setTabName(self)
+            self.tabmanager.setTabName(self)
 
             self.openedpg = url
             return
@@ -311,7 +311,7 @@ class PyChmWebView(QWebView):
             url = u'ms-its://' + url
         print ("[debug] [webview.openPage] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
-        self.tabsmanager.setTabName(self)
+        self.tabmanager.setTabName(self)
         self.openedpg = url[9:]
         return True
 
