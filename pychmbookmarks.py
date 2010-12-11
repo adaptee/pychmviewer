@@ -36,7 +36,7 @@ class PyChmBookmarkItem(QListWidgetItem):
         except StandardError :
             pass
 
-    def setUrlandPos(self, db_value):
+    def setValue(self, db_value):
         self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
@@ -52,10 +52,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.mainwin = mainwin
         self.db      = None
 
-        self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
         self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.addBookmark)
         self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.delBookmark)
         self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.editBookmark)
+        self.connect(self.list,
+                     QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'),
+                     self.openBookmark
+                    )
 
     def _getNameFromUser(   self,
                             title=u"add bookmar",
@@ -119,7 +122,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item = PyChmBookmarkItem(self.list)
             key = key.decode('utf-8')
             item.name = key
-            item.setUrlandPos(value)
+            item.setValue(value)
             item.setText(key)
             print "insert bookmark:%s" % key.encode("utf-8")
 
@@ -139,9 +142,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         return self._getCurrentView().chmfile
 
     def addBookmark(self):
-        '''
-        inner method
-        '''
         webview = self._getCurrentView()
 
         url   = webview.openedpg
@@ -157,19 +157,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item.setText(name)
             item.saveTo(self.db)
 
-    def delBookmark(self):
-        '''
-        inner method
-        '''
-        item = self.list.currentItem()
-        if item :
-            item.delFrom(self.db)
-            self.list.takeItem(self.list.row(item))
-
     def editBookmark(self):
-        '''
-        inner method
-        '''
         item = self.list.currentItem()
         if item :
             name = self._getNameForBookmark( title=u"rename bookmark",
@@ -179,13 +167,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                 item.name = name
                 item.setText(name)
 
+    def delBookmark(self):
+        item = self.list.currentItem()
+        if item :
+            item.delFrom(self.db)
+            self.list.takeItem(self.list.row(item))
 
-
-
-    def onItemDoubleClicked(self, item):
-        '''
-        inner method
-        '''
+    def openBookmark(self, item):
         if item :
             webview = self._getCurrentView()
 
