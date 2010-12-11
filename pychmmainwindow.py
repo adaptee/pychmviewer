@@ -294,17 +294,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview.onAddPressed()
 
     def onCheckToolBar(self):
-        if self.currentView is None:
-            self.nav_actionBack.setEnabled(False)
-            self.nav_actionForward.setEnabled(False)
-            return
-        if self.currentView.canGoBack():
-            self.nav_actionBack.setEnabled(True)
+        if self.currentView :
+            self.nav_actionBack.setEnabled(   self.currentView.canGoBack() )
+            self.nav_actionForward.setEnabled(self.currentView.canGoForward())
         else:
             self.nav_actionBack.setEnabled(False)
-        if self.currentView.canGoForward():
-            self.nav_actionForward.setEnabled(True)
-        else:
             self.nav_actionForward.setEnabled(False)
 
 
