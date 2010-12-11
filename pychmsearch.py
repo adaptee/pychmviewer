@@ -13,7 +13,6 @@ from PyQt4.QtGui import QTreeWidgetItem
 
 from Ui_tab_search import Ui_TabSearch
 
-
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
     def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -31,6 +30,11 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
     def onDoubleClicked(self, item, _col):
         if item :
             self.emit(QtCore.SIGNAL('openUrl'), item.url)
+
+    def onTabSwitched(self):
+        #FIXME; currently, I have no good idea about what to do.
+        pass
+
 
     def clear(self):
         self.tree.clear()

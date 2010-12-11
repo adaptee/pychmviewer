@@ -15,11 +15,8 @@ class AbstractTreeView(object):
                      self.onDoubleClicked,
                     )
 
-        self.dataloaded = False
-
     def clear(self):
         self.tree.clear()
-        self.dataloaded = False
 
     def onDoubleClicked(self, item, _col):
         if item :
@@ -27,16 +24,11 @@ class AbstractTreeView(object):
             self.emit(QtCore.SIGNAL('openUrl'), url)
 
     def loadData(self, tree):
-        if self.dataloaded:
-            return
-
         if tree:
             self.clear()
 
             self.loadNode(node=tree, parent=None)
             self.tree.update()
-
-            self.dataloaded = True
 
     def loadNode(self, node, parent):
         # special case for the root of tree

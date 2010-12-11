@@ -48,9 +48,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.setupUi(self)
 
         self.mainwin = mainwin
-
         self.db = None
-        self.dataloaded = False
 
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
         self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.onAddPressed)
@@ -103,11 +101,21 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         return name
 
+    def onTabSwitched(self):
+        return
+        chmfile = self._getCurrentChmFile()
+
+    def _getCurrentView(self):
+        return self.main.currentView
+
+    def _getCurrentChmFile(self):
+        return self._getCurrentView().chmfile
+
     def onAddPressed(self):
         '''
         inner method
         '''
-        webview = self.mainwin.currentView
+        webview = self._getCurrentView()
 
         url   = webview.openedpg
         title = webview.title()
@@ -144,11 +152,12 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                 item.name = name
                 item.setText(name)
 
+
     def showEvent(self, _event):
         '''
         inner method
         '''
-        if not self.db or self.dataloaded:
+        if not self.db:
             return
 
         self.loadBookmarks()
@@ -159,15 +168,11 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         '''
         self.db = db
         self.list.clear()
-        self.dataloaded = False
 
     def loadBookmarks(self):
         '''
         load Bookmarks from db
         '''
-        if self.dataloaded:
-            return
-
         self.list.clear()
 
         for key, value in self.db.iteritems():
@@ -177,18 +182,15 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item.setUrlandPos(value)
             item.setText(key)
 
-        self.dataloaded = True
 
     def onItemDoubleClicked(self, item):
         '''
         inner method
         '''
-        if not item :
-            return
+        if item :
+            webview = self._getCurrentView()
 
-        webview = self.mainwin.currentView
+            if webview.openedpg != item.url:
+                webview.openPage(item.url)
 
-        if webview.openedpg != item.url:
-            webview.openPage(item.url)
-
-        webview.setScrollPos(item.pos)
+            webview.setScrollPos(item.pos)
