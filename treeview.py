@@ -24,9 +24,10 @@ class AbstractTreeView(object):
             self.emit(QtCore.SIGNAL('openURL'), url)
 
     def loadData(self, tree):
-        if tree:
-            self.clear()
+        # always clear current state
+        self.clear()
 
+        if tree:
             self.loadNode(node=tree, parent=None)
             self.tree.update()
 
