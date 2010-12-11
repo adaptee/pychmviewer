@@ -50,7 +50,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabmanager = self.WebViewsWidget
 
         # FIXME; dirty hack; to be moved out after refactor
-        self.tabmanager.onOpenAtNewTab(u'index.html')
+        #self.tabmanager.onOpenAtNewTab(u'index.html')
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -60,15 +60,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupSettingsMenu()
         self._setupHelpMenu()
         self._setupMiscActions()
-        self.setWebFont()
+        self._setWebFont()
 
         if paths:
             self._startUpWithPathsGiven(paths)
         else:
             self._startUpWithPathsNotGiven()
-
-    def _startUpCommon(self):
-        pass
 
     def _startUpWithPathsGiven(self, paths):
         for path in paths:
@@ -82,7 +79,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def currentView(self):
         return self.tabmanager.currentView
 
-    def setWebFont(self):
+    def _setWebFont(self):
         settings   = QtWebKit.QWebSettings.globalSettings()
 
         fontfamily = self.config.fontfamily
@@ -129,19 +126,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabifyDockWidget(self.dockIndex, self.dockSearch)
         self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
 
-        #self.indexview = PyChmIndexView(self.dockIndex)
         self.indexview = PyChmIndexView(mainwin=self, parent=self.dockIndex)
         self.dockIndex.setWidget(self.indexview)
 
-        #self.topicsview = PyChmTopicsView(self.dockTopics)
         self.topicsview = PyChmTopicsView(mainwin=self, parent=self.dockTopics)
         self.dockTopics.setWidget(self.topicsview)
 
-        #self.searchview = PyChmSearchView(self.dockSearch)
         self.searchview = PyChmSearchView(mainwin=self, parent=self.dockSearch)
         self.dockSearch.setWidget(self.searchview)
 
-        #self.bookmarkview = PyChmBookmarksView(self.dockBookmark)
         self.bookmarkview = PyChmBookmarksView(mainwin=self, parent=self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
@@ -285,7 +278,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.searchext = dialog.searchext
             self.config.save_into_file()
 
-            self.setWebFont()
+            self._setWebFont()
             for webview in self.tabmanager.webviews:
                 webview.reload()
 
@@ -375,8 +368,4 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
 if __name__  ==  "__main__":
-    app = QtGui.QApplication(sys.argv)
-    mainwin = PyChmMainWindow()
-    mainwin.show()
-    sys.exit(app.exec_())
-
+    raise NotImplementedError("")
