@@ -50,7 +50,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.setupUi(self)
 
         self.mainwin = mainwin
-        self.db      = None
+        # { } used as dummy database, to prevent NoneType Error
+        self.db      = { }
 
         self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.addBookmark)
         self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.delBookmark)
@@ -109,7 +110,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
     def onTabSwitched(self):
 
         chmfile = self._getCurrentChmFile()
-        self.db = chmfile.bookmarkdb
+        self.db = chmfile.bookmarkdb or { }
         self.loadBookmarks()
 
     def loadBookmarks(self):
@@ -117,6 +118,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         load Bookmarks from db
         '''
         self.clear()
+        print ("[bookmark] db: %s" % self.db )
 
         for key, value in self.db.iteritems():
             item = PyChmBookmarkItem(self.list)
