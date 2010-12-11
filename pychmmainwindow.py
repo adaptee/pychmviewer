@@ -212,15 +212,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         encodings_menu = QMenu(self)
         self.groupOfEncodings = QtGui.QActionGroup(self)
 
-        action = QAction(self)
-        action.setText(u'Auto')
-        action.encoding = None
-        action.setCheckable(True)
-        action.setChecked(True)
-
-        self.groupOfEncodings.addAction(action)
-        encodings_menu.addAction(action)
-
         for language, encoding in encodings:
             action = QAction(self)
             action.setText( u"%s ( %s )" % (language, encoding) )
