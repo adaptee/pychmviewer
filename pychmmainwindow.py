@@ -56,6 +56,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
+        #experimental
+        self.session = session
+        self.config = session.config
+        self.tabmanager = self.WebViewsWidget
+        #self.bookmarkview = None [done]
+        #self.topicsview =  None
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -73,12 +79,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         # that it must die! ASAP!
         self.config = getcfg()
 
-        #experimental
-        self.session = session
-        self.config = session.config
-        self.tabmanager = self.WebViewsWidget
-        #self.bookmarkview = None [done]
-        #self.topicsview =  None
 
         self.initialize()
 
@@ -172,7 +172,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'), self.onAbout)
 
     def _setupMiscActions(self):
-        self.connect(self.WebViewsWidget,
+        self.connect(self.tabmanager,
                 QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
         self.connect(self.bookmark_AddAction,
                 QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
@@ -210,11 +210,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.conf = PyChmConfig(getchmfile().path)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
-        self.WebViewsWidget.closeAll()
+        self.tabmanager.closeAll()
         if self.conf.lastconfdb and self.config.loadlasttime:
-            ok = self.WebViewsWidget.loadFrom(self.conf.lastconfdb)
+            ok = self.tabmanager.loadFrom(self.conf.lastconfdb)
         if not ok:
-            self.WebViewsWidget.onOpenAtNewTab(getchmfile().home)
+            self.tabmanager.onOpenAtNewTab(getchmfile().home)
         self.indexview.loadIndex(getchmfile().index)
         self.bookmarkview.loadBookmarks()
         self.topicsview.loadTopics(getchmfile().topics)
@@ -232,7 +232,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         ok = chmfile.loadFile(chmpath)
         if ok:
             setchmfile(chmfile)
-            self.WebViewsWidget.saveTo(self.conf.lastconfdb)
+            self.tabmanager.saveTo(self.conf.lastconfdb)
             self.indexview.dataloaded = False
             self.bookmarkview.dataloaded = False
             self.topicsview.clear()
@@ -253,7 +253,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.searchext = dialog.searchext
             self.config.save_into_file()
             setWebFont()
-            for window in self.WebViewsWidget.windows:
+            for window in self.tabmanager.windows:
                 window.reload()
 
     def onViewSource(self):
@@ -288,7 +288,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         view.onEncodingChanged(action.encoding)
         setencoding(action.encoding)
 
-        for window in self.WebViewsWidget.windows:
+        for window in self.tabmanager.windows:
             window.reload()
 
     def onFilePrint(self):
@@ -354,7 +354,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def closeEvent(self, event):
-        self.WebViewsWidget.saveTo(self.conf.lastconfdb)
+        self.tabmanager.saveTo(self.conf.lastconfdb)
         event.accept()
 
 if __name__  ==  "__main__":
