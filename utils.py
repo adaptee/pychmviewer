@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
-import globalvalue
 
 def remove_comment(text):
     " hello, world.#string ==> hello, world"
@@ -14,9 +13,4 @@ def remove_comment(text):
     else:
         return text
 
-def getchmfile():
-    return globalvalue.chmfile
-
-def setchmfile(chmfile):
-    globalvalue.chmfile = chmfile
 

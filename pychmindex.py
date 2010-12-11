@@ -10,7 +10,6 @@
 from PyQt4 import QtCore, QtGui
 
 from treeview import AbstractTreeView
-from utils import getchmfile, setchmfile
 from Ui_tab_index import Ui_TabIndex
 
 class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
@@ -25,12 +24,13 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
 
         self.lastitem = None
 
-        chmfile = getchmfile()
+        #experimental
+        self.mainwin = mainwin
+
+        chmfile = mainwin.currentView.chmfile
         if chmfile and chmfile.index :
             self.loadIndex(chmfile.index)
 
-        #experimental
-        self.mainwin = mainwin
 
     def clear(self):
         '''
@@ -74,7 +74,6 @@ if __name__  ==  "__main__":
 
         path = sys.argv[1].decode(system_encoding)
         chmfile = PyChmFile(path)
-        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         IDX = PyChmIndexView()

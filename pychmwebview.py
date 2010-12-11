@@ -19,7 +19,8 @@ from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
 from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
-from utils import getchmfile, setchmfile, remove_comment
+from pychmfile import PyChmFile
+from utils import remove_comment
 from content_type import content_types
 
 
@@ -55,7 +56,7 @@ class PyChmNetReply(QNetworkReply):
         return data
 
     def loadResource(self, url):
-        chm = getchmfile()
+        chm = self.qwebview.chmfile
         if not chm:
             return ''
 
@@ -115,7 +116,7 @@ class PyChmWebView(QWebView):
 
         #experimental
         self.tabmanager = tabmanager
-        self.chmfile = None
+        self.chmfile = PyChmFile()
         self.encoding = "gb18030"
         self.url = None
 
@@ -221,7 +222,7 @@ class PyChmWebView(QWebView):
         inner method
         '''
 
-        chmfile = getchmfile()
+        chmfile = self.chmfile
         chmpath = chmfile.path
 
         res = self.page().currentFrame().hitTestContent(pos)
@@ -261,7 +262,7 @@ class PyChmWebView(QWebView):
         inner method
         '''
 
-        chmfile = getchmfile()
+        chmfile = self.chmfile
         chmpath = chmfile.path
 
 
@@ -297,7 +298,7 @@ class PyChmWebView(QWebView):
             self.openedpg = url
             return
         if url == u'/':
-            url = getchmfile().home
+            url = self.chmfile.home
         try:
             pos = url.index(u'://')
             if url[0:pos] != u'ms-its': #just for url in chmfile
@@ -347,7 +348,6 @@ if __name__ == '__main__':
 
         path = sys.argv[1].decode(system_encoding)
         chmfile = PyChmFile(path)
-        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         Form = PyChmWebView()

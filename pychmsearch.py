@@ -11,7 +11,6 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-from utils import getchmfile, setchmfile
 from Ui_tab_search import Ui_TabSearch
 
 
@@ -45,7 +44,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
             self._search(text)
 
     def _search(self, pattern):
-        chmfile  = getchmfile()
+        chmfile  = self.mainwin.currentView.chmfile
         maxmimum = len( chmfile.getSearchableURLs() )
 
         progress = QtGui.QProgressDialog(u'Searching ...',
@@ -92,7 +91,6 @@ if __name__ == "__main__":
 
         path = sys.argv[1].decode(system_encoding)
         chmfile = PyChmFile(path)
-        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         sch = PyChmSearchView()
