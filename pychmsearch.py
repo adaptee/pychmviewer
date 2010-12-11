@@ -16,15 +16,12 @@ from Ui_tab_search import Ui_TabSearch
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
     def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
-
         self.setupUi(self)
         self.searchBox.setFocus()
-
         self.connect(self.go, QtCore.SIGNAL('clicked()'), self.search)
         self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.search)
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
 
-        #experimental
         self.mainwin = mainwin
 
     def onDoubleClicked(self, item, _col):
@@ -62,15 +59,12 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         results = chmfile.search(pattern)
         matches = []
 
-        counter = 1
-        for result in results:
-            progress.setValue(counter)
-            counter += 1
-            if counter % 16 == 0 and progress.wasCanceled() :
-                break
-
+        for index, result in enumerate(results):
             if result:
                 matches.append(result)
+            progress.setValue(index + 1)
+            if (index + 1) % 16 == 0 and progress.wasCanceled() :
+                break
 
         self._showSearchResults(matches)
 

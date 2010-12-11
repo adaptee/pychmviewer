@@ -348,12 +348,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         reports = chmfile.extractAll(output_dir)
         logs = [ ]
 
-        counter = 1
-        for report in reports:
+        for index, report in enumerate(reports):
             logs.append(report)
-            progress.setValue(counter)
-            counter += 1
-            if counter % 16 == 0 and progress.wasCanceled() :
+            progress.setValue(index+1)
+            if (index + 1) % 16 == 0 and progress.wasCanceled() :
                 break
 
 if __name__  ==  "__main__":
