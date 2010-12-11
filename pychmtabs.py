@@ -186,10 +186,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def onTabSwitched(self, tabnum):
         print "[TabSwitched] tabnum: %d" % tabnum
-        if tabnum == -1:
-            return
         self.currentView = self.tabWidget.widget(tabnum)
-        self.currentView.setFocus()
+        # Maybe all views are closed
+        if self.currentView:
+            self.currentView.setFocus()
 
         self.emit(QtCore.SIGNAL('tabSwitched'))
 
