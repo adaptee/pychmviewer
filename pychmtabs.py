@@ -102,6 +102,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         elif event.matches(QtGui.QKeySequence.SelectAll):
             raise NotImplementedError("Ctrl-A to select All is not done yet.")
 
+    def openChmFile(self, chmfile):
+        view = self.onOpenAtNewTab(chmfile.home)
+        view.chmfile = chmfile
+        # FIXME; dirty hack
+        view.goHome()
+
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg
         self.onOpenAtNewTab(url)

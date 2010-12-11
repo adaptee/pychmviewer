@@ -269,11 +269,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def openFile(self, path):
         chmfile = PyChmFile(self.session, path)
+        self.tabmanager.openChmFile(chmfile)
 
-        view = self.tabmanager.onOpenAtNewTab(chmfile.home)
-        view.chmfile = chmfile
-        # FIXME; dirty hack
-        view.goHome()
+        #view = self.tabmanager.onOpenAtNewTab(chmfile.home)
+        #view.chmfile = chmfile
+        ## FIXME; dirty hack
+        #view.goHome()
 
     def onAbout(self):
         dialog = AboutDialog(self)
