@@ -19,7 +19,7 @@ from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
 from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
-from utils import getchmfile, setchmfile, getencoding, remove_comment
+from utils import getchmfile, setchmfile, remove_comment
 from content_type import content_types
 
 
@@ -76,8 +76,8 @@ class PyChmNetReply(QNetworkReply):
         if ext :
             ext = ext[1:]
         ctt_type = content_types.get(ext, 'binary/octet')
-        if ctt_type.lower().startswith('text') and getencoding() :
-            ctt_type += '; charset=' + getencoding()
+        if ctt_type.lower().startswith('text') and self.qwebview.encoding :
+            ctt_type += '; charset=' + self.qwebview.encoding
         self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(ctt_type))
 
 
@@ -117,6 +117,12 @@ class PyChmWebView(QWebView):
         self.chmfile = None
         self.encoding = "gb18030"
         self.url = None
+
+    def onEncodingChanged(self, encoding):
+        self.encoding = encoding
+        print "[Fixme] should reload current page with new encoding"
+        self.reload()
+
 
     def zoomOut(self):
         '''
