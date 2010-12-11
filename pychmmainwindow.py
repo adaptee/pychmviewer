@@ -245,11 +245,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         hardcoded_chmfile = PyChmFile(u"/home/whodare/code/pychmviewer/bad.chm")
         hardcoded_chmfile.session = self.session
 
+        #self.tabmanager.closeAll()
         self.conf = PyChmConfig(hardcoded_chmfile.path)
-        self.bookmarkview.db = self.conf.bookmarkdb
 
         ok = False
-        self.tabmanager.closeAll()
         if self.conf.lastconfdb and self.config.loadlasttime:
             ok = self.tabmanager.loadFrom(self.conf.lastconfdb)
         if not ok:
@@ -278,16 +277,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         try:
             chmfile = PyChmFile(path)
-            # FIXME; dirty hack
+            # FIXME; dirty hack; to be deleted
             chmfile.session = self.session
 
-            #FIXME; to be deleted
-            self.tabmanager.saveTo(self.conf.lastconfdb)
-
-            self.tabmanager.onOpenAtNewTab(chmfile.home)
-
-            self.initialize()
-
+            view = self.tabmanager.onOpenAtNewTab(chmfile.home)
+            view.chmfile = chmfile
         except StandardError:
             print ("[Error] failed to open: %s" % path)
 

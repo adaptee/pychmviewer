@@ -37,7 +37,5 @@ class PyChmConfig(object):
         except OSError:
             pass
 
-        bookmarkpath = os.path.join(self.cfghome, 'bookmark.db')
         lastconfpath = os.path.join(self.cfghome, 'last.db')
-        self.bookmarkdb = bsddb.hashopen(bookmarkpath)
         self.lastconfdb = bsddb.hashopen(lastconfpath)
