@@ -17,7 +17,7 @@ from session import Session
 
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
-from session import system_encoding
+#from session import system_encoding
 
 if __name__ == "__main__":
 
@@ -31,12 +31,12 @@ if __name__ == "__main__":
     ok = False
 
     if len(sys.argv) >= 2:
-        path = os.path.realpath(sys.argv[1].decode(system_encoding))
+        path = os.path.realpath(sys.argv[1].decode(session.system_encoding))
         ok = chmfile.loadFile(path)
 
     if not ok:
         if path :
-            print (u"Failed open chm file: %s" % path )
+            print (u"Failed to open: %s" % path )
 
         path = QtGui.QFileDialog.getOpenFileName(
                                                 None,
@@ -48,9 +48,6 @@ if __name__ == "__main__":
         ok = chmfile.loadFile(unicode(path))
         if not ok:
             sys.exit(1)
-
-
-
 
     mainwin = PyChmMainWindow(session)
     mainwin.show()
