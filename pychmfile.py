@@ -104,12 +104,21 @@ class PyChmFile(object):
             fullpath = os.path.realpath(filename)
             return fullpath.decode(system_encoding)
 
-        def getBookmarkDB(md5sum):
-            pass
+        def getBookmarkdb(md5sum):
+            dbname = "bookmarks.db"
+            config_dir = self.session.config_dir
+            private_dir = os.path.join(config_dir, md5sum)
+
+            if not os.path.exists(private_dir):
+                os.mkdir(private_dir, 0755)
+
+            return bsddb.hashopen( os.path.join(private_dir, dbname) )
 
         self._fullpath = getFullPath(filename)
 
-        self._md5sum = md5sum(self._fullpath)
+        self._md5sum = md5sum(self.path)
+
+        self._bookmarkdb = getBookmarkdb(self.md5sum)
 
         return True
 
@@ -179,7 +188,7 @@ class PyChmFile(object):
             paths.append(ui.path)
             return chmlib.CHM_ENUMERATOR_CONTINUE
 
-        chmfile = chmlib.chm_open( self._fullpath.encode(system_encoding) )
+        chmfile = chmlib.chm_open( self.path.encode(system_encoding) )
 
         paths = []
         ok = chmlib.chm_enumerate(chmfile,
@@ -253,6 +262,11 @@ class PyChmFile(object):
     def md5sum(self):
         "md5sum of this file"
         return self._md5sum
+
+    @property
+    def bookmarkdb(self):
+        "small database for storing bookmarks of this chm file"
+        return self._bookmarkdb
 
     @property
     def index(self):
