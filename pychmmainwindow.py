@@ -21,7 +21,6 @@ from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
 from pychmtabs import PyChmTabs
 
-from config import PyChmConfig
 from pychmfile import PyChmFile
 from encodinglist import encodings
 from settingdlg import SettingDlg
@@ -246,11 +245,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         hardcoded_chmfile.session = self.session
 
         #self.tabmanager.closeAll()
-        self.conf = PyChmConfig(hardcoded_chmfile.path)
 
         ok = False
-        if self.conf.lastconfdb and self.config.loadlasttime:
-            ok = self.tabmanager.loadFrom(self.conf.lastconfdb)
+        if self.config.loadlasttime:
+            ok = self.tabmanager.loadFrom(self.session.snapshot)
         if not ok:
             self.tabmanager.onOpenAtNewTab(hardcoded_chmfile.home)
 
@@ -390,7 +388,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def closeEvent(self, event):
-        self.tabmanager.saveTo(self.conf.lastconfdb)
+        self.tabmanager.saveTo(self.session.snapshot)
         event.accept()
 
 if __name__  ==  "__main__":
