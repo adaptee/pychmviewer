@@ -88,7 +88,7 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
         self.qwebview = parent
 
     def createRequest(self, op, request, outgoingdata):
-        print "[debug] createRequest(): requested url: %s" % request.url()
+        #print "[debug] createRequest(): requested url: %s" % request.url()
         scheme = request.url().scheme()
         if scheme == QLatin1String('ms-its'):
             return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
