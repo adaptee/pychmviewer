@@ -26,7 +26,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding,  getcfg
+from utils import getchmfile, setchmfile, getcfg
 from Ui_window_main import Ui_MainWindow
 
 
@@ -215,6 +215,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             ok = self.tabmanager.loadFrom(self.conf.lastconfdb)
         if not ok:
             self.tabmanager.onOpenAtNewTab(getchmfile().home)
+
+        # FIXME; too dirty; last resort
+        view = self.currentView
+        view.chmfile = getchmfile()
+
         self.indexview.loadIndex(getchmfile().index)
         self.bookmarkview.loadBookmarks()
         self.topicsview.loadTopics(getchmfile().topics)
@@ -283,11 +288,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def onEncodingChanged(self, action):
-
         view = self.currentView
         view.onEncodingChanged(action.encoding)
-        setencoding(action.encoding)
 
+        # FIXME; this should be removed once refactor is done
         for window in self.tabmanager.windows:
             window.reload()
 

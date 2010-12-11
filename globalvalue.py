@@ -13,5 +13,4 @@ from option import PyChmViewerConfig as GlobalConfig
 globalcfg = GlobalConfig()
 
 chmfile        = None
-encoding       = "gb18030"
 

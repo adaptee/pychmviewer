@@ -16,12 +16,13 @@ from chm.chm import CHMFile
 from chm import chmlib
 
 import soup
-from utils import remove_comment, getencoding, getcfg
+from utils import remove_comment, getcfg
 from session import system_encoding
 
 # TODO: provide real implementation
+# FIXME; this is not always correct
 def codepage2encoding(codepage):
-    return codepage
+    return 'gb18030' if codepage == 'cp936' else codepage
 
 def normalize_url(url):
     if not url:
@@ -69,18 +70,6 @@ def filterByExt(names, exts):
 
     return results
 
-def guessEncoding(contents):
-    meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
-
-    match = meta_charset.search(contents)
-    if match:
-        encoding = match.group(1)
-    elif getencoding():
-        encoding = getencoding()
-    else:
-        encoding = "utf-8"
-
-    return encoding
 
 
 class PyChmFile(object):
@@ -138,6 +127,20 @@ class PyChmFile(object):
         return True
 
     def search(self, pattern):
+
+        def guessEncoding(contents):
+            meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
+
+            match = meta_charset.search(contents)
+            if match:
+                encoding = match.group(1)
+            else :
+                encoding = self.encoding
+
+            print "[debug] encoding: %s" % encoding
+            return encoding
+
+
         urls = self.getSearchableURLs()
 
         for url in urls:
