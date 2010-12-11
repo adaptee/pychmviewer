@@ -186,7 +186,27 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _setupMiscActions(self):
         self.connect(self.tabmanager,
-                QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
+                QtCore.SIGNAL('tabSwitched'), self.onTabSwitched)
+
+        self.connect(self.tabmanager,
+                     QtCore.SIGNAL('tabSwitched'),
+                     self.topicsview.onTabSwitched,
+                    )
+
+        self.connect(self.tabmanager,
+                     QtCore.SIGNAL('tabSwitched'),
+                     self.indexview.onTabSwitched,
+                    )
+
+        self.connect(self.tabmanager,
+                     QtCore.SIGNAL('tabSwitched'),
+                     self.bookmarkview.onTabSwitched,
+                    )
+
+        self.connect(self.tabmanager,
+                     QtCore.SIGNAL('tabSwitched'),
+                     self.searchview.onTabSwitched,
+                    )
 
         self.connect(self.bookmark_AddAction,
                 QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
@@ -235,35 +255,42 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if not ok:
             self.tabmanager.onOpenAtNewTab(hardcoded_chmfile.home)
 
-        # FIXME; too dirty; last resort
+        # FIXME; too dirty; last resort ; to be deleted
         view = self.currentView
         view.chmfile = hardcoded_chmfile
-
-        self.indexview.loadIndex(hardcoded_chmfile.index)
-        self.bookmarkview.loadBookmarks()
         self.topicsview.loadTopics(hardcoded_chmfile.topics)
-        self.setWindowTitle(hardcoded_chmfile.title + u' PyChmViewer')
+
+
+    def onTabSwitched(self):
+        self.onCheckToolBar()
+        self.setWindowTitle( u"%s - PyChmViewer" %
+                             self.currentView.chmfile.title
+                           )
 
 
     def onOpenFile(self):
-        choice = QtGui.QFileDialog.getOpenFileName(None,
-                                                   u'choose file',
+        path = QtGui.QFileDialog.getOpenFileName(None,
+                                                   u'Choose file',
                                                    self.config.lastdir,
                                                    u'CHM files (*.chm)',
                                                  )
-        chmpath = unicode(choice)
-        chmfile = PyChmFile()
-        # FIXME; dirty hack
-        chmfile.session = self.session
+        path = unicode(path)
 
-        ok = chmfile.loadFile(chmpath)
-        if ok:
+        try:
+            chmfile = PyChmFile(path)
+            # FIXME; dirty hack
+            chmfile.session = self.session
+
+            #FIXME; to be deleted
             self.tabmanager.saveTo(self.conf.lastconfdb)
-            self.indexview.dataloaded = False
-            self.bookmarkview.dataloaded = False
-            self.topicsview.clear()
-            self.searchview.clear()
+
+            self.tabmanager.onOpenAtNewTab(chmfile.home)
+
             self.initialize()
+
+        except StandardError:
+            print ("[Error] failed to open: %s" % path)
+
 
     def onAbout(self):
         dialog = AboutDialog(self)

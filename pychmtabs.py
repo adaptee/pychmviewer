@@ -184,7 +184,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.currentView = self.tabWidget.widget(tabnum)
         self.currentView.setFocus()
 
-        self.emit(QtCore.SIGNAL('checkToolBar'))
+        self.emit(QtCore.SIGNAL('tabSwitched'))
 
     def closeAll(self):
         for window in self.windows:

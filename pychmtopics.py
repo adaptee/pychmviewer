@@ -58,12 +58,12 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
 
         self.url2item = PyChmTopicsView.URLDict()
 
-        #experimental
         self.mainwin = mainwin
 
         chmfile = mainwin.currentView.chmfile
         if chmfile and chmfile.topics:
             self.loadTopics(chmfile.topics)
+
     def locateUrl(self, url):
         '''
         this method is to locate the item who has the given url
@@ -79,6 +79,10 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
         while parent :
             parent.setExpanded(True)
             parent = parent.parent()
+
+    def onTabSwitched(self):
+        chmfile = self.mainwin.currentView.chmfile
+        self.loadTopics(chmfile.topics)
 
     def clear(self):
         '''
