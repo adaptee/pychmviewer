@@ -136,12 +136,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.editFind.installEventFilter(self)
 
-        self.connect(view, QtCore.SIGNAL('openURL'), self.currentView.openPage)
+        self.connect(view, QtCore.SIGNAL('openURL'), view.openPage)
         self.connect(view, QtCore.SIGNAL('openAtNewTab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
         if self.config.openremote:
-            self.connect(view, QtCore.SIGNAL('openRemoteURL'), self.currentView.openPage)
+            self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
