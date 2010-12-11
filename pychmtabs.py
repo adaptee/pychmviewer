@@ -20,7 +20,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         '''
         attrs:
             webviews: list of PyChmWebView
-            signal 'newtabadded' with parameter view(PyChmWebView) will be emited
+            #signal 'newTabAdded' with parameter view(PyChmWebView) will be emited
             signal 'checkToolBar' will emit when sth in view changed(use it to check the
                       toolbar's forward and backward
         '''
@@ -124,6 +124,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.webviews.append(view)
         self.tabWidget.addTab(view, '')
 
+        if active or len(self.webviews) == 1:
+            self.tabWidget.setCurrentWidget(view)
+            self.currentView = view
+
         self.editFind.installEventFilter(self)
 
         self.connect(view, QtCore.SIGNAL('openURL'), self.currentView.openPage)
@@ -134,12 +138,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.connect(view, QtCore.SIGNAL('openRemoteURL'), self.currentView.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
-        self.emit(QtCore.SIGNAL('newtabadded'), view)
+        #self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
-
-        if active or len(self.webviews) == 1:
-            self.tabWidget.setCurrentWidget(view)
-            self.currentView = view
 
         return view
 
