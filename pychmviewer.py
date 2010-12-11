@@ -10,46 +10,37 @@
 
 import os
 import sys
+from argparse import ArgumentParser
 
 from PyQt4 import QtGui
 
 from session import Session
-
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
-#from session import system_encoding
+
+def getRealPath(path):
+    return os.path.realpath(path)
+
 
 if __name__ == "__main__":
-
-    app = QtGui.QApplication(sys.argv)
     session = Session()
 
-    chmfile = PyChmFile()
-    #FIXME; dirty hack
-    chmfile.session = session
-    path = ""
-    ok = False
+    argparser = ArgumentParser(
+                description= "A CHM reader written in PyQt."
+                              )
 
-    if len(sys.argv) >= 2:
-        path = os.path.realpath(sys.argv[1].decode(session.system_encoding))
-        ok = chmfile.loadFile(path)
+    argparser.add_argument( "paths",
+                             metavar="PATH",
+                             nargs='*',
+                             help="CHM File to open."
+                          )
 
-    if not ok:
-        if path :
-            print (u"Failed to open: %s" % path )
+    args = argparser.parse_args()
+    paths = [ unicode( getRealPath(path), session.system_encoding )
+              for path in args.paths
+            ]
 
-        path = QtGui.QFileDialog.getOpenFileName(
-                                                None,
-                                                u'choose file',
-                                                session.config.lastdir,
-                                                u'CHM files (*.chm *.CHM)',
-                                                   )
-
-        ok = chmfile.loadFile(unicode(path))
-        if not ok:
-            sys.exit(1)
-
-    mainwin = PyChmMainWindow(session)
+    app = QtGui.QApplication(sys.argv)
+    mainwin = PyChmMainWindow(session, paths)
     mainwin.show()
-
     sys.exit(app.exec_())

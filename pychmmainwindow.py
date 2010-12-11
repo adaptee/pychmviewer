@@ -37,7 +37,7 @@ except AttributeError:
 
 
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
-    def __init__(self, session, parent=None):
+    def __init__(self, session, paths=None, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
