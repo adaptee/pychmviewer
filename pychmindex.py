@@ -17,7 +17,7 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
     '''
     signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
-    def __init__(self, parent=None):
+    def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
         AbstractTreeView.__init__(self)
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
@@ -28,6 +28,9 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
         chmfile = getchmfile()
         if chmfile and chmfile.index :
             self.loadIndex(chmfile.index)
+
+        #experimental
+        self.mainwin = mainwin
 
     def clear(self):
         '''
