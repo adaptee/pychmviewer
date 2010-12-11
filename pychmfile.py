@@ -84,10 +84,11 @@ def guessEncoding(contents):
 
 
 class PyChmFile(object):
-    def __init__(self, path=None):
+    def __init__(self, path=None, force_encoding=None):
+        self._force_encoding = force_encoding
         self.initialize()
         if path:
-            self.loadFile(path)
+            self.loadFile(path, force_encoding)
 
     def initialize(self):
         self._chm           = CHMFile()
@@ -102,7 +103,7 @@ class PyChmFile(object):
         self._chm.CloseCHM()
         self.initialize()
 
-    def loadFile(self, filename):
+    def loadFile(self, filename, force_encoding=None):
         '''
         filename must be unicode
         if success,return True,
@@ -111,6 +112,8 @@ class PyChmFile(object):
 
         assert isinstance(filename, unicode)
         self.reset()
+        if force_encoding:
+            self._force_encoding = force_encoding
 
         if not self._chm.LoadCHM(filename.encode(system_encoding)):
             print ("load file failed")
@@ -228,7 +231,7 @@ class PyChmFile(object):
     @property
     def encoding(self):
         "Encoding of this chm file"
-        return self._encoding
+        return self._force_encoding  or self._encoding
 
     @property
     def path(self):

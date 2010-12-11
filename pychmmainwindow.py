@@ -283,7 +283,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def onEncodingChanged(self, action):
+
+        view = self.currentView
+        view.onEncodingChanged(action.encoding)
         setencoding(action.encoding)
+
         for window in self.WebViewsWidget.windows:
             window.reload()
 
