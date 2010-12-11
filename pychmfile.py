@@ -16,6 +16,7 @@ from chm.chm import CHMFile
 from chm import chmlib
 
 import soup
+from md5sum import md5sum
 from utils import remove_comment
 from session import system_encoding
 
@@ -47,11 +48,9 @@ def normalize_url(url):
     return os.path.normpath(url)
 
 
-
-
-
 class PyChmFile(object):
     def __init__(self, path=None, force_encoding=None):
+        # FIXME; should _force_encoding also be reset in initialize()?
         self._force_encoding = force_encoding
         self.initialize()
         if path:
@@ -65,6 +64,7 @@ class PyChmFile(object):
         self._content_table = [ ]
         self._index_table   = [ ]
         self._fullpath      = ""
+        self._md5sum        = None
 
     def reset(self):
         self._chm.CloseCHM()
@@ -101,6 +101,8 @@ class PyChmFile(object):
             return fullpath.decode(system_encoding)
 
         self._fullpath = getFullPath(filename)
+
+        self._md5sum = md5sum(self._fullpath)
 
         return True
 
@@ -239,6 +241,11 @@ class PyChmFile(object):
     def path(self):
         "Encoding of this chm file"
         return self._fullpath
+
+    @property
+    def md5sum(self):
+        "md5sum of this file"
+        return self._md5sum
 
     @property
     def index(self):
