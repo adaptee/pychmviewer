@@ -262,10 +262,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             print ("[Error] failed to open: %s" % path)
 
     def openFile(self, path):
-
         chmfile = PyChmFile(self.session, path)
-        # FIXME; dirty hack; to be deleted
-        #chmfile.session = self.session
 
         view = self.tabmanager.onOpenAtNewTab(chmfile.home)
         view.chmfile = chmfile
