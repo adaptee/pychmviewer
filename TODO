@@ -6,6 +6,7 @@
 [ ] support 'Ctrl-A' for select all
 [ ] support showing icon with tree item
 [ ] refine context menu
+[x] remember the size and position of window
 
 * low priority *
 

@@ -42,15 +42,19 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.session = session
         self.config  = session.config
 
+        # make using QSettings more easy
+        QtCore.QCoreApplication.setOrganizationName(session.organization)
+        QtCore.QCoreApplication.setApplicationName(session.application)
+
+        # You do not want to resize the mainwindow every time
+        self.restoreLayoutInfo()
+
         # FIXME; 3 lines should be put into Ui_xxxx.py, not here
         self.WebViewsWidget = PyChmTabs(mainwin=self, parent=self.widget)
         self.WebViewsWidget.setObjectName(_fromUtf8("WebViewsWidget"))
         self.horizontalLayout.addWidget(self.WebViewsWidget)
 
         self.tabmanager = self.WebViewsWidget
-
-        # FIXME; dirty hack; to be moved out after refactor
-        #self.tabmanager.onOpenAtNewTab(u'index.html')
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -63,15 +67,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setWebFont()
 
         if paths:
-            self._startUpWithPathsGiven(paths)
+            self._startUpWithPaths(paths)
         else:
-            self._startUpWithPathsNotGiven()
+            self._startUpWithNoPaths()
 
-    def _startUpWithPathsGiven(self, paths):
+    def _startUpWithPaths(self, paths):
         for path in paths:
             self.openFile(path)
 
-    def _startUpWithPathsNotGiven(self):
+    def _startUpWithNoPaths(self):
         if self.config.loadlasttime:
             self.tabmanager.loadFrom(self.session.snapshot)
 
@@ -229,7 +233,30 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         self.tabmanager.saveTo(self.session.snapshot)
-        event.accept()
+        self.storeLayoutInfo()
+
+        # delegate other tasks to super class
+        QtGui.QMainWindow.closeEvent(self, event)
+
+    def storeLayoutInfo(self):
+        settings = QtCore.QSettings()
+        settings.setValue("mainwin/maximized", self.isMaximized() )
+        settings.setValue("mainwin/geometry",  self.saveGeometry() )
+
+    def restoreLayoutInfo(self):
+        settings = QtCore.QSettings()
+        geometry = settings.value("mainwin/geometry").toByteArray()
+        maxmized = settings.value("mainwin/maximized").toBool()
+
+        if maxmized:
+            self.showMaximized()
+        else:
+            self.restoreGeometry(geometry)
+
+
+    def onTabSwitched(self):
+        self.onCheckToolBar()
+        self.updateWindowTitle()
 
     def updateWindowTitle(self):
         if self.currentView:
@@ -239,11 +266,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             window_title = u"PyChmViewer"
 
         self.setWindowTitle(window_title)
-
-    def onTabSwitched(self):
-        self.onCheckToolBar()
-        self.updateWindowTitle()
-
 
     def onOpenFile(self):
         path = QtGui.QFileDialog.getOpenFileName(None,

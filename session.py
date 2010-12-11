@@ -7,6 +7,11 @@ import bsddb
 
 from option import PyChmViewerConfig
 
+organization = u"PyChmViewer"
+application  = u"PyChmViewer"
+version      = u"0.1.1"
+
+
 # FIXME; duplicated info, but is really convenience
 _, system_encoding = locale.getdefaultlocale()
 
@@ -16,7 +21,10 @@ class Session(object):
         self.config_dir      = os.path.join( os.environ["HOME"], ".pychmviewer")
         self.config          = self._getConfig(config_path)
         self.snapshot        = self._getSnapshot()
-        self.system_encoding = locale.getdefaultlocale()[1]
+        self.system_encoding = system_encoding
+        self.organization    = organization
+        self.application     = application
+        self.version         = version
 
     def _getConfig(self, config_path=None):
         config_path = config_path or \
