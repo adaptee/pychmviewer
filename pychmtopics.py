@@ -28,9 +28,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
     '''
 
     class URLDict(object):
-        '''
-        for inner use
-        '''
+        "map url to some item in the topicsview"
         def __init__(self):
             self.map = { }
 
