@@ -9,8 +9,6 @@
 #########################################################################
 import os
 import cPickle as Pickle
-# FIXME; this module is deprecated
-import bsddb
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
@@ -46,13 +44,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
     def __init__(self, mainwin=None, parent=None, ):
         '''
         attrs:
-           db: a bsddb , the bookmarks stored in it
+           db: a small database storing bookmarks
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
         self.mainwin = mainwin
-        self.db = None
+        self.db      = None
 
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
         self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.onAddPressed)
@@ -108,21 +106,8 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
     def onTabSwitched(self):
 
         chmfile = self._getCurrentChmFile()
-        self.db = self._openPrivateBookmarkDb(chmfile)
+        self.db = chmfile.bookmarkdb
         self.loadBookmarks()
-
-    def _openPrivateBookmarkDb(self, chmfile):
-        dbname = "bookmarks.db"
-
-        md5sum = chmfile.md5sum
-        config_dir = self.mainwin.session.config_dir
-        private_dir = os.path.join(config_dir, md5sum)
-
-        if not os.path.exists(private_dir):
-            os.mkdir(private_dir, 0755)
-
-        db = bsddb.hashopen( os.path.join(private_dir, dbname) )
-        return db
 
     def loadBookmarks(self):
         '''
