@@ -231,12 +231,18 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabmanager.saveTo(self.session.snapshot)
         event.accept()
 
-    def onTabSwitched(self):
+    def updateWindowTitle(self):
         if self.currentView:
-            self.onCheckToolBar()
-            self.setWindowTitle( u"%s - PyChmViewer" %
-                                self.currentView.chmfile.title
-                               )
+            window_title = u"%s - PyChmViewer" % \
+                          self.currentView.chmfile.title
+        else:
+            window_title = u"PyChmViewer"
+
+        self.setWindowTitle(window_title)
+
+    def onTabSwitched(self):
+        self.onCheckToolBar()
+        self.updateWindowTitle()
 
 
     def onOpenFile(self):
