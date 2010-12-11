@@ -104,7 +104,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             if not selectedText.isEmpty():
                 QtGui.QApplication.clipboard().setText(selectedText)
         elif event.matches(QtGui.QKeySequence.SelectAll):
-            # TODO ; implement this!
+            # TODO ; implement this in more serious way
             print ("[debug] keyboard event: SelectAll")
             pass
 
