@@ -128,7 +128,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         private_dir = os.path.join(config_dir, md5sum)
 
         if not os.path.exists(private_dir):
-            os.mkdir(private_dir)
+            os.mkdir(private_dir, 0755)
 
         db = bsddb.hashopen( os.path.join(private_dir, dbname) )
         return db
