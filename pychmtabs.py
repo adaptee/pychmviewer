@@ -12,7 +12,7 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 
-from utils import getchmfile, setchmfile, getcfg, settabs
+from utils import getchmfile, setchmfile, getcfg
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -114,7 +114,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def addNewTab(self, active):
         ''''''
-        view = PyChmWebView(self.tabWidget)
+        view = PyChmWebView(tabmanager=self, parent=self.tabWidget)
         self.windows.append(view)
         self.tabWidget.addTab(view, '')
         self.editFind.installEventFilter(self)
@@ -261,7 +261,6 @@ if __name__ == '__main__':
 
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()
-        settabs(Form)
         Form.onOpenAtNewTab(chmfile.home)
         Form.show()
         sys.exit(app.exec_())
