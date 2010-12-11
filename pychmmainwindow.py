@@ -242,6 +242,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onEncodingChanged,
                     )
 
+    def closeEvent(self, event):
+        self.tabmanager.saveTo(self.session.snapshot)
+        event.accept()
 
 
     def onTabSwitched(self):
@@ -374,9 +377,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             logs.append(report)
 
 
-    def closeEvent(self, event):
-        self.tabmanager.saveTo(self.session.snapshot)
-        event.accept()
 
 if __name__  ==  "__main__":
     app = QtGui.QApplication(sys.argv)
