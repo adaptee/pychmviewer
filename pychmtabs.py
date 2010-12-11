@@ -38,7 +38,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.connect(self.tabWidget,
                      QtCore.SIGNAL('currentChanged(int)'),
-                     self.onTabChanged
+                     self.onTabSwitched
                     )
 
         self._setupCloseButton()
@@ -178,13 +178,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         enable = len(self.windows) > 1
         self.closeButton.setEnabled(enable)
 
-
-    def onTabChanged(self, tabnum):
+    def onTabSwitched(self, tabnum):
         if tabnum == -1:
             return
         self.currentView = self.tabWidget.widget(tabnum)
-
         self.currentView.setFocus()
+
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def closeAll(self):
