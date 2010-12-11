@@ -11,6 +11,7 @@
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtWebKit import QWebPage
 
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
@@ -95,12 +96,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0, len(self.editFind.text()))
+        # FIXME; should this be moved into webview class?
         elif event.matches(QtGui.QKeySequence.Copy):
-            selectedText = self.tabWidget.currentWidget().selectedText()
-            if not selectedText.isEmpty():
-                QtGui.QApplication.clipboard().setText(selectedText)
+            self.currentView.triggerPageAction(QWebPage.Copy)
         elif event.matches(QtGui.QKeySequence.SelectAll):
-            raise NotImplementedError("Ctrl-A to select All is not done yet.")
+            #FIXME; it does not work
+            print "[keyPressEvent] Ctrl-A"
+            self.currentView.triggerPageAction(QWebPage.MoveToStartOfDocument)
+            self.currentView.triggerPageAction(QWebPage.SelectEndOfDocument)
 
     def openChmFile(self, chmfile):
         view = self.onOpenAtNewTab(chmfile.home)
