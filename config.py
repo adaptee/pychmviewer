@@ -7,10 +7,7 @@
 # File Name: config.py
 # Description:
 #########################################################################
-import sys
 import os
-import exceptions
-from ConfigParser import ConfigParser
 #FIXME; this module is deprecated and marked to be removal in future
 import bsddb
 
@@ -18,91 +15,6 @@ from md5sum import md5sum
 
 home          = os.environ['HOME']
 cfghome       = os.path.join(home, '.pychmviewer')
-globalcfgfile = os.path.join(cfghome, 'pychmviewer.cfg')
-encoding      = sys.getfilesystemencoding()
-
-class GlobalConfig(object):
-    def __getlastdir(self):
-        return self.__lastdir.decode(encoding)
-
-    def __setlastdir(self, value):
-        assert isinstance(value, unicode)
-        self.__lastdir = value.encode(encoding)
-
-    lastdir = property(__getlastdir, __setlastdir)
-
-    def __init__(self):
-        cfg = ConfigParser()
-        try:
-            cfg.read(globalcfgfile)
-        except:
-            pass
-        if not cfg.has_section('userconfig'):
-            self.loadlasttime = True
-            self.openremote = True
-            self.fontfamily = None
-            self.fontsize = None
-            self.__lastdir = home
-        if not cfg.has_section('searchext'):
-            self.searchext = {'html':True, 'htm':True, 'js':False, 'txt':False, 'css':False}
-        else:
-            self.searchext = {}
-            for a,b in cfg.items('searchext'):
-                if b.lower() == 'false':
-                    self.searchext[a] = False
-                else:
-                    self.searchext[a] = True
-        try:
-            self.loadlasttime = cfg.getboolean('userconfig', 'loadlasttime')
-        except:
-            self.lastlasttime = True
-
-        try:
-            self.openremote = cfg.getboolean('userconfig', 'openremote')
-        except:
-            self.openremote = True
-
-        try:
-            self.fontfamily = cfg.get('userconfig','fontfamily').decode('utf-8')
-            if self.fontfamily == 'default':
-                self.fontfamily = None
-        except:
-            self.fontfamily = None
-
-        try:
-            self.fontsize = cfg.getint('userconfig', 'fontsize')
-        except:
-            self.fontsize = None
-
-        try:
-            self.__lastdir = cfg.get('userconfig', 'lastdir')
-        except:
-            self.__lastdir = home
-
-    def save_info_file(self):
-        cfg = ConfigParser()
-        cfg.add_section('userconfig')
-        cfg.set('userconfig', 'loadlasttime', str(self.loadlasttime))
-        cfg.set('userconfig', 'openremote', str(self.openremote))
-        if self.fontfamily:
-            cfg.set('userconfig', 'fontfamily', self.fontfamily.encode('utf-8'))
-        if self.fontsize:
-            cfg.set('userconfig', 'fontsize', str(self.fontsize))
-        cfg.set('userconfig', 'lastdir', self.__lastdir)
-        cfg.add_section('searchext')
-
-        for a, b in self.searchext.iteritems():
-            cfg.set('searchext', a, str(b))
-
-        try:
-            os.mkdir(cfghome, 0700)
-        except exceptions.OSError:
-            pass
-
-        fileobj = open(globalcfgfile, 'wb')
-        cfg.write(fileobj)
-        fileobj.flush()
-        fileobj.close()
 
 
 class PyChmConfig(object):
