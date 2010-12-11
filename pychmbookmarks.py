@@ -7,7 +7,10 @@
 # File Name: pychmbookmarks.py
 # Description:
 #########################################################################
+import os
 import cPickle as Pickle
+# FIXME; this module is deprecated
+import bsddb
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
@@ -39,6 +42,7 @@ class PyChmBookmarkItem(QListWidgetItem):
         self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
+
     def __init__(self, mainwin=None, parent=None, ):
         '''
         attrs:
@@ -101,12 +105,36 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         return name
 
+    def showEvent(self, _event):
+        '''
+        inner method
+        '''
+        if self.db:
+            self.loadBookmarks()
+
     def onTabSwitched(self):
-        return
+
         chmfile = self._getCurrentChmFile()
+        self.db = self._openPrivateBookmarkDb(chmfile)
+        # FIXME; it does not work if this line is enabled
+        # currently loadBookmarks() has to be called in showEvent()
+        #self.loadBookmarks()
+
+    def _openPrivateBookmarkDb(self, chmfile):
+        dbname = "bookmarks.db"
+
+        md5sum = chmfile.md5sum
+        config_dir = self.mainwin.session.config_dir
+        private_dir = os.path.join(config_dir, md5sum)
+
+        if not os.path.exists(private_dir):
+            os.mkdir(private_dir)
+
+        db = bsddb.hashopen( os.path.join(private_dir, dbname) )
+        return db
 
     def _getCurrentView(self):
-        return self.main.currentView
+        return self.mainwin.currentView
 
     def _getCurrentChmFile(self):
         return self._getCurrentView().chmfile
@@ -152,28 +180,17 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                 item.name = name
                 item.setText(name)
 
-
-    def showEvent(self, _event):
+    def clear(self):
         '''
-        inner method
+        clear the bookmark view
         '''
-        if not self.db:
-            return
-
-        self.loadBookmarks()
-
-    def clearandsetdb(self, db):
-        '''
-        clear the bookmark view and set a new db
-        '''
-        self.db = db
         self.list.clear()
 
     def loadBookmarks(self):
         '''
         load Bookmarks from db
         '''
-        self.list.clear()
+        self.clear()
 
         for key, value in self.db.iteritems():
             item = PyChmBookmarkItem(self.list)
