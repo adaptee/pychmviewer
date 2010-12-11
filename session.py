@@ -7,12 +7,9 @@ import bsddb
 
 from option import PyChmViewerConfig
 
-organization = u"PyChmViewer"
-application  = u"PyChmViewer"
-version      = u"0.1.1"
-
-
-# FIXME; duplicated info, but is really convenience
+organization       = u"PyChmViewer"
+application        = u"PyChmViewer"
+version            = u"0.1.1"
 _, system_encoding = locale.getdefaultlocale()
 
 
