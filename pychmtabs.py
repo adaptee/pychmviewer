@@ -19,7 +19,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def __init__(self, mainwin=None, parent=None):
         '''
         attrs:
-            windows: list of PyChmWebView
+            webviews: list of PyChmWebView
             signal 'newtabadded' with parameter view(PyChmWebView) will be emited
             signal 'checkToolBar' will emit when sth in view changed(use it to check the
                       toolbar's forward and backward
@@ -54,7 +54,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(self.toolPrevious, QtCore.SIGNAL('clicked()'), self.onFindPrevious)
         self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
 
-        self.windows = []
+        self.webviews = []
 
         #experimental
         self.currentView = None
@@ -130,7 +130,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         else:
             view = PyChmWebView(tabmanager=self, parent=self.tabWidget)
 
-        self.windows.append(view)
+        self.webviews.append(view)
         self.tabWidget.addTab(view, '')
         self.editFind.installEventFilter(self)
 
@@ -145,7 +145,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.emit(QtCore.SIGNAL('newtabadded'), view)
         self.updateCloseButton()
 
-        if active or len(self.windows) == 1:
+        if active or len(self.webviews) == 1:
             self.tabWidget.setCurrentWidget(view)
             self.currentView = view
 
@@ -156,11 +156,11 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def closeTab(self, view):
         pos = -1
-        for index, window in enumerate(self.windows):
-            if window == view:
+        for index, webview in enumerate(self.webviews):
+            if webview == view:
                 pos = index
         if pos != -1:
-            del self.windows[pos]
+            del self.webviews[pos]
         else:
             print ('[Error] unknow webview to close')
             return
@@ -175,7 +175,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.frameFind.show()
 
     def updateCloseButton(self):
-        enable = len(self.windows) > 1
+        enable = len(self.webviews) > 1
         self.closeButton.setEnabled(enable)
 
     def onTabSwitched(self, tabnum):
@@ -187,12 +187,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.emit(QtCore.SIGNAL('tabSwitched'))
 
     def closeAll(self):
-        for window in self.windows:
-            self.closeTab(window)
+        for webview in self.webviews:
+            self.closeTab(webview)
 
     def onCloseCurrentTab(self):
         # FIXME; prevent closing the only tab
-        if len(self.windows) == 1:
+        if len(self.webviews) == 1:
             return
 
         self.closeTab(self.tabWidget.currentWidget())
@@ -223,7 +223,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def saveTo(self, db):
         db.clear()
 
-        for index, view in enumerate(self.windows):
+        for index, view in enumerate(self.webviews):
             if not self.config.openremote:
                 try:
                     viewv.openedpg.index(u'://')
