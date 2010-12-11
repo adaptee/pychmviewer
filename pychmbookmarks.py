@@ -53,9 +53,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         self.db      = None
 
         self.connect(self.list, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'), self.onItemDoubleClicked)
-        self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.onAddPressed)
-        self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.onDelPressed)
-        self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.onEditPressed)
+        self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.addBookmark)
+        self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.delBookmark)
+        self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.editBookmark)
 
     def _getNameFromUser(   self,
                             title=u"add bookmar",
@@ -138,7 +138,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
     def _getCurrentChmFile(self):
         return self._getCurrentView().chmfile
 
-    def onAddPressed(self):
+    def addBookmark(self):
         '''
         inner method
         '''
@@ -157,7 +157,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item.setText(name)
             item.saveTo(self.db)
 
-    def onDelPressed(self):
+    def delBookmark(self):
         '''
         inner method
         '''
@@ -166,7 +166,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item.delFrom(self.db)
             self.list.takeItem(self.list.row(item))
 
-    def onEditPressed(self):
+    def editBookmark(self):
         '''
         inner method
         '''
