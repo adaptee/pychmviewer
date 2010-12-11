@@ -225,11 +225,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         hardcoded_chmfile = PyChmFile(u"/home/whodare/code/pychmviewer/bad.chm")
         hardcoded_chmfile.session = self.session
 
-        self.config.lastdir = os.path.dirname(hardcoded_chmfile.path)
-        self.config.save_into_file()
-
         self.conf = PyChmConfig(hardcoded_chmfile.path)
         self.bookmarkview.db = self.conf.bookmarkdb
+
         ok = False
         self.tabmanager.closeAll()
         if self.conf.lastconfdb and self.config.loadlasttime:
