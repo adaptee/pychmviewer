@@ -272,7 +272,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         view = self.tabmanager.onOpenAtNewTab(chmfile.home)
         view.chmfile = chmfile
-
+        # FIXME; dirty hack
+        view.goHome()
 
     def onAbout(self):
         dialog = AboutDialog(self)
@@ -289,8 +290,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.save_into_file()
 
             self.setWebFont()
-            for window in self.tabmanager.windows:
-                window.reload()
+            for webview in self.tabmanager.webviews:
+                webview.reload()
 
     def onViewSource(self):
         dialog = HtmlDialog(self)
