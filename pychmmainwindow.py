@@ -26,7 +26,6 @@ from encodinglist import encodings
 from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
-from session import system_encoding
 from Ui_window_main import Ui_MainWindow
 
 try:
@@ -361,7 +360,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if not output_dir:
             return
 
-        output_dir = unicode(output_dir).encode(system_encoding)
+        output_dir = unicode(output_dir).encode(self.session.system_encoding)
 
         chmfile = self.currentView.chmfile
         maximum = len( chmfile.getURLs() )
