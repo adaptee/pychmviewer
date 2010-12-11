@@ -271,11 +271,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         chmfile = PyChmFile(self.session, path)
         self.tabmanager.openChmFile(chmfile)
 
-        #view = self.tabmanager.onOpenAtNewTab(chmfile.home)
-        #view.chmfile = chmfile
-        ## FIXME; dirty hack
-        #view.goHome()
-
     def onAbout(self):
         dialog = AboutDialog(self)
         dialog.exec_()
@@ -333,7 +328,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.topicsview.locateUrl(self.currentView.openedpg)
 
     def openInCurrentTab(self, url):
-        #print "[debug] openInCurrentTab(): %s" % url
         self.currentView.openPage(url)
 
     def onGoHome(self):

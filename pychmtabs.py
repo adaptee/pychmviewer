@@ -180,11 +180,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             #return
 
         self.closeTab(self.tabWidget.currentWidget())
-
         self.currentView = self.tabWidget.currentWidget()
+        #print "[currentView] %s" % self.currentView
 
 
     def onTabSwitched(self, tabnum):
+        print "[TabSwitched] tabnum: %d" % tabnum
         if tabnum == -1:
             return
         self.currentView = self.tabWidget.widget(tabnum)
