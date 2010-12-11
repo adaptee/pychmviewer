@@ -58,9 +58,9 @@ class PyChmFile(object):
         if path:
             self.loadFile(path, force_encoding)
 
-    def __del__(self):
-        self._chm.CloseCHM()
-        self.bookmarkdb.close()
+    #def __del__(self):
+        #self._chm.CloseCHM()
+        #self.bookmarkdb.close()
 
     def initialize(self):
         self._chm            = CHMFile()
