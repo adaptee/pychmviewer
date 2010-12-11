@@ -105,20 +105,11 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         return name
 
-    def showEvent(self, _event):
-        '''
-        inner method
-        '''
-        if self.db:
-            self.loadBookmarks()
-
     def onTabSwitched(self):
 
         chmfile = self._getCurrentChmFile()
         self.db = self._openPrivateBookmarkDb(chmfile)
-        # FIXME; it does not work if this line is enabled
-        # currently loadBookmarks() has to be called in showEvent()
-        #self.loadBookmarks()
+        self.loadBookmarks()
 
     def _openPrivateBookmarkDb(self, chmfile):
         dbname = "bookmarks.db"
@@ -132,6 +123,29 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         db = bsddb.hashopen( os.path.join(private_dir, dbname) )
         return db
+
+    def loadBookmarks(self):
+        '''
+        load Bookmarks from db
+        '''
+        self.clear()
+
+        for key, value in self.db.iteritems():
+            item = PyChmBookmarkItem(self.list)
+            key = key.decode('utf-8')
+            item.name = key
+            item.setUrlandPos(value)
+            item.setText(key)
+            print "insert bookmark:%s" % key.encode("utf-8")
+
+        self.list.update()
+
+    def clear(self):
+        '''
+        clear the bookmark view
+        '''
+        self.list.clear()
+
 
     def _getCurrentView(self):
         return self.mainwin.currentView
@@ -180,24 +194,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                 item.name = name
                 item.setText(name)
 
-    def clear(self):
-        '''
-        clear the bookmark view
-        '''
-        self.list.clear()
 
-    def loadBookmarks(self):
-        '''
-        load Bookmarks from db
-        '''
-        self.clear()
-
-        for key, value in self.db.iteritems():
-            item = PyChmBookmarkItem(self.list)
-            key = key.decode('utf-8')
-            item.name = key
-            item.setUrlandPos(value)
-            item.setText(key)
 
 
     def onItemDoubleClicked(self, item):
