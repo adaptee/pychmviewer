@@ -22,14 +22,15 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
         self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
         self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
 
+        self.mainwin  = mainwin
+
+        if mainwin.currentView:
+            chmfile = mainwin.currentView.chmfile
+            if chmfile and chmfile.index :
+                self.loadIndex(chmfile.index)
+
+
         self.lastitem = None
-
-        #experimental
-        self.mainwin = mainwin
-
-        chmfile = mainwin.currentView.chmfile
-        if chmfile and chmfile.index :
-            self.loadIndex(chmfile.index)
 
     def onTabSwitched(self):
         chmfile = self.mainwin.currentView.chmfile
