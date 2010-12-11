@@ -21,7 +21,7 @@ class AbstractTreeView(object):
     def onDoubleClicked(self, item, _col):
         if item :
             url = item.entry.url
-            self.emit(QtCore.SIGNAL('openUrl'), url)
+            self.emit(QtCore.SIGNAL('openURL'), url)
 
     def loadData(self, tree):
         if tree:

@@ -145,9 +145,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview = PyChmBookmarksView(mainwin=self, parent=self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
-        self.connect(self.indexview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
-        self.connect(self.topicsview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
-        self.connect(self.searchview, QtCore.SIGNAL('openUrl'), self.openInCurrentTab)
+        self.connect(self.indexview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
+        self.connect(self.topicsview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
+        self.connect(self.searchview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
 
     def _setupFileMenu(self):
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)

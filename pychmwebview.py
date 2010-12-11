@@ -99,7 +99,7 @@ class PyChmWebView(QWebView):
         '''
         zoom: zoom out times
         openedpg: current openedpage
-        signal 'openUrl' will be emited(with param url:unicode)
+        signal 'openURL' will be emited(with param url:unicode)
         signal 'openatnewtab' will be emited(with param url:unicode)
         signal 'openremoteatnewtab' will be emited(with param url:unicode)
         signal 'openRemoteUrl' will be emited(with param url:unicode)
@@ -300,7 +300,7 @@ class PyChmWebView(QWebView):
             else:
                 return
         url = os.path.normpath(url)
-        self.emit(QtCore.SIGNAL('openUrl'), url)
+        self.emit(QtCore.SIGNAL('openURL'), url)
 
     def openPage(self, url):
         '''

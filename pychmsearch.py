@@ -29,7 +29,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
 
     def onDoubleClicked(self, item, _col):
         if item :
-            self.emit(QtCore.SIGNAL('openUrl'), item.url)
+            self.emit(QtCore.SIGNAL('openURL'), item.url)
 
     def onTabSwitched(self):
         #FIXME; currently, I have no good idea about what to do.

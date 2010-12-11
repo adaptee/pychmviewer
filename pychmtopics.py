@@ -24,7 +24,7 @@ def normalize_key(key):
 
 class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
     '''
-    signal 'openUrl' will be emited(with param url:unicode) when the index item be doubleclicked
+    signal 'openURL' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
 
     class URLDict(object):
