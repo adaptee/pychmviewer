@@ -295,7 +295,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         dialog.exec_()
 
     def onAddBookmark(self):
-        self.bookmarkview.onAddPressed()
+        self.bookmarkview.addBookmark()
 
     def onCheckToolBar(self):
         if self.currentView :
