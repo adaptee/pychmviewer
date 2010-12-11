@@ -116,14 +116,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabifyDockWidget(self.dockIndex, self.dockSearch)
         self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
 
-        self.indexview = PyChmIndexView(self.dockIndex)
+        #self.indexview = PyChmIndexView(self.dockIndex)
+        self.indexview = PyChmIndexView(mainwin=self, parent=self.dockIndex)
         self.dockIndex.setWidget(self.indexview)
 
         #self.topicsview = PyChmTopicsView(self.dockTopics)
         self.topicsview = PyChmTopicsView(mainwin=self, parent=self.dockTopics)
         self.dockTopics.setWidget(self.topicsview)
 
-        self.searchview = PyChmSearchView(self.dockSearch)
+        #self.searchview = PyChmSearchView(self.dockSearch)
+        self.searchview = PyChmSearchView(mainwin=self, parent=self.dockSearch)
         self.dockSearch.setWidget(self.searchview)
 
         #self.bookmarkview = PyChmBookmarksView(self.dockBookmark)

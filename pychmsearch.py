@@ -16,7 +16,7 @@ from Ui_tab_search import Ui_TabSearch
 
 
 class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
-    def __init__(self, parent=None):
+    def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
 
         self.setupUi(self)
@@ -25,6 +25,9 @@ class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
         self.connect(self.go, QtCore.SIGNAL('clicked()'), self.search)
         self.connect(self.searchBox.lineEdit(), QtCore.SIGNAL('returnPressed()'), self.search)
         self.connect(self.tree, QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'), self.onDoubleClicked)
+
+        #experimental
+        self.mainwin = mainwin
 
     def onDoubleClicked(self, item, _col):
         if item :
