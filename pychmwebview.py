@@ -114,6 +114,9 @@ class PyChmWebView(QWebView):
 
         #FIXME ; dirty hack
         self.tabsmanager = gettabs()
+        #self.tabmanager = None
+        self.chmfile = None
+        self.encoding = "gb18030"
 
     def zoomOut(self):
         '''
@@ -300,7 +303,7 @@ class PyChmWebView(QWebView):
 
         if not url.lower().startswith(u'ms-its://'):
             url = u'ms-its://' + url
-        print ("[debug] loading url: %s" % url)
+        print ("[debug] [webview.openPage] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
         self.tabsmanager.setTabName(self)
         self.openedpg = url[9:]
