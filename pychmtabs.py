@@ -12,12 +12,12 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 
-from utils import getchmfile, setchmfile, getcfg
+from utils import getchmfile, setchmfile
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
 class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
-    def __init__(self, parent=None):
+    def __init__(self, mainwin=None, parent=None):
         '''
         attrs:
             windows: list of PyChmWebView
@@ -27,6 +27,10 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
+
+        self.mainwin = mainwin
+        self.config  = mainwin.config
+
 
         # FIXME; without this strange line
         # we will have a extra and weird 'Untitled' tab
@@ -55,9 +59,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         #experimental
         self.currentView = None
-
-    #def currentView(self):
-        #return self.currentView
 
 
     def _setupCloseButton(self):
@@ -129,7 +130,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.emitCheckToolBar)
 
-        if getcfg().openremote:
+        if self.config.openremote:
             self.connect(view, QtCore.SIGNAL('openRemoteUrl'), self.currentView.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
@@ -220,7 +221,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         db.clear()
 
         for index, view in enumerate(self.windows):
-            if not getcfg().openremote:
+            if not self.config.openremote:
                 try:
                     viewv.openedpg.index(u'://')
                     b = True

@@ -19,6 +19,8 @@ from pychmindex import PyChmIndexView
 from pychmtopics import PyChmTopicsView
 from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
+from pychmtabs import PyChmTabs
+
 from config import PyChmConfig
 from pychmfile import PyChmFile
 from encodinglist import encodings
@@ -26,29 +28,13 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, getcfg
+from utils import getchmfile, setchmfile
 from Ui_window_main import Ui_MainWindow
 
-
-def setWebFont():
-    config     = getcfg()
-    fontfamily = config.fontfamily
-    fontsize   = config.fontsize
-
-    settings   = QtWebKit.QWebSettings.globalSettings()
-
-    if fontfamily :
-        settings.setFontFamily(QtWebKit.QWebSettings.StandardFont, fontfamily)
-        settings.setFontFamily(QtWebKit.QWebSettings.FixedFont, fontfamily)
-        settings.setFontFamily(QtWebKit.QWebSettings.SerifFont, fontfamily)
-        settings.setFontFamily(QtWebKit.QWebSettings.SansSerifFont, fontfamily)
-        settings.setFontFamily(QtWebKit.QWebSettings.CursiveFont, fontfamily)
-        settings.setFontFamily(QtWebKit.QWebSettings.FantasyFont, fontfamily)
-    if fontsize :
-        settings.setFontSize(QtWebKit.QWebSettings.DefaultFontSize, fontsize)
-        settings.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, fontsize)
-        settings.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, fontsize)
-        settings.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, fontsize)
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
 
 
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
@@ -59,9 +45,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         #experimental
         self.session = session
         self.config = session.config
+
+        # FIXME; 3 lines should be put into Ui_xxxx.py, not here
+        self.WebViewsWidget = PyChmTabs(mainwin=self, parent=self.widget)
+        self.WebViewsWidget.setObjectName(_fromUtf8("WebViewsWidget"))
+        self.horizontalLayout.addWidget(self.WebViewsWidget)
+
         self.tabmanager = self.WebViewsWidget
-        #self.bookmarkview = None [done]
-        #self.topicsview =  None
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -73,12 +63,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupMiscActions()
 
         self._setupEncodingsSubMenu()
-        setWebFont()
-
-        # FIXME ; these 2 lines are so dirty and evil
-        # that it must die! ASAP!
-        self.config = getcfg()
-
+        self.setWebFont()
 
         self.initialize()
 
@@ -86,6 +71,24 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def currentView(self):
         return self.tabmanager.currentView
 
+    def setWebFont(self):
+        settings   = QtWebKit.QWebSettings.globalSettings()
+
+        fontfamily = self.config.fontfamily
+        fontsize   = self.config.fontsize
+
+        if fontfamily :
+            settings.setFontFamily(QtWebKit.QWebSettings.StandardFont, fontfamily)
+            settings.setFontFamily(QtWebKit.QWebSettings.FixedFont, fontfamily)
+            settings.setFontFamily(QtWebKit.QWebSettings.SerifFont, fontfamily)
+            settings.setFontFamily(QtWebKit.QWebSettings.SansSerifFont, fontfamily)
+            settings.setFontFamily(QtWebKit.QWebSettings.CursiveFont, fontfamily)
+            settings.setFontFamily(QtWebKit.QWebSettings.FantasyFont, fontfamily)
+        if fontsize :
+            settings.setFontSize(QtWebKit.QWebSettings.DefaultFontSize, fontsize)
+            settings.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, fontsize)
+            settings.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, fontsize)
+            settings.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, fontsize)
 
     def _setupPanelMenu(self):
 
@@ -234,6 +237,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                                  )
         chmpath = unicode(choice)
         chmfile = PyChmFile()
+        # FIXME; dirty hack
+        chmfile.session = self.session
+
         ok = chmfile.loadFile(chmpath)
         if ok:
             setchmfile(chmfile)
@@ -249,7 +255,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         dialog.exec_()
 
     def onSetting(self):
-        dialog = SettingDlg(self)
+        dialog = SettingDlg(mainwin=self, parent=self)
         if dialog.exec_() == QtGui.QDialog.Accepted:
             self.config.loadlasttime = dialog.loadlasttime
             self.config.fontfamily = unicode(dialog.fontfamily)
