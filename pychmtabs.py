@@ -106,7 +106,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         view = self.onOpenAtNewTab(chmfile.home)
         view.chmfile = chmfile
         # FIXME; dirty hack
-        view.goHome()
+        #view.goHome()
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg
@@ -144,7 +144,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.connect(view, QtCore.SIGNAL('openRemoteURL'), self.currentView.openPage)
             self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
 
-        #self.emit(QtCore.SIGNAL('newTabAdded'), view)
+        self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
 
         return view
