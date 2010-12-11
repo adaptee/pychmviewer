@@ -12,7 +12,6 @@ import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
 
-from utils import getchmfile, setchmfile
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -212,7 +211,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if index == -1:
             return
 
-        title = view.title() or getchmfile().title or u"no title"
+        title = view.title() or view.chmfile.title or u"no title"
         if len(title) > 15:
             title = title[0:12] + u'...'
         self.tabWidget.setTabText(index, title)
@@ -258,7 +257,6 @@ if __name__ == '__main__':
 
         path = sys.argv[1].decode(system_encoding)
         chmfile = PyChmFile(path)
-        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         Form  = PyChmTabs()

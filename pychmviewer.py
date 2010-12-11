@@ -15,7 +15,6 @@ from PyQt4 import QtGui
 
 from session import Session
 
-from utils import getchmfile, setchmfile
 from pychmfile import PyChmFile
 from pychmmainwindow import PyChmMainWindow
 from session import system_encoding
@@ -34,7 +33,6 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         path = os.path.realpath(sys.argv[1].decode(system_encoding))
         ok = chmfile.loadFile(path)
-        setchmfile(chmfile)
 
     if not ok:
         if path :
@@ -52,7 +50,6 @@ if __name__ == "__main__":
             sys.exit(1)
 
 
-        setchmfile( chmfile )
 
 
     mainwin = PyChmMainWindow(session)

@@ -10,7 +10,7 @@
 from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-from utils import remove_comment, getchmfile, setchmfile
+from utils import remove_comment
 from treeview import AbstractTreeView
 from Ui_tab_contents import Ui_TabContents
 
@@ -58,13 +58,12 @@ class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
 
         self.url2item = PyChmTopicsView.URLDict()
 
-        chmfile = getchmfile()
-        if chmfile and chmfile.topics:
-            self.loadTopics(chmfile.topics)
-
         #experimental
         self.mainwin = mainwin
 
+        chmfile = mainwin.currentView.chmfile
+        if chmfile and chmfile.topics:
+            self.loadTopics(chmfile.topics)
     def locateUrl(self, url):
         '''
         this method is to locate the item who has the given url
@@ -120,7 +119,6 @@ if __name__  ==  "__main__":
 
         path = sys.argv[1].decode(system_encoding)
         chmfile = PyChmFile(path)
-        setchmfile(chmfile)
 
         app = QtGui.QApplication(sys.argv)
         TC = PyChmTopicsView()

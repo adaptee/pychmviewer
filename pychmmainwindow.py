@@ -28,7 +28,6 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile
 from Ui_window_main import Ui_MainWindow
 
 try:
@@ -52,6 +51,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.horizontalLayout.addWidget(self.WebViewsWidget)
 
         self.tabmanager = self.WebViewsWidget
+        # FIXME; dirty hack; to be moved out after refactor
+        self.tabmanager.onOpenAtNewTab(u'http://google.com')
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -208,25 +209,31 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     )
 
     def initialize(self):
-        self.config.lastdir = os.path.dirname(getchmfile().path)
+
+        # FIXME ; dirty hack; to be removed after refactor is done
+
+        hardcoded_chmfile = PyChmFile(u"/home/whodare/code/pychmviewer/bad.chm")
+        hardcoded_chmfile.session = self.session
+
+        self.config.lastdir = os.path.dirname(hardcoded_chmfile.path)
         self.config.save_into_file()
-        self.conf = PyChmConfig(getchmfile().path)
+        self.conf = PyChmConfig(hardcoded_chmfile.path)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
         self.tabmanager.closeAll()
         if self.conf.lastconfdb and self.config.loadlasttime:
             ok = self.tabmanager.loadFrom(self.conf.lastconfdb)
         if not ok:
-            self.tabmanager.onOpenAtNewTab(getchmfile().home)
+            self.tabmanager.onOpenAtNewTab(hardcoded_chmfile.home)
 
         # FIXME; too dirty; last resort
         view = self.currentView
-        view.chmfile = getchmfile()
+        view.chmfile = hardcoded_chmfile
 
-        self.indexview.loadIndex(getchmfile().index)
+        self.indexview.loadIndex(hardcoded_chmfile.index)
         self.bookmarkview.loadBookmarks()
-        self.topicsview.loadTopics(getchmfile().topics)
-        self.setWindowTitle(getchmfile().title + u' PyChmViewer')
+        self.topicsview.loadTopics(hardcoded_chmfile.topics)
+        self.setWindowTitle(hardcoded_chmfile.title + u' PyChmViewer')
 
 
     def onOpenFile(self):
@@ -242,7 +249,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         ok = chmfile.loadFile(chmpath)
         if ok:
-            setchmfile(chmfile)
             self.tabmanager.saveTo(self.conf.lastconfdb)
             self.indexview.dataloaded = False
             self.bookmarkview.dataloaded = False
@@ -321,7 +327,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.currentView.openPage(url)
 
     def onGoHome(self):
-        self.currentView.openPage(getchmfile().home)
+        self.currentView.openPage(self.currentView.chmfile.home)
 
     def onGoBack(self):
         self.currentView.goBack()
@@ -339,7 +345,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         output_dir = unicode(output_dir).encode(system_encoding)
 
-        chmfile = getchmfile()
+        chmfile = self.currentView.chmfile
         maximum = len( chmfile.getURLs() )
 
 
