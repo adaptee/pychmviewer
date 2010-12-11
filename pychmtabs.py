@@ -36,8 +36,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         print "[tabmanager] %d tabs exists right after __init__()" % self.tabWidget.count()
         ## FIXME; without this strange line
         ## we will have a extra and weird 'Untitled' tab
-        #if self.tabWidget.count() > 0:
-            #self.tabWidget.removeTab(0)
+        if self.tabWidget.count() > 0:
+            self.tabWidget.removeTab(0)
 
         self._setupCloseButton()
         self._setupNewButton()
@@ -127,7 +127,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.editFind.installEventFilter(self)
 
         self.connect(view, QtCore.SIGNAL('openURL'), self.currentView.openPage)
-        self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
+        self.connect(view, QtCore.SIGNAL('openAtNewTab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
         if self.config.openremote:
