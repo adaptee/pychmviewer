@@ -19,7 +19,7 @@ from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
 from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
-from utils import getchmfile, setchmfile, getencoding, gettabs, remove_comment
+from utils import getchmfile, setchmfile, getencoding, remove_comment
 from content_type import content_types
 
 
@@ -93,7 +93,7 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
         return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
 
 class PyChmWebView(QWebView):
-    def __init__(self, parent=None):
+    def __init__(self, tabmanager=None, parent=None):
         '''
         zoom: zoom out times
         openedpg: current openedpage
@@ -112,9 +112,8 @@ class PyChmWebView(QWebView):
         self.openedpg = None
         self.currentPos = 0
 
-        #FIXME ; dirty hack
-        self.tabsmanager = gettabs()
-        #self.tabmanager = None
+        #experimental
+        self.tabsmanager = tabmanager
         self.chmfile = None
         self.encoding = "gb18030"
 

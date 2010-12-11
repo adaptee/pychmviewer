@@ -14,5 +14,4 @@ globalcfg = GlobalConfig()
 
 chmfile        = None
 encoding       = "gb18030"
-tabs           = None
 

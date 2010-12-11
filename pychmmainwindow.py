@@ -26,7 +26,7 @@ from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
 from session import system_encoding
-from utils import getchmfile, setchmfile, setencoding, settabs, getcfg
+from utils import getchmfile, setchmfile, setencoding,  getcfg
 from Ui_window_main import Ui_MainWindow
 
 
@@ -71,7 +71,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         # FIXME ; these 2 lines are so dirty and evil
         # that it must die! ASAP!
-        settabs(self.WebViewsWidget)
         self.config = getcfg()
 
         #experimental

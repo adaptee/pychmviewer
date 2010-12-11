@@ -29,9 +29,3 @@ def setencoding(encoding):
 def getcfg():
     return globalvalue.globalcfg
 
-def gettabs():
-    return  globalvalue.tabs
-
-def settabs(tabs):
-    globalvalue.tabs = tabs
-
