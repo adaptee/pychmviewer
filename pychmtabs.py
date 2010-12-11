@@ -112,18 +112,27 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onFindReturnPressed(self):
         self.find()
 
+    def onOpenNewTab(self):
+        url = self.tabWidget.currentWidget().openedpg
+        self.onOpenAtNewTab(url)
+
+    def onOpenAtNewTab(self, url):
+        # 'True' means forcc opening new tab at foregound.
+        view = self.addNewTab(True)
+        view.openPage(url)
+        return view
+
     def addNewTab(self, active):
         ''''''
-        view = PyChmWebView(tabmanager=self, parent=self.tabWidget)
+
+        if self.currentView:
+            view = self.currentView.clone()
+        else:
+            view = PyChmWebView(tabmanager=self, parent=self.tabWidget)
+
         self.windows.append(view)
         self.tabWidget.addTab(view, '')
         self.editFind.installEventFilter(self)
-
-        if active or len(self.windows) == 1:
-            self.tabWidget.setCurrentWidget(view)
-
-            #set the current web view, so other part will know
-            self.currentView = view
 
         self.connect(view, QtCore.SIGNAL('openUrl'), self.currentView.openPage)
         self.connect(view, QtCore.SIGNAL('openatnewtab'), self.onOpenAtNewTab)
@@ -135,8 +144,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.emit(QtCore.SIGNAL('newtabadded'), view)
         self.updateCloseButton()
-        return view
 
+        if active or len(self.windows) == 1:
+            self.tabWidget.setCurrentWidget(view)
+            self.currentView = view
+
+        return view
 
     def emitCheckToolBar(self):
         self.emit(QtCore.SIGNAL('checkToolBar'))
@@ -165,11 +178,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         enable = len(self.windows) > 1
         self.closeButton.setEnabled(enable)
 
-    def onOpenAtNewTab(self, url):
-        # 'True' means forcc opening new tab at foregound.
-        view = self.addNewTab(True)
-        view.openPage(url)
-        return view
 
     def onTabChanged(self, tabnum):
         if tabnum == -1:
@@ -192,9 +200,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.currentView = self.tabWidget.currentWidget()
 
-    def onOpenNewTab(self):
-        url = self.tabWidget.currentWidget().openedpg
-        self.onOpenAtNewTab(url)
 
     def onTextEdited(self, _):
         self.find()

@@ -120,6 +120,20 @@ class PyChmWebView(QWebView):
         self.encoding = "gb18030"
         self.url = None
 
+    def clone(self):
+        view = PyChmWebView(tabmanager=self.tabmanager,
+                            parent=self.parent() )
+
+        view.chmfile = PyChmFile(self.chmfile.path)
+        view.enocding = self.encoding
+        view.url = self.url
+
+        view.currentPos = self.currentPos
+        view.openedpg = self.openedpg
+
+        return view
+
+
     def onEncodingChanged(self, encoding):
         self.encoding = encoding
         chmfile = self.chmfile
