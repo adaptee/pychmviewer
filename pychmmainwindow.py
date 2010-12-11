@@ -41,7 +41,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
-        #experimental
         self.session = session
         self.config = session.config
 
@@ -63,10 +62,19 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupHelpMenu()
         self._setupMiscActions()
 
-        self._setupEncodingsSubMenu()
         self.setWebFont()
 
         self.initialize()
+
+    def _startUpCommon(self):
+        pass
+
+    def _startUpWithPathsGiven(self):
+        pass
+
+    def _startUpWithPathsNotGiven(self):
+        pass
+
 
     @property
     def currentView(self):
@@ -323,11 +331,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.topicsview.locateUrl(self.currentView.openedpg)
 
     def openInCurrentTab(self, url):
-        print "[debug] trying to open url: %s" % url
+        print "[debug] openInCurrentTab(): %s" % url
         self.currentView.openPage(url)
 
     def onGoHome(self):
-        self.currentView.openPage(self.currentView.chmfile.home)
+        self.currentView.goHome()
 
     def onGoBack(self):
         self.currentView.goBack()
