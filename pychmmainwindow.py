@@ -50,8 +50,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.horizontalLayout.addWidget(self.WebViewsWidget)
 
         self.tabmanager = self.WebViewsWidget
+
         # FIXME; dirty hack; to be moved out after refactor
-        self.tabmanager.onOpenAtNewTab(u'http://google.com')
+        self.tabmanager.onOpenAtNewTab(u'index.html')
 
         self._setupFileMenu()
         self._setupViewMenu()
@@ -186,6 +187,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def _setupMiscActions(self):
         self.connect(self.tabmanager,
                 QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
+
         self.connect(self.bookmark_AddAction,
                 QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
 
@@ -225,6 +227,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.config.lastdir = os.path.dirname(hardcoded_chmfile.path)
         self.config.save_into_file()
+
         self.conf = PyChmConfig(hardcoded_chmfile.path)
         self.bookmarkview.db = self.conf.bookmarkdb
         ok = False
