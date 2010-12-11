@@ -164,13 +164,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
     def updateCloseButton(self):
-        enable = len(self.webviews) > 1
+        #enable = len(self.webviews) > 1
+        enable = len(self.webviews) > 0
         self.closeButton.setEnabled(enable)
 
     def onCloseCurrentTab(self):
         # FIXME; prevent closing the only tab
-        if len(self.webviews) == 1:
-            return
+        #if len(self.webviews) == 1:
+            #return
 
         self.closeTab(self.tabWidget.currentWidget())
 

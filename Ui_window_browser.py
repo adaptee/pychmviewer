@@ -25,7 +25,7 @@ class Ui_TabbedBrowser(object):
         self.gridlayout.setMargin(8)
         self.gridlayout.setSpacing(6)
         self.gridlayout.setObjectName("gridlayout")
-        self.tabWidget.addTab(self.frontpage, "")
+        #self.tabWidget.addTab(self.frontpage, "")
         self.vboxlayout.addWidget(self.tabWidget)
         self.frameFind = QtGui.QFrame(TabbedBrowser)
         self.frameFind.setFrameShape(QtGui.QFrame.StyledPanel)
@@ -81,7 +81,7 @@ class Ui_TabbedBrowser(object):
 
     def retranslateUi(self, TabbedBrowser):
         TabbedBrowser.setWindowTitle(QtGui.QApplication.translate("TabbedBrowser", "TabbedBrowser", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.frontpage), QtGui.QApplication.translate("TabbedBrowser", "Untitled", None, QtGui.QApplication.UnicodeUTF8))
+        #self.tabWidget.setTabText(self.tabWidget.indexOf(self.frontpage), QtGui.QApplication.translate("TabbedBrowser", "Untitled", None, QtGui.QApplication.UnicodeUTF8))
         self.toolPrevious.setText(QtGui.QApplication.translate("TabbedBrowser", "Previous", None, QtGui.QApplication.UnicodeUTF8))
         self.toolNext.setText(QtGui.QApplication.translate("TabbedBrowser", "Next", None, QtGui.QApplication.UnicodeUTF8))
         self.checkCase.setText(QtGui.QApplication.translate("TabbedBrowser", "Case Sensitive", None, QtGui.QApplication.UnicodeUTF8))
