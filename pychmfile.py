@@ -50,9 +50,10 @@ def normalize_url(url):
 
 
 class PyChmFile(object):
-    def __init__(self, path=None, force_encoding=None):
+    def __init__(self, session, path=None, force_encoding=None):
         # FIXME; should _force_encoding also be reset in initialize()?
         self.initialize()
+        self.session = session
         self._force_encoding = force_encoding
         if path:
             self.loadFile(path, force_encoding)
