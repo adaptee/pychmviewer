@@ -118,7 +118,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
         load Bookmarks from db
         '''
         self.clear()
-        print ("[bookmark] db: %s" % self.db )
 
         for key, value in self.db.iteritems():
             item = PyChmBookmarkItem(self.list)
@@ -126,7 +125,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             item.name = key
             item.setValue(value)
             item.setText(key)
-            print "insert bookmark:%s" % key.encode("utf-8")
 
         self.list.update()
 
