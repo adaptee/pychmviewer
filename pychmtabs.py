@@ -234,63 +234,44 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
     def saveTo(self, db):
-        # [Important] we only remember now, not past...
+        "save snapshot of opened views "
+        # we only remember now, not past...
         db.clear()
 
         def isRemoteURL(url):
             return url.find(u"://") != -1
 
         for index, view in enumerate(self.webviews):
-            #if not self.config.openremote:
-                #try:
-                    #view.openedpg.index(u'://')
-                    #b = True
-                #except:
-                    #b = False
-                #if b:
-                    #continue
-            if isRemoteURL(url) and not self.config.openremote:
+            if isRemoteURL(view.openedpg) and not self.config.openremote:
                 continue
 
-            key     = str(index + 1)  # avoid 0
-            value   = Pickle.dumps((view.chmfile.path,
-                                    view.openedpg,
-                                    view.getScrollPos(),
-                                   )
+            key   = str(index + 1)  # avoid 0
+            value = Pickle.dumps((view.chmfile.path,
+                                  view.openedpg,
+                                  view.getScrollPos(),
                                   )
+                                )
             db[key] = value
 
         db.sync()
 
     def loadFrom(self, db):
-        #try:
-            #for key, value in db.iteritems():
-                #url, pos = Pickle.loads(value)
-                #view = self.onOpenAtNewTab(url)
-                #view.setScrollPos(pos)
-            #return True
-        #except:
-            ## FIXME; this is too rude;
-            #self.closeAll()
-            #return False
-
-        failed = []
+        "restore previously open views from snapshot"
+        failures = []
 
         for key, value in db.iteritems():
             path, url, pos = Pickle.loads(value)
             try:
                 view = self.openChmFile(path)
             except StandardError:
-                # accumulated all failed paths
-                failed.append(path)
+                # accumulated all failures paths
+                failures.append(path)
             else:
                 view.openPage(url)
                 view.setScrollPos(pos)
 
-        if failed:
-            raise StandardError(failed)
-
-
+        if failures:
+            raise StandardError(failures)
 
 if __name__ == '__main__':
     raise NotImplementedError()
