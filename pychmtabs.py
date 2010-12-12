@@ -13,6 +13,7 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtWebKit import QWebPage
 
+from pychmfile import PyChmFile
 from pychmwebview import PyChmWebView
 from Ui_window_browser import Ui_TabbedBrowser
 
@@ -105,7 +106,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             event.ignore()
 
 
-    def openChmFile(self, chmfile):
+    def openChmFile(self, path):
+        chmfile = PyChmFile(self.session, path)
+
         view = PyChmWebView(tabmanager=self,
                             chmfile=chmfile,
                             parent=self.tabWidget
