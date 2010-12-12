@@ -96,14 +96,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0, len(self.editFind.text()))
-        # FIXME; should this be moved into webview class?
-        elif event.matches(QtGui.QKeySequence.Copy):
-            self.currentView.triggerPageAction(QWebPage.Copy)
-        elif event.matches(QtGui.QKeySequence.SelectAll):
-            #FIXME; it does not work
-            print "[keyPressEvent] Ctrl-A"
-            self.currentView.triggerPageAction(QWebPage.MoveToStartOfDocument)
-            self.currentView.triggerPageAction(QWebPage.SelectEndOfDocument)
+        else:
+            pass
 
     def openChmFile(self, chmfile):
         view = self.onOpenAtNewTab(chmfile.home)
