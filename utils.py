@@ -13,4 +13,18 @@ def remove_comment(text):
     else:
         return text
 
+def CachedProperty(func):
+    """returns a cached property that is calculated by function func"""
+    def get(self):
+        try:
+            return self._property_cache[func]
+        except AttributeError:
+            self._property_cache = { }
+            x = self._property_cache[func] = func(self)
+            return x
+        except KeyError:
+            x = self._property_cache[func] = func(self)
+            return x
+
+    return property(get)
 

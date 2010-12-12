@@ -18,7 +18,7 @@ from chm import chmlib
 
 import soup
 from md5sum import md5sum
-from utils import remove_comment
+from utils import remove_comment, CachedProperty
 from session import system_encoding
 
 # TODO: provide serious implementation
@@ -256,42 +256,29 @@ class PyChmFile(object):
         "small database for storing bookmarks of this chm file"
         return self._bookmarkdb
 
-    # TODO; make it a cached property
-    @property
+    @CachedProperty
     def index(self):
         "Index of this chm file"
-        if self._index_table :
-            return self._index_table
-
         if not self._chm.index :
-            self._index_table = []
-            return []
+            return [ ]
 
-        index_url = self._chm.index.decode(self.encoding)
+        index_url  = self._chm.index.decode(self.encoding)
         index_data = self.getContentsByURL(index_url)
 
         if index_data:
             _, tree = soup.parse(index_data.decode(self.encoding))
-            self._index_table = tree
-
             return tree
 
-    @property
+    @CachedProperty
     def topics(self):
-        if self._topics_table :
-            return self._topics_table
-
         if not self._chm.topics :
-            self._topics_table = []
             return []
 
-        topics_url = self._chm.topics.decode(self.encoding)
+        topics_url  = self._chm.topics.decode(self.encoding)
         topics_data = self.getContentsByURL(topics_url)
 
         if topics_data :
             _, tree = soup.parse(topics_data.decode(self.encoding))
-            self._topics_table = tree
-
             return tree
 
     def checkURL(self, url):
