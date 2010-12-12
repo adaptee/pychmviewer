@@ -197,12 +197,12 @@ class PyChmViewerConfig(ConfigMapper):
     """
 
     defaultEncoding = StringConfigItem("userconfig", "gb18030")
-    fontfamily   = StringConfigItem("userconfig", "")
-    fontsize     = IntegerConfigItem("userconfig", 10)
-    sessionRestore = YesNoConfigItem("userconfig", True)
+    sessionRestore  = YesNoConfigItem("userconfig", True)
     openRemoteURL   = YesNoConfigItem("userconfig", True)
+    fontfamily      = StringConfigItem("userconfig", "")
+    fontsize        = IntegerConfigItem("userconfig", 10)
 
-    lastdir = StringConfigItem("userdata", ".")
+    lastdir         = StringConfigItem("userdata", ".")
 
     def __init__(self, path):
         try:
