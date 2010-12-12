@@ -119,6 +119,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         # FIXME; dirty hack, but we sitll need it now.
         view.goHome()
 
+        return view
+
     def onOpenNewTab(self):
         "duplicate a new view showing same url as this one"
         url = self.tabWidget.currentWidget().openedpg
@@ -235,32 +237,59 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         # [Important] we only remember now, not past...
         db.clear()
 
+        def isRemoteURL(url):
+            return url.find(u"://") != -1
+
         for index, view in enumerate(self.webviews):
-            if not self.config.openremote:
-                try:
-                    viewv.openedpg.index(u'://')
-                    b = True
-                except:
-                    b = False
-                if b:
-                    continue
-            key = str(index)
-            value = Pickle.dumps((view.openedpg, view.getScrollPos()))
+            #if not self.config.openremote:
+                #try:
+                    #view.openedpg.index(u'://')
+                    #b = True
+                #except:
+                    #b = False
+                #if b:
+                    #continue
+            if isRemoteURL(url) and not self.config.openremote:
+                continue
+
+            key     = str(index + 1)  # avoid 0
+            value   = Pickle.dumps((view.chmfile.path,
+                                    view.openedpg,
+                                    view.getScrollPos(),
+                                   )
+                                  )
             db[key] = value
 
         db.sync()
 
     def loadFrom(self, db):
-        try:
-            for key, value in db.iteritems():
-                url, pos = Pickle.loads(value)
-                view = self.onOpenAtNewTab(url)
+        #try:
+            #for key, value in db.iteritems():
+                #url, pos = Pickle.loads(value)
+                #view = self.onOpenAtNewTab(url)
+                #view.setScrollPos(pos)
+            #return True
+        #except:
+            ## FIXME; this is too rude;
+            #self.closeAll()
+            #return False
+
+        failed = []
+
+        for key, value in db.iteritems():
+            path, url, pos = Pickle.loads(value)
+            try:
+                view = self.openChmFile(path)
+            except StandardError:
+                # accumulated all failed paths
+                failed.append(path)
+            else:
+                view.openPage(url)
                 view.setScrollPos(pos)
-            return True
-        except:
-            # FIXME; this is too rude;
-            self.closeAll()
-            return False
+
+        if failed:
+            raise StandardError(failed)
+
 
 
 if __name__ == '__main__':
