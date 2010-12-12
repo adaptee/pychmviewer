@@ -27,58 +27,64 @@ class PyChmNetReply(QNetworkReply):
     def __init__(self, request, url, parent=None, qwebview=None):
         QNetworkReply.__init__(self, parent)
         self.qwebview = qwebview
+
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
-        self.m_data = self.loadResource(url)
-        if self.m_data:
-            self.m_length = len(self.m_data)
-            self.m_data = StringIO.StringIO(self.m_data)
-        else:
-            self.m_length = 0
-            self.m_data = StringIO.StringIO('')
-        self.left = self.m_length
+
+        self.m_data   = self.loadResource(url)
+        self.m_length = len(self.m_data)
+        self.m_data   = StringIO.StringIO(self.m_data)
+
+        self.left     = self.m_length
+
         self.setHeader(QNetworkRequest.ContentLengthHeader, QVariant(QtCore.QByteArray.number(self.m_length)))
-#        QTimer.singleShot(0, self, QtCore.SIGNAL('metaDataChanged()'))
+
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
 
-    def bytesAvailable(self):
-        return self.left + QNetworkReply.bytesAvailable(self)
-
-    def abort(self):
-        pass
-
-    def readData(self, maxlen):
-        data = self.m_data.read(maxlen)
-        self.left = self.m_length-self.m_data.tell()
-        if self.left == 0:
-            QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
-        return data
-
     def loadResource(self, url):
-        chm = self.qwebview.chmfile
-        if not chm:
-            return ''
+        chmfile = self.qwebview.chmfile
+        if not chmfile:
+            return ""
 
         path = unicode(url.path())
         path = remove_comment(path)
         path = urllib.unquote_plus(path)
 
-        data = chm.getContentsByURL(path)
-        if not data:
-            self.setError(404,'')
-            return None
-        self.setContentTypeHeader(path)
+        data = chmfile.getContentsByURL(path)
+        #print ("[loadResource] data length:%s" % len(data))
 
-        return data
+        if data:
+            self.setContentTypeHeader(path)
+            return data
+        else:
+            self.setError(404, "")
+            return ""
 
     def setContentTypeHeader(self, path):
+        "provide necessary charset info, so that webkit can show it nicely"
         ext = os.path.splitext(path)[1].lower()
         if ext :
             ext = ext[1:]
-        ctt_type = content_types.get(ext, 'binary/octet')
-        if ctt_type.lower().startswith('text') and self.qwebview.encoding :
-            ctt_type += '; charset=' + self.qwebview.encoding
-        self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(ctt_type))
+
+        content_type = content_types.get(ext, 'binary/octet').lower()
+        if content_type.startswith('text') and self.qwebview.encoding :
+            content_type += ("; charset=%s" % self.qwebview.encoding)
+
+        self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(content_type))
+
+
+    def bytesAvailable(self):
+        return self.left + QNetworkReply.bytesAvailable(self)
+
+    def readData(self, maxlen):
+        data = self.m_data.read(maxlen)
+        self.left = self.m_length - self.m_data.tell()
+        if self.left == 0:
+            QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
+        return data
+
+    def abort(self):
+        pass
 
 
 class PyChmNetworkAccessManager(QNetworkAccessManager):
@@ -88,9 +94,12 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 
     def createRequest(self, op, request, outgoingdata):
         scheme = request.url().scheme()
-        if scheme == QLatin1String('ms-its'):
+
+        # special case for links related with .CHM
+        if scheme == QLatin1String("ms-its"):
             return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
-        return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
+        else:
+            return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
 
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
@@ -105,10 +114,8 @@ class PyChmWebView(QWebView):
         QWebView.__init__(self, parent)
         self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
-        self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
-        self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
-        self.zoom = 1.0
 
+        self.zoom = 1.0
         self.tabmanager = tabmanager
         self.session    = tabmanager.session
         self.chmfile    = chmfile
@@ -116,6 +123,9 @@ class PyChmWebView(QWebView):
         self.url        = None
         self.openedpg   = None
         self.currentPos = 0
+
+        self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
+        self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
     # FIXME; maybe not needed?
     def clone(self):
@@ -133,11 +143,9 @@ class PyChmWebView(QWebView):
 
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Copy):
-            self.triggerPageAction(QWebPage.Copy)
+            self.copyToClipboard()
         elif event.matches(QtGui.QKeySequence.SelectAll):
-            #FIXME; it does not work
-            self.triggerPageAction(QWebPage.MoveToStartOfDocument)
-            self.triggerPageAction(QWebPage.SelectEndOfDocument)
+            self.selectAll()
         elif event.matches(QtGui.QKeySequence.Refresh):
             self.reload()
         elif event.matches(QtGui.QKeySequence.Back):
@@ -157,10 +165,10 @@ class PyChmWebView(QWebView):
         link = self.anchorAt(event.pos())
         if link :
             self.keepnewtaburl = link
-            menu.addAction(u'在新标签页打开', self.openAtNewPage)
+            menu.addAction(u"在新标签页打开", self.openAtNewPage)
             menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
-            menu.addAction(u'复制', self.copyToClipboard)
+            menu.addAction(u"复制", self.copyToClipboard)
             menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -170,7 +178,7 @@ class PyChmWebView(QWebView):
 
         self.keepnewtaburl = self.anchorAt(event.pos())
         if self.keepnewtaburl :
-            if self.keepnewtaburl[0:4] == 'http':
+            if self.keepnewtaburl[0:4] == "http":
                 self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
             else:
                 self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
@@ -181,12 +189,13 @@ class PyChmWebView(QWebView):
         chmpath = chmfile.path
 
         res = self.page().currentFrame().hitTestContent(pos)
-        if not res.linkUrl().isValid():
-            return None
         qurl = res.linkUrl()
-        if qurl.scheme() == 'http' or qurl.scheme()== 'https' :
+        if not qurl.isValid():
+            return None
+
+        if qurl.scheme() in [ "http", "https"] :
             return unicode(qurl.toString())
-        if qurl.scheme() != 'ms-its':
+        if qurl.scheme() != "ms-its":
             return None
         url = unicode(qurl.path())
         if url == u'/':
@@ -203,9 +212,14 @@ class PyChmWebView(QWebView):
         return url
 
 
-
     def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())
+        #self.triggerPageAction(QWebPage.Copy)
+
+    def selectAll(self):
+        #FIXME; it does not work
+        self.triggerPageAction(QWebPage.MoveToStartOfDocument)
+        self.triggerPageAction(QWebPage.SelectEndOfDocument)
 
     def zoomIn(self):
         self.zoom *= 1.2
@@ -219,7 +233,6 @@ class PyChmWebView(QWebView):
         " to make the font size normal "
         self.zoom = 1.0
         self.setTextSizeMultiplier(self.zoom)
-
 
     def onLoadFinished(self, ok):
         if ok:
@@ -266,7 +279,6 @@ class PyChmWebView(QWebView):
         self.chmfile.loadFile(self.chmfile.path, encoding)
 
         self.reload()
-
 
     def onLinkClicked(self, qurl):
 
