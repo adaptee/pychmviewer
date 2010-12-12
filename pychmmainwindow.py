@@ -71,7 +71,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _startUpWithPaths(self, paths):
         for path in paths:
-            self.openFile(path)
+            try:
+                self.openFile(path)
+            except StandardError:
+                pass
 
     def _startUpWithNoPaths(self):
         if self.config.sessionRestore:

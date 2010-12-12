@@ -172,19 +172,41 @@ class PyChmWebView(QWebView):
             menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
-        if event.button() != QtCore.Qt.MidButton:
+        # special support for middle button
+        if event.button() == QtCore.Qt.MidButton:
+            # FIXME; is this really worthwhile?
+            self.keepnewtaburl = self.anchorAt(event.pos())
+            if self.keepnewtaburl :
+                if self.keepnewtaburl[0:4] == "http":
+                    self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
+                else:
+                    self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
+        else:
             QWebView.mousePressEvent(self, event)
-            return
 
-        self.keepnewtaburl = self.anchorAt(event.pos())
-        if self.keepnewtaburl :
-            if self.keepnewtaburl[0:4] == "http":
-                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
+    def onLinkClicked(self, qurl):
+        chmfile = self.chmfile
+        chmpath = chmfile.path
+
+        if qurl.scheme() in [ "http", "https"] :
+            self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
+            return
+        if qurl.scheme() != 'ms-its':
+            return
+        url = unicode(qurl.path())
+        if url == u'/':
+            url = chmfile.home
+        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
+        if isnew:
+            ochm = os.path.join(os.path.dirname(chmpath), ochm)
+            if ochm != chmpath:
+                url = pg
             else:
-                self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
+                return
+        url = os.path.normpath(url)
+        self.emit(QtCore.SIGNAL('openURL'), url)
 
     def anchorAt(self, pos):
-
         chmfile = self.chmfile
         chmpath = chmfile.path
 
@@ -236,7 +258,7 @@ class PyChmWebView(QWebView):
 
     def onLoadFinished(self, ok):
         if ok:
-            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
+            self.page().currentFrame().setScrollBarValue(QtCore.Qt.Vertical, self.currentPos)
             self.currentPos = 0
             self.tabmanager.setTabName(self)
         else:
@@ -265,8 +287,6 @@ class PyChmWebView(QWebView):
 
 
 
-
-
     def openAtNewPage(self):
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
@@ -280,29 +300,6 @@ class PyChmWebView(QWebView):
 
         self.reload()
 
-    def onLinkClicked(self, qurl):
-
-        chmfile = self.chmfile
-        chmpath = chmfile.path
-
-
-        if qurl.scheme() == 'http' or qurl.scheme() == 'https':
-            self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
-            return
-        if qurl.scheme() != 'ms-its':
-            return
-        url = unicode(qurl.path())
-        if url == u'/':
-            url = chmfile.home
-        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
-        if isnew:
-            ochm = os.path.join(os.path.dirname(chmpath), ochm)
-            if ochm != chmpath:
-                url = pg
-            else:
-                return
-        url = os.path.normpath(url)
-        self.emit(QtCore.SIGNAL('openURL'), url)
 
     def openPage(self, url):
         '''
@@ -340,17 +337,11 @@ class PyChmWebView(QWebView):
         return True
 
     def getScrollPos(self):
-        '''
-        get current pos of the frame
-        '''
-        return self.page().currentFrame().scrollBarValue(Qt.Vertical)
+        return self.page().currentFrame().scrollBarValue(QtCore.Qt.Vertical)
 
     def setScrollPos(self, pos):
-        '''
-        set current pos of the frame
-        '''
+        self.page().currentFrame().setScrollBarValue(QtCore.Qt.Vertical, pos)
         self.currentPos = pos
-        self.page().currentFrame().setScrollBarValue(Qt.Vertical, pos)
 
     def find(self, text, backward=False, casesens=False):
         '''
