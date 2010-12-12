@@ -241,8 +241,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if event.matches(QtGui.QKeySequence.Open):
             self.onFileOpen()
         else:
-            # You should only catch those you are interested.
-            event.ignore()
+            QtGui.QMainWindow.keyPressEvent(self, event)
 
     def closeEvent(self, event):
         self.config.save_into_file()
