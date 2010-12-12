@@ -287,7 +287,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                                    self.config.lastdir,
                                                    u'CHM files (*.chm)',
                                                  )
-        print ("[openfile] fullpath: %s" % path)
         if path:
             path = unicode(path)
             # update lastdir after each succeful dialog
