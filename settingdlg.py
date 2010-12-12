@@ -40,7 +40,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.openRemoteCheckbox.setChecked(self.openremote)
         self.label.setText( get_fontinfo(self.config) )
 
-        self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.selectFont)
+        self.connect(self.selectFontButton, QtCore.SIGNAL('clicked()'), self.selectFont)
         self.connect(self.sessionRestoreCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
 
