@@ -239,6 +239,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             event.ignore()
 
     def closeEvent(self, event):
+        self.config.save_into_file()
         self.tabmanager.saveTo(self.session.snapshot)
         self.storeLayoutInfo()
 
@@ -307,7 +308,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.fontsize = dialog.fontsize
             self.config.openremote = dialog.openremote
             self.config.searchext = dialog.searchext
-            self.config.save_into_file()
 
             self._setWebFont()
             for webview in self.tabmanager.webviews:
