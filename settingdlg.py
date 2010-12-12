@@ -45,14 +45,10 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
 
     def onLoadLast(self):
-        if self.loadlastCheckbox.isChecked():
-            self.loadlasttime = True
-        else:
-            self.loadlasttime = False
+        self.loadlasttime = self.loadlastCheckbox.isChecked()
 
     def onOpenRemote(self):
         self.openremote = self.openRemoteCheckbox.isChecked()
-        self.msglabel.setText(u'重启后生效')
 
     def selectFont(self):
         font, ok = QtGui.QFontDialog.getFont(self)
