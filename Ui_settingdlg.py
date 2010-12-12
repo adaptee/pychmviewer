@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/settingdlg.ui'
 #
-# Created: Sun Dec 12 20:19:50 2010
+# Created: Sun Dec 12 20:35:31 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,10 +26,6 @@ class Ui_Dialog(object):
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
-        self.msglabel = QtGui.QLabel(self.tab)
-        self.msglabel.setGeometry(QtCore.QRect(60, 190, 181, 16))
-        self.msglabel.setText(_fromUtf8(""))
-        self.msglabel.setObjectName(_fromUtf8("msglabel"))
         self.verticalLayoutWidget_2 = QtGui.QWidget(self.tab)
         self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(20, 40, 160, 80))
         self.verticalLayoutWidget_2.setObjectName(_fromUtf8("verticalLayoutWidget_2"))
