@@ -124,6 +124,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _setupPanelDock(self):
 
+        # the order determines who is listed before another
+        # In this case  Index->Topics->Search->Bookmark
         self.tabifyDockWidget(self.dockIndex, self.dockTopics)
         self.tabifyDockWidget(self.dockIndex, self.dockSearch)
         self.tabifyDockWidget(self.dockIndex, self.dockBookmark)
@@ -143,6 +145,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.indexview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
         self.connect(self.topicsview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
         self.connect(self.searchview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
+
+        # Topics is the most useful one, so activiate it by force
+        self.dockTopics.activateWindow()
+        self.dockTopics.raise_()
+
 
     def _setupFileMenu(self):
         self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onFileOpen)
