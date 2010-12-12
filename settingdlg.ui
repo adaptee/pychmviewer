@@ -25,19 +25,6 @@
         <attribute name="title">
          <string>启动</string>
         </attribute>
-        <widget class="QLabel" name="msglabel">
-         <property name="geometry">
-          <rect>
-           <x>60</x>
-           <y>190</y>
-           <width>181</width>
-           <height>16</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
         <widget class="QWidget" name="verticalLayoutWidget_2">
          <property name="geometry">
           <rect>
