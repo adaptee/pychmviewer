@@ -168,8 +168,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if pos != -1:
             del self.webviews[pos]
         else:
-            print ('[Error] unknow webview to close')
-            return
+            raise ValueError("[Terrible] We are asked to close non-managed view! ")
 
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
         self.updateCloseButton()
@@ -184,7 +183,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.currentView = self.tabWidget.currentWidget()
 
     def onTabSwitched(self, tabnum):
-        print "[TabSwitched] tabnum: %d" % tabnum
+        print ("[TabSwitched] tabnum: %d" % tabnum)
         self.currentView = self.tabWidget.widget(tabnum)
         # Maybe no views exists now
         if self.currentView:

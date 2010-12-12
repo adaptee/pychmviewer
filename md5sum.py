@@ -24,6 +24,3 @@ def md5sum(filename):
     fileobj.close()
     return md5.hexdigest()
 
-if __name__ == '__main__':
-    filename = sys.argv[1].decode(sys.getfilesystemencoding() )
-    print (md5sum(filename))

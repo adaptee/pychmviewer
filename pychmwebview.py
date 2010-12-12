@@ -212,7 +212,7 @@ class PyChmWebView(QWebView):
             self.currentPos = 0
             self.tabmanager.setTabName(self)
         else:
-            print '[loadFinished] page not found'
+            print ("[loadFinished] page not found")
 
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
