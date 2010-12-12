@@ -270,9 +270,6 @@ class PyChmFile(object):
         index_url = self._chm.index.decode(self.encoding)
         index_data = self.getContentsByURL(index_url)
 
-        if not index_data:
-            index_data = self._chm.GetIndex()
-
         if index_data:
             _, tree = soup.parse(index_data.decode(self.encoding))
             self._index_table = tree
@@ -290,9 +287,6 @@ class PyChmFile(object):
 
         topics_url = self._chm.topics.decode(self.encoding)
         topics_data = self.getContentsByURL(topics_url)
-
-        if not topics_data:
-            topics_data = self._chm.GetTopicsTree()
 
         if topics_data :
             _, tree = soup.parse(topics_data.decode(self.encoding))
