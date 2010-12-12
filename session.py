@@ -10,6 +10,11 @@ from option import PyChmViewerConfig
 organization       = u"PyChmViewer"
 application        = u"PyChmViewer"
 version            = u"0.1.1"
+license            = u"GPLv2"
+author             = u"Jekyll Wu"
+email              = u"Adaptee@gmail.com"
+url                = u"http://www.github.com/adaptee/pychmviewer"
+
 _, system_encoding = locale.getdefaultlocale()
 
 
@@ -19,9 +24,15 @@ class Session(object):
         self.config          = self._getConfig(config_path)
         self.snapshot        = self._getSnapshot()
         self.system_encoding = system_encoding
+
         self.organization    = organization
         self.application     = application
         self.version         = version
+        self.license         = license
+        self.author          = author
+        self.email           = email
+        self.url             = url
+
 
     def _getConfig(self, config_path=None):
         config_path = config_path or \
