@@ -106,6 +106,6 @@ if __name__ == '__main__':
 
         style, tree = parse( open(filename).read() )
 
-        print "style: %s" % style
-        print tree
+        print ("style: %s" % style)
+        print (tree)
 
