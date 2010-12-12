@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/settingdlg.ui'
 #
-# Created: Sun Dec 12 20:35:31 2010
+# Created: Sun Dec 12 20:55:41 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,9 +31,9 @@ class Ui_Dialog(object):
         self.verticalLayoutWidget_2.setObjectName(_fromUtf8("verticalLayoutWidget_2"))
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-        self.loadlastCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
-        self.loadlastCheckbox.setObjectName(_fromUtf8("loadlastCheckbox"))
-        self.verticalLayout_3.addWidget(self.loadlastCheckbox)
+        self.sessionRestoreCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
+        self.sessionRestoreCheckbox.setObjectName(_fromUtf8("sessionRestoreCheckbox"))
+        self.verticalLayout_3.addWidget(self.sessionRestoreCheckbox)
         self.openRemoteCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
         self.openRemoteCheckbox.setObjectName(_fromUtf8("openRemoteCheckbox"))
         self.verticalLayout_3.addWidget(self.openRemoteCheckbox)
@@ -62,7 +62,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "settings", None, QtGui.QApplication.UnicodeUTF8))
-        self.loadlastCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开上一次的标签页", None, QtGui.QApplication.UnicodeUTF8))
+        self.sessionRestoreCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开上一次的标签页", None, QtGui.QApplication.UnicodeUTF8))
         self.openRemoteCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开外部链接", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Dialog", "启动", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))

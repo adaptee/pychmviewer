@@ -36,16 +36,16 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.fontsize = self.config.fontsize
 
 
-        self.loadlastCheckbox.setChecked(self.session_restore)
+        self.sessionRestoreCheckbox.setChecked(self.session_restore)
         self.openRemoteCheckbox.setChecked(self.openremote)
         self.label.setText( get_fontinfo(self.config) )
 
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.selectFont)
-        self.connect(self.loadlastCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
+        self.connect(self.sessionRestoreCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
 
     def onLoadLast(self):
-        self.session_restore = self.loadlastCheckbox.isChecked()
+        self.session_restore = self.sessionRestoreCheckbox.isChecked()
 
     def onOpenRemote(self):
         self.openremote = self.openRemoteCheckbox.isChecked()

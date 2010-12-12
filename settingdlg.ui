@@ -36,7 +36,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QCheckBox" name="loadlastCheckbox">
+           <widget class="QCheckBox" name="sessionRestoreCheckbox">
             <property name="text">
              <string>打开上一次的标签页</string>
             </property>
