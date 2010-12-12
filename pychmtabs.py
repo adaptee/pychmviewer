@@ -239,7 +239,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             key   = str(index + 1)  # avoid 0
             value = Pickle.dumps((view.chmfile.path,
                                   view.openedpg,
-                                  view.getScrollPos(),
+                                  view.currentPos(),
                                   )
                                 )
             db[key] = value
@@ -259,7 +259,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                 failures.append(path)
             else:
                 view.openPage(url)
-                view.setScrollPos(pos)
+                view.setCurrentPos(pos)
 
         if failures:
             raise StandardError(failures)
