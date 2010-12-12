@@ -280,12 +280,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                                    self.config.lastdir,
                                                    u'CHM files (*.chm)',
                                                  )
-        path = unicode(path)
+        print ("[openfile] fullpath: %s" % path)
+        if path:
+            path = unicode(path)
+            # update lastdir after each succeful dialog
+            self.config.lastdir = os.path.dirname(path)
 
-        try:
-            self.openFile(path)
-        except StandardError:
-            print ("[Error] failed to open: %s" % path)
+            try:
+                self.openFile(path)
+            except StandardError:
+                print ("[Error] failed to open: %s" % path)
 
     def openFile(self, path):
         chmfile = PyChmFile(self.session, path)
