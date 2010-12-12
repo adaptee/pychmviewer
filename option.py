@@ -19,7 +19,6 @@ config file and then just call the super().__init__() and the ConfigMapper
 instance gets populated with the data from the input file.
 """
 
-import os
 from StringIO import StringIO
 from ConfigParser import RawConfigParser
 
@@ -177,7 +176,7 @@ class ConfigMapper(object):
                     item.name
                 ))
 
-    def save_into_file(self, fn=None):
+    def save_into_file(self, path):
         """Write the default config settings to a file"""
         conf_obj = RawConfigParser()
         written_sections = []
@@ -187,11 +186,8 @@ class ConfigMapper(object):
                 conf_obj.add_section(v.section)
             conf_obj.set(v.section, k, v.outconv(v.value))
 
-        #FIXME ; dity
-        fn = fn or "/home/whodare/.pychmviewer/pychmviewer.cfg"
-
-        with open(fn, "w") as fd:
-            conf_obj.write(fd)
+        with open(path, "w") as stream:
+            conf_obj.write(stream)
 
 
 
@@ -214,13 +210,10 @@ class PyChmViewerConfig(ConfigMapper):
     css  = YesNoConfigItem("searchtxt", False)
     js   = YesNoConfigItem("searchtxt", False)
 
-    def __init__(self, config_fn=None):
+    def __init__(self, path):
 
-        # FIXME; dirty
-        config_fn = config_fn or "/home/whodare/.pychmviewer/pychmviewer.cfg"
-        fileobj = open(config_fn)
-
-        super(PyChmViewerConfig, self).__init__( fileobj )
+        stream = open(path)
+        super(PyChmViewerConfig, self).__init__( stream )
 
         # FIXME ; dirty hack
         self.searchext = { "htm" : self.htm,
@@ -229,6 +222,7 @@ class PyChmViewerConfig(ConfigMapper):
                             'css': self.css,
                             "js": self.js,
                          }
+
     def __str__(self):
         """Showing all config options"""
         o  = "Showing all Configuration options:\n"
