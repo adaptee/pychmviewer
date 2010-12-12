@@ -310,7 +310,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.config.session_restore = dialog.session_restore
             self.config.fontfamily = unicode(dialog.fontfamily)
             self.config.fontsize = dialog.fontsize
-            self.config.openremote = dialog.openremote
+            self.config.openRemoteURL = dialog.openRemoteURL
 
             self._setWebFont()
             for webview in self.tabmanager.webviews:

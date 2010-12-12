@@ -146,9 +146,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.connect(view, QtCore.SIGNAL('openAtNewTab'), self.onOpenAtNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
-        if self.config.openremote:
+        if self.config.openRemoteURL:
             self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.openPage)
-            self.connect(view, QtCore.SIGNAL('openremoteatnewtab'), self.onOpenAtNewTab)
+            self.connect(view, QtCore.SIGNAL('openRemoteURLatNewTab'), self.onOpenAtNewTab)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
@@ -233,7 +233,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             return url.find(u"://") != -1
 
         for index, view in enumerate(self.webviews):
-            if isRemoteURL(view.openedpg) and not self.config.openremote:
+            if isRemoteURL(view.openedpg) and not self.config.openRemoteURL:
                 continue
 
             key   = str(index + 1)  # avoid 0
