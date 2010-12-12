@@ -139,24 +139,12 @@ class PyChmFile(object):
                 yield None
 
     def getSearchableURLs(self):
+        searchable_extensions = [ ".htm", ".html", ".txt"   ]
 
-        def getextensions():
-            exts= []
+        def filterByExtension(names, exts):
+            names   = [ name.lower() for name in names ]
 
-            for ext, enable in self.session.config.searchext.iteritems():
-                if enable:
-                    exts.append(ext)
-            return exts
-
-
-        def filterByExt(names, exts):
-            if not names or not exts:
-                return names
-
-            names   = [ name.lower() for name in names  ]
-            exts    = [ ext.lower() for ext in exts  ]
             results = [ ]
-
             for name in names:
                 for ext in exts:
                     if name.endswith(ext):
@@ -164,7 +152,7 @@ class PyChmFile(object):
 
             return results
 
-        return filterByExt( self.allURLs, getextensions() )
+        return filterByExtension( self.allURLs, searchable_extensions )
 
     @CachedProperty
     def allURLs(self):

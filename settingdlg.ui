@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>335</width>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,90 +15,97 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="groupBoxdata">
-     <property name="title">
-      <string>启动</string>
-     </property>
-     <widget class="QCheckBox" name="loadlastCheckbox">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>40</y>
-        <width>161</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>打开上一次的标签页</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="openRemoteCheckbox">
-      <property name="geometry">
-       <rect>
-        <x>50</x>
-        <y>70</y>
-        <width>141</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>打开外部链接</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="msglabel">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>100</y>
-        <width>181</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBoxfont">
-     <property name="title">
-      <string>字体</string>
-     </property>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>70</y>
-        <width>105</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>选择</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>30</y>
-        <width>241</width>
-        <height>91</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>启动</string>
+        </attribute>
+        <widget class="QLabel" name="msglabel">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>190</y>
+           <width>181</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>40</y>
+           <width>160</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="loadlastCheckbox">
+            <property name="text">
+             <string>打开上一次的标签页</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="openRemoteCheckbox">
+            <property name="text">
+             <string>打开外部链接</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>字体</string>
+        </attribute>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>130</y>
+           <width>241</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>70</y>
+           <width>105</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>选择字体</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -111,12 +118,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>275</y>
+     <x>167</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>298</x>
-     <y>-19</y>
+     <x>167</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>
@@ -127,12 +134,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>367</x>
-     <y>278</y>
+     <x>167</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>342</x>
-     <y>-20</y>
+     <x>167</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>

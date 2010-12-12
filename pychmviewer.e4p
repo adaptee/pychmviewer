@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project pychmviewer -->
-<!-- Saved: 2009-06-02, 19:12:15 -->
-<!-- Copyright (C) 2009 ,  -->
+<!-- Saved: 2010-12-12, 20:09:08 -->
+<!-- Copyright (C) 2010 ,  -->
 <Project version="4.6">
   <Language>en</Language>
   <ProgLanguage mixed="0">Python</ProgLanguage>
@@ -15,26 +15,20 @@
     <Source>urltools.py</Source>
     <Source>pychmwebview.py</Source>
     <Source>pychmfile.py</Source>
-    <Source>myre.py</Source>
     <Source>content_type.py</Source>
-    <Source>minetypedict.py</Source>
-    <Source>t.py</Source>
-    <Source>Ui_pychmwebview.py</Source>
     <Source>Ui_tab_contents.py</Source>
     <Source>Ui_tab_index.py</Source>
     <Source>Ui_tab_search.py</Source>
     <Source>Ui_window_main.py</Source>
-    <Source>Ui_cs.py</Source>
     <Source>Ui_dialog_topicselector.py</Source>
     <Source>resources/images_rc.py</Source>
+    <Source>Ui_settingdlg.py</Source>
   </Sources>
   <Forms>
-    <Form>pychmwebview.ui</Form>
     <Form>tab_contents.ui</Form>
     <Form>tab_index.ui</Form>
     <Form>tab_search.ui</Form>
     <Form>window_main.ui</Form>
-    <Form>cs.ui</Form>
     <Form>dialog_topicselector.ui</Form>
     <Form>settingdlg.ui</Form>
   </Forms>

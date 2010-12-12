@@ -202,16 +202,9 @@ class PyChmViewerConfig(ConfigMapper):
     loadlasttime = YesNoConfigItem("userconfig", True)
     openremote   = YesNoConfigItem("userconfig", True)
 
-    lastdir = StringConfigItem("userconfig", ".")
-
-    htm  = YesNoConfigItem("searchtxt", True)
-    html = YesNoConfigItem("searchtxt", True)
-    txt  = YesNoConfigItem("searchtxt", False)
-    css  = YesNoConfigItem("searchtxt", False)
-    js   = YesNoConfigItem("searchtxt", False)
+    lastdir = StringConfigItem("userdata", ".")
 
     def __init__(self, path):
-
         try:
             stream = open(path)
         except IOError:
@@ -221,14 +214,6 @@ class PyChmViewerConfig(ConfigMapper):
         super(PyChmViewerConfig, self).__init__( stream )
 
         self.path = path
-
-        # FIXME ; dirty hack
-        self.searchext = { "htm" : self.htm,
-                            "html":  self.html,
-                            "txt": self.txt,
-                            'css': self.css,
-                            "js": self.js,
-                         }
 
     def save_into_file(self, path=None):
         path = path or self.path
