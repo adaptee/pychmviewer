@@ -1,3 +1,4 @@
+  - support restoring previous state from snapshot
 
 0.1.1
   - Import from SVN and start hacking
