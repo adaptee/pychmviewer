@@ -232,6 +232,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
     def saveTo(self, db):
+        # [Important] we only remember now, not past...
         db.clear()
 
         for index, view in enumerate(self.webviews):
@@ -257,6 +258,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                 view.setScrollPos(pos)
             return True
         except:
+            # FIXME; this is too rude;
             self.closeAll()
             return False
 
