@@ -35,12 +35,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.webviews    = []
         self.currentView = None
 
-        print "[tabmanager] %d tabs exists right after __init__()" % self.tabWidget.count()
-        ## FIXME; without this strange line
-        ## we will have a extra and weird 'Untitled' tab
-        if self.tabWidget.count() > 0:
-            self.tabWidget.removeTab(0)
-
         self._setupCloseButton()
         self._setupNewButton()
         self.frameFind.setVisible(False)
