@@ -137,9 +137,22 @@ class PyChmWebView(QWebView):
             self.triggerPageAction(QWebPage.Copy)
         elif event.matches(QtGui.QKeySequence.SelectAll):
             #FIXME; it does not work
-            print "[keyPressEvent] Ctrl-A"
             self.triggerPageAction(QWebPage.MoveToStartOfDocument)
             self.triggerPageAction(QWebPage.SelectEndOfDocument)
+        elif event.matches(QtGui.QKeySequence.Refresh):
+            self.reload()
+        elif event.matches(QtGui.QKeySequence.Back):
+            self.goBack()
+        elif event.matches(QtGui.QKeySequence.Forward):
+            self.goForward()
+        #elif event.matches(QtGui.QKeySequence.ZoomIn):
+            #self.zoomIn()
+        #elif event.matches(QtGui.QKeySequence.ZoomOut) :
+            #self.zoomOut()
+        else:
+            # You should only catch those you are interested.
+            event.ignore()
+
 
 
     def contextMenuEvent(self, event):

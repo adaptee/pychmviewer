@@ -96,8 +96,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             self.frameFind.show()
             self.editFind.setFocus()
             self.editFind.setSelection(0, len(self.editFind.text()))
+        elif event.matches(QtGui.QKeySequence.Close):
+            self.closeTab(self.currentView)
+        elif event.matches(QtGui.QKeySequence.AddTab):
+            self.onOpenNewTab()
         else:
-            pass
+            # You should only catch those you are interested.
+            event.ignore()
+
 
     def openChmFile(self, chmfile):
         view = self.onOpenAtNewTab(chmfile.home)

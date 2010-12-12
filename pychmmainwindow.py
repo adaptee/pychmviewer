@@ -146,7 +146,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.searchview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
 
     def _setupFileMenu(self):
-        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onOpenFile)
+        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onFileOpen)
         self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
         self.connect(self.file_Extract_action,
                 QtCore.SIGNAL('triggered(bool)'), self.onExtractCurrentCHMFile)
@@ -230,6 +230,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onEncodingChanged,
                     )
 
+
+    def keyPressEvent(self, event):
+        if event.matches(QtGui.QKeySequence.Open):
+            self.onFileOpen()
+        else:
+            # You should only catch those you are interested.
+            event.ignore()
+
     def closeEvent(self, event):
         self.tabmanager.saveTo(self.session.snapshot)
         self.storeLayoutInfo()
@@ -266,7 +274,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.setWindowTitle(window_title)
 
-    def onOpenFile(self):
+    def onFileOpen(self):
         path = QtGui.QFileDialog.getOpenFileName(None,
                                                    u'Choose file',
                                                    self.config.lastdir,
