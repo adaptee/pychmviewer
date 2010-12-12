@@ -212,8 +212,10 @@ class PyChmViewerConfig(ConfigMapper):
 
     def __init__(self, path):
 
-        stream = open(path)
-        super(PyChmViewerConfig, self).__init__( stream )
+        with open(path) as stream:
+            super(PyChmViewerConfig, self).__init__( stream )
+
+        self.path = path
 
         # FIXME ; dirty hack
         self.searchext = { "htm" : self.htm,
@@ -222,6 +224,11 @@ class PyChmViewerConfig(ConfigMapper):
                             'css': self.css,
                             "js": self.js,
                          }
+
+    def save_into_file(self, path=None):
+        path = path or self.path
+        super(PyChmViewerConfig, self).save_into_file(path)
+
 
     def __str__(self):
         """Showing all config options"""
