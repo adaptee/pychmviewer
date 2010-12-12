@@ -196,7 +196,7 @@ class PyChmViewerConfig(ConfigMapper):
     should be an instance of it around as attribute from a Session instance
     """
 
-    defaultencoding = StringConfigItem("userconfig", "gb18030")
+    defaultEncoding = StringConfigItem("userconfig", "gb18030")
     fontfamily   = StringConfigItem("userconfig", "")
     fontsize     = IntegerConfigItem("userconfig", 10)
     sessionRestore = YesNoConfigItem("userconfig", True)
