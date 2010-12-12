@@ -99,7 +99,7 @@ class PyChmWebView(QWebView):
         openedpg: current openedpage
         signal 'openURL' will be emited(with param url:unicode)
         signal 'openAtNewTab' will be emited(with param url:unicode)
-        signal 'openremoteatnewtab' will be emited(with param url:unicode)
+        signal 'openRemoteURLatNewTab' will be emited(with param url:unicode)
         signal 'openRemoteURL' will be emited(with param url:unicode)
         '''
         QWebView.__init__(self, parent)
@@ -240,7 +240,7 @@ class PyChmWebView(QWebView):
         self.keepnewtaburl = self.anchorAt(event.pos())
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
-                self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
+                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
             else:
                 self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
 
@@ -275,7 +275,7 @@ class PyChmWebView(QWebView):
     def openAtNewPage(self):
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
-                self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
+                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
                 return
             self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
 
