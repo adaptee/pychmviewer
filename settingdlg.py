@@ -13,25 +13,18 @@ from PyQt4.QtGui import QListWidgetItem
 
 from Ui_settingdlg import Ui_Dialog
 
-# FIXME; ugly name and location
-def get_font_info(config):
-    family = config.fontfamily or "default"
-    size   = config.fontsize or "default"
-    return family, size
-
-def stringlize_font_info(family, size):
+def stringlize_fontinfo(family, size):
     template = u"Font family: %s\nFont size: %s"
     return template % (family, size)
 
 
-
 class SettingDlg(QtGui.QDialog, Ui_Dialog):
-    def __init__(self, mainwin=None, parent=None):
+    def __init__(self, mainwin, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
 
         self.mainwin = mainwin
-        self.config = mainwin.session.config
+        self.config  = mainwin.session.config
 
         self.loadlastCheckbox.setChecked(self.config.loadlasttime)
         self.openRemoteCheckbox.setChecked(self.config.openremote)
@@ -44,14 +37,19 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.fontfamily = self.config.fontfamily
         self.fontsize = self.config.fontsize
 
-        text = stringlize_font_info(*get_font_info(self.config))
-        self.label.setText(text)
+        def get_fontinfo(config):
+            family = config.fontfamily or "default"
+            size   = config.fontsize or "default"
+            return stringlize_fontinfo(family, size)
 
-        self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.fontSelect)
+        textinfo = get_fontinfo(self.config)
+        self.label.setText(fontinfo)
+
+        self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.selectFont)
         self.connect(self.loadlastCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
         self.connect(self.openRemoteCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
-        self.connect(self.pushButton_slct, QtCore.SIGNAL('clicked()'), self.onSlctExt)
-        self.connect(self.pushButton_deslct, QtCore.SIGNAL('clicked()'), self.onUnSlctExt)
+        self.connect(self.pushButton_slct, QtCore.SIGNAL('clicked()'), self.onSelectExt)
+        self.connect(self.pushButton_deslct, QtCore.SIGNAL('clicked()'), self.onUnSelectExt)
         for a, b in self.searchext.iteritems():
             if b:
                 item = QListWidgetItem(self.list_search)
@@ -60,7 +58,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
                 item = QListWidgetItem(self.list_unsearch)
                 item.setText(a)
 
-    def onSlctExt(self):
+    def onSelectExt(self):
         item = self.list_unsearch.currentItem()
         if not item :
             return
@@ -70,7 +68,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.list_unsearch.takeItem(self.list_unsearch.row(item))
         self.searchext[ext] = True
 
-    def onUnSlctExt(self):
+    def onUnSelectExt(self):
         item = self.list_search.currentItem()
         if not item :
             return
@@ -90,22 +88,16 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.openremote = True if self.openRemoteCheckbox.isChecked() else False
         self.msglabel.setText(u'重启后生效')
 
-
-    def fontSelect(self):
+    def selectFont(self):
         font, ok = QtGui.QFontDialog.getFont(self)
         if ok:
             self.fontfamily = font.family()
             self.fontsize = font.pixelSize()
             if self.fontsize == -1:
                 self.fontsize = font.pointSize()
-            text = stringlize_font_info(self.fontfamily, self.fontsize)
-            self.label.setText(text)
+            fontinfo = stringlize_fontinfo(self.fontfamily, self.fontsize)
+            self.label.setText(fontinfo)
 
 
 if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    Dialog = SettingDlg()
-    Dialog.show()
-    sys.exit(app.exec_())
-
+    raise NotImplementedError("")
