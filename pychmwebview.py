@@ -88,7 +88,6 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
         self.qwebview = parent
 
     def createRequest(self, op, request, outgoingdata):
-        #print "[debug] createRequest(): requested url: %s" % request.url()
         scheme = request.url().scheme()
         if scheme == QLatin1String('ms-its'):
             return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
@@ -109,16 +108,15 @@ class PyChmWebView(QWebView):
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
-        self.zoomOff()
-        self.reload()
-        self.openedpg = None
-        self.currentPos = 0
+        self.zoom = 1.0
 
         self.tabmanager = tabmanager
         self.session    = tabmanager.session
-        self.chmfile = PyChmFile(self.session )
-        self.encoding = "gb18030"
-        self.url = None
+        self.chmfile    = PyChmFile(self.session )
+        self.encoding   = "gb18030"
+        self.url        = None
+        self.openedpg   = None
+        self.currentPos = 0
 
     # FIXME; maybe not needed?
     def clone(self):
@@ -342,6 +340,7 @@ class PyChmWebView(QWebView):
             url = u'ms-its://' + url
         print ("[webview.openPage] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
+        self.show()
         self.tabmanager.setTabName(self)
         self.openedpg = url[9:]
         return True
