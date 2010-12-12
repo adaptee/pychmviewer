@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/settingdlg.ui'
 #
-# Created: Sun Dec 12 21:00:36 2010
+# Created: Sun Dec 12 21:06:01 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -34,15 +34,15 @@ class Ui_Dialog(object):
         self.sessionRestoreCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
         self.sessionRestoreCheckbox.setObjectName(_fromUtf8("sessionRestoreCheckbox"))
         self.verticalLayout_3.addWidget(self.sessionRestoreCheckbox)
-        self.openRemoteCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
-        self.openRemoteCheckbox.setObjectName(_fromUtf8("openRemoteCheckbox"))
-        self.verticalLayout_3.addWidget(self.openRemoteCheckbox)
+        self.openRemoteURLCheckbox = QtGui.QCheckBox(self.verticalLayoutWidget_2)
+        self.openRemoteURLCheckbox.setObjectName(_fromUtf8("openRemoteURLCheckbox"))
+        self.verticalLayout_3.addWidget(self.openRemoteURLCheckbox)
         self.tabWidget.addTab(self.tab, _fromUtf8(""))
         self.tab_2 = QtGui.QWidget()
         self.tab_2.setObjectName(_fromUtf8("tab_2"))
-        self.label = QtGui.QLabel(self.tab_2)
-        self.label.setGeometry(QtCore.QRect(40, 130, 241, 91))
-        self.label.setObjectName(_fromUtf8("label"))
+        self.fontInfoLabel = QtGui.QLabel(self.tab_2)
+        self.fontInfoLabel.setGeometry(QtCore.QRect(40, 130, 241, 91))
+        self.fontInfoLabel.setObjectName(_fromUtf8("fontInfoLabel"))
         self.selectFontButton = QtGui.QPushButton(self.tab_2)
         self.selectFontButton.setGeometry(QtCore.QRect(90, 70, 105, 25))
         self.selectFontButton.setObjectName(_fromUtf8("selectFontButton"))
@@ -55,7 +55,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.verticalLayout_2)
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Dialog.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -63,9 +63,9 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "settings", None, QtGui.QApplication.UnicodeUTF8))
         self.sessionRestoreCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开上一次的标签页", None, QtGui.QApplication.UnicodeUTF8))
-        self.openRemoteCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开外部链接", None, QtGui.QApplication.UnicodeUTF8))
+        self.openRemoteURLCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开外部链接", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Dialog", "启动", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
+        self.fontInfoLabel.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
         self.selectFontButton.setText(QtGui.QApplication.translate("Dialog", "选择字体", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Dialog", "字体", None, QtGui.QApplication.UnicodeUTF8))
 

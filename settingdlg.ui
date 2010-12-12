@@ -19,7 +19,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -43,7 +43,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="openRemoteCheckbox">
+           <widget class="QCheckBox" name="openRemoteURLCheckbox">
             <property name="text">
              <string>打开外部链接</string>
             </property>
@@ -56,7 +56,7 @@
         <attribute name="title">
          <string>字体</string>
         </attribute>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="fontInfoLabel">
          <property name="geometry">
           <rect>
            <x>40</x>
