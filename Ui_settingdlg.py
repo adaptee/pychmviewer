@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/settingdlg.ui'
 #
-# Created: Sun Dec 12 20:55:41 2010
+# Created: Sun Dec 12 21:00:36 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -43,9 +43,9 @@ class Ui_Dialog(object):
         self.label = QtGui.QLabel(self.tab_2)
         self.label.setGeometry(QtCore.QRect(40, 130, 241, 91))
         self.label.setObjectName(_fromUtf8("label"))
-        self.pushButton = QtGui.QPushButton(self.tab_2)
-        self.pushButton.setGeometry(QtCore.QRect(90, 70, 105, 25))
-        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.selectFontButton = QtGui.QPushButton(self.tab_2)
+        self.selectFontButton.setGeometry(QtCore.QRect(90, 70, 105, 25))
+        self.selectFontButton.setObjectName(_fromUtf8("selectFontButton"))
         self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
         self.verticalLayout_2.addWidget(self.tabWidget)
         self.buttonBox = QtGui.QDialogButtonBox(Dialog)
@@ -55,7 +55,7 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.verticalLayout_2)
 
         self.retranslateUi(Dialog)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Dialog.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Dialog.reject)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -66,7 +66,7 @@ class Ui_Dialog(object):
         self.openRemoteCheckbox.setText(QtGui.QApplication.translate("Dialog", "打开外部链接", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("Dialog", "启动", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "选择字体", None, QtGui.QApplication.UnicodeUTF8))
+        self.selectFontButton.setText(QtGui.QApplication.translate("Dialog", "选择字体", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("Dialog", "字体", None, QtGui.QApplication.UnicodeUTF8))
 
 
