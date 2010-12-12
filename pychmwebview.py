@@ -149,8 +149,7 @@ class PyChmWebView(QWebView):
         #elif event.matches(QtGui.QKeySequence.ZoomOut) :
             #self.zoomOut()
         else:
-            # You should only catch those you are interested.
-            event.ignore()
+            QWebView.keyPressEvent(self,event)
 
 
 

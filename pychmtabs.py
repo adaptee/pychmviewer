@@ -96,8 +96,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         elif event.matches(QtGui.QKeySequence.AddTab):
             self.onOpenNewTab()
         else:
-            # You should only catch those you are interested.
-            event.ignore()
+            QtGui.QWidget.keyPressEvent(self, event)
 
 
     def openChmFile(self, path):
