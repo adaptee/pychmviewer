@@ -21,7 +21,6 @@ from pychmsearch import PyChmSearchView
 from pychmbookmarks import PyChmBookmarksView
 from pychmtabs import PyChmTabs
 
-from pychmfile import PyChmFile
 from encodinglist import encodings
 from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
@@ -290,11 +289,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             try:
                 self.openFile(path)
             except StandardError:
+                # FIXME ; should give GUI warning, instead
                 print ("[Error] failed to open: %s" % path)
 
     def openFile(self, path):
-        chmfile = PyChmFile(self.session, path)
-        self.tabmanager.openChmFile(chmfile)
+        self.tabmanager.openChmFile(path)
 
     def onAbout(self):
         dialog = AboutDialog(self)
