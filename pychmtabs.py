@@ -183,7 +183,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.currentView = self.tabWidget.currentWidget()
 
     def onTabSwitched(self, tabnum):
-        print ("[TabSwitched] tabnum: %d" % tabnum)
         self.currentView = self.tabWidget.widget(tabnum)
         # Maybe no views exists now
         if self.currentView:
