@@ -19,7 +19,6 @@ from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
 from PyQt4.QtCore import QIODevice, Qt
 
 import urltools
-from pychmfile import PyChmFile
 from utils import remove_comment
 from content_type import content_types
 
@@ -94,7 +93,7 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
         return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
 
 class PyChmWebView(QWebView):
-    def __init__(self, tabmanager=None, parent=None):
+    def __init__(self, tabmanager, chmfile, parent):
         '''
         zoom: zoom out times
         openedpg: current openedpage
@@ -112,7 +111,7 @@ class PyChmWebView(QWebView):
 
         self.tabmanager = tabmanager
         self.session    = tabmanager.session
-        self.chmfile    = PyChmFile(self.session )
+        self.chmfile    = chmfile
         self.encoding   = "gb18030"
         self.url        = None
         self.openedpg   = None
@@ -121,9 +120,9 @@ class PyChmWebView(QWebView):
     # FIXME; maybe not needed?
     def clone(self):
         view = PyChmWebView(tabmanager=self.tabmanager,
+                            chmfile=self.chmfile,
                             parent=self.parent() )
 
-        view.chmfile = PyChmFile(self.session, self.chmfile.path)
         view.enocding = self.encoding
         view.url = self.url
 

@@ -106,29 +106,34 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
     def openChmFile(self, chmfile):
-        view = self.onOpenAtNewTab(chmfile.home)
-        view.chmfile = chmfile
-        # FIXME; dirty hack
-        #view.goHome()
+        view = PyChmWebView(tabmanager=self,
+                            chmfile=chmfile,
+                            parent=self.tabWidget
+                           )
+
+        self.addNewTab(view)
+
+        # FIXME; dirty hack, but we sitll need it now.
+        view.goHome()
 
     def onOpenNewTab(self):
+        "duplicate a new view showing same url as this one"
         url = self.tabWidget.currentWidget().openedpg
         self.onOpenAtNewTab(url)
 
     def onOpenAtNewTab(self, url):
-        # FIXME; should add a new param representing True/False
-        # 'True' means forcc opening new tab at foregound.
-        view = self.addNewTab(True)
+        "open specified url in a newly created view"
+        if not self.currentView:
+            raise ValueError("Something terrible has happened! Shame of the coder!")
+
+        view = self.currentView.clone()
+        self.addNewTab(view)
         view.openPage(url)
+
         return view
 
-    def addNewTab(self, active):
-        ''''''
-
-        if self.currentView:
-            view = self.currentView.clone()
-        else:
-            view = PyChmWebView(tabmanager=self, parent=self.tabWidget)
+    def addNewTab(self, view, active=True):
+        "only responsible for putting view into widgetmanager"
 
         self.webviews.append(view)
         self.tabWidget.addTab(view, '')
