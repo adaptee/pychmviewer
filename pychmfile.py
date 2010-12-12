@@ -198,9 +198,9 @@ class PyChmFile(object):
             return path
 
         def prepare_for_extracting_to(fullpath):
-            dirname, _ = os.path.split(fullpath)
+            dirname = os.path.dirname(fullpath)
             if not os.path.exists(dirname):
-                os.makedirs(dirname)
+                os.mkdir(dirname)
 
 
         urls = self.getURLs()

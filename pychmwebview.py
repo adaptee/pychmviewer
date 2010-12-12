@@ -155,9 +155,6 @@ class PyChmWebView(QWebView):
 
 
     def contextMenuEvent(self, event):
-        '''
-        inner method
-        '''
         menu = QtGui.QMenu(self)
         link = self.anchorAt(event.pos())
         if link :
@@ -210,15 +207,12 @@ class PyChmWebView(QWebView):
         self.findText(text, flags)
 
     def onLoadFinished(self, ok):
-        '''
-        inner method
-        '''
         if ok:
             self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
             self.currentPos = 0
             self.tabmanager.setTabName(self)
         else:
-            print 'file not found'
+            print '[loadFinished] page not found'
 
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
@@ -240,9 +234,6 @@ class PyChmWebView(QWebView):
         QtGui.QApplication.clipboard().setText(self.selectedText())
 
     def mousePressEvent(self, event):
-        '''
-        inner method
-        '''
         if event.button() != QtCore.Qt.MidButton:
             QWebView.mousePressEvent(self, event)
             return
@@ -256,9 +247,6 @@ class PyChmWebView(QWebView):
 
 
     def anchorAt(self, pos):
-        '''
-        inner method
-        '''
 
         chmfile = self.chmfile
         chmpath = chmfile.path
@@ -286,9 +274,6 @@ class PyChmWebView(QWebView):
         return url
 
     def openAtNewPage(self):
-        '''
-        inner method
-        '''
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
                 self.emit(QtCore.SIGNAL('openremoteatnewtab'), self.keepnewtaburl)
@@ -296,9 +281,6 @@ class PyChmWebView(QWebView):
             self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
 
     def onLinkClicked(self, qurl):
-        '''
-        inner method
-        '''
 
         chmfile = self.chmfile
         chmpath = chmfile.path
