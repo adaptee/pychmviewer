@@ -42,7 +42,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             size   = config.fontsize or "default"
             return stringlize_fontinfo(family, size)
 
-        textinfo = get_fontinfo(self.config)
+        fontinfo = get_fontinfo(self.config)
         self.label.setText(fontinfo)
 
         self.connect(self.pushButton, QtCore.SIGNAL('clicked()'), self.selectFont)
