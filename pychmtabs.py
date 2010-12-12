@@ -103,7 +103,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         view = self.onOpenAtNewTab(chmfile.home)
         view.chmfile = chmfile
         # FIXME; dirty hack
-        view.goHome()
+        #view.goHome()
 
     def onOpenNewTab(self):
         url = self.tabWidget.currentWidget().openedpg

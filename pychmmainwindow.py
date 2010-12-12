@@ -45,7 +45,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         # make using QSettings more easy
         QtCore.QCoreApplication.setOrganizationName(session.organization)
         QtCore.QCoreApplication.setApplicationName(session.application)
-
         # You do not want to resize the mainwindow every time
         self.restoreLayoutInfo()
 
