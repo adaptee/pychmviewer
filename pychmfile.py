@@ -21,8 +21,7 @@ from md5sum import md5sum
 from utils import remove_comment
 from session import system_encoding
 
-# TODO: provide real implementation
-# FIXME; this is not always correct
+# TODO: provide serious implementation
 def codepage2encoding(codepage):
     return 'gb18030' if codepage == 'cp936' else codepage
 
@@ -50,28 +49,21 @@ def normalize_url(url):
 
 
 class PyChmFile(object):
-    def __init__(self, session, path=None, force_encoding=None):
-        # FIXME; should _force_encoding also be reset in initialize()?
+    def __init__(self, session, path, force_encoding=None):
         self.initialize()
         self.session = session
-        self._force_encoding = force_encoding
-        if path:
-            self.loadFile(path, force_encoding)
-
-    #def __del__(self):
-        #self._chm.CloseCHM()
-        #self.bookmarkdb.close()
+        self.loadFile(path, force_encoding)
 
     def initialize(self):
         self._chm            = CHMFile()
         self._title          = u""
-        self._homeurl        = u""
+        self._home           = u""
         self._encoding       = u""
         self._force_encoding = u""
         self._fullpath       = u""
         self._md5sum         = None
         self._bookmarkdb     = None
-        self._content_table  = [ ]
+        self._topics_table  = [ ]
         self._index_table    = [ ]
 
     def reset(self):
@@ -79,20 +71,13 @@ class PyChmFile(object):
         self.initialize()
 
     def loadFile(self, filename, force_encoding=None):
-        '''
-        filename must be unicode
-        if success,return True,
-        else,return False
-        '''
-
         assert isinstance(filename, unicode)
-        self.reset()
+
         if force_encoding:
             self._force_encoding = force_encoding
 
         if not self._chm.LoadCHM(filename.encode(system_encoding)):
-            print ("load file failed")
-            return False
+            raise IOError("Failed to load: %s" % filename)
 
         chm = self._chm
 
@@ -100,7 +85,7 @@ class PyChmFile(object):
         encoding = codepage2encoding(codepage)
         self._encoding = encoding or 'utf-8'
 
-        self._homeurl = normalize_url( chm.home.decode(encoding) )
+        self._home = normalize_url( chm.home.decode(encoding) )
         self._title   = chm.title.decode(encoding)
 
         def getFullPath(filename):
@@ -124,7 +109,6 @@ class PyChmFile(object):
 
         self._bookmarkdb = getBookmarkdb(self.md5sum)
 
-        return True
 
     def search(self, pattern):
         def guessEncoding(contents):
@@ -250,7 +234,7 @@ class PyChmFile(object):
     @property
     def home(self):
         "Home of this file"
-        return self._homeurl
+        return self._home
 
     @property
     def encoding(self):
@@ -272,16 +256,13 @@ class PyChmFile(object):
         "small database for storing bookmarks of this chm file"
         return self._bookmarkdb
 
+    # TODO; make it a cached property
     @property
     def index(self):
         "Index of this chm file"
         if self._index_table :
             return self._index_table
 
-        #self._chm.GetTopicsTree()  (data)
-        #self._chm.GetIndex()       (data)
-        #self._chm.index            (url only)
-        #self._chm.topics           (url only)
         if not self._chm.index :
             self._index_table = []
             return []
@@ -300,11 +281,11 @@ class PyChmFile(object):
 
     @property
     def topics(self):
-        if self._content_table :
-            return self._content_table
+        if self._topics_table :
+            return self._topics_table
 
         if not self._chm.topics :
-            self._content_table = []
+            self._topics_table = []
             return []
 
         topics_url = self._chm.topics.decode(self.encoding)
@@ -315,7 +296,7 @@ class PyChmFile(object):
 
         if topics_data :
             _, tree = soup.parse(topics_data.decode(self.encoding))
-            self._content_table = tree
+            self._topics_table = tree
 
             return tree
 
