@@ -380,7 +380,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         output_dir = unicode(output_dir).encode(self.session.system_encoding)
 
         chmfile = self.currentView.chmfile
-        maximum = len( chmfile.getURLs() )
+        maximum = len( chmfile.allURLs )
 
 
         progress = QtGui.QProgressDialog(u'Extract chm file',

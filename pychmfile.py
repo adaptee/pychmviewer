@@ -164,9 +164,10 @@ class PyChmFile(object):
 
             return results
 
-        return filterByExt( self.getURLs(), getextensions() )
+        return filterByExt( self.allURLs, getextensions() )
 
-    def getURLs(self):
+    @CachedProperty
+    def allURLs(self):
         '''
         get all the URLs in  this chm file
         [note], return raw url, not unicode
@@ -203,7 +204,7 @@ class PyChmFile(object):
                 os.mkdir(dirname)
 
 
-        urls = self.getURLs()
+        urls = self.allURLs
         for url in urls:
             # FIXME; always decode using 'utf-8'?
             url = url.decode('utf-8')
@@ -212,19 +213,22 @@ class PyChmFile(object):
             path = normalize_path(path)
 
             fullpath = os.path.join(output_dir, path)
-            prepare_for_extracting_to(fullpath)
-
-            contents = self.getContentsByURL(url)
-
-            if contents:
-                try :
-                    with open(fullpath, 'w') as writer:
-                        writer.write(contents)
-                    yield ( True,  u"[success] %s" % url )
-                except StandardError :
-                    yield ( False, u"[failure] %s" % url )
+            try:
+                prepare_for_extracting_to(fullpath)
+            except StandardError:
+                yield ( False, u"[failure] %s" % url )
             else:
-                yield( True, "[skip] %s (empty)" % url )
+                contents = self.getContentsByURL(url)
+
+                if contents:
+                    try :
+                        with open(fullpath, 'w') as writer:
+                            writer.write(contents)
+                        yield ( True,  u"[success] %s" % url )
+                    except StandardError :
+                        yield ( False, u"[failure] %s" % url )
+                else:
+                    yield( True, "[skip] %s (empty)" % url )
 
     @property
     def title(self):
