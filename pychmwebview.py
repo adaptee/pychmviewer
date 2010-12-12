@@ -134,6 +134,29 @@ class PyChmWebView(QWebView):
 
         return view
 
+    def keyPressEvent(self, event):
+        if event.matches(QtGui.QKeySequence.Copy):
+            self.triggerPageAction(QWebPage.Copy)
+        elif event.matches(QtGui.QKeySequence.SelectAll):
+            #FIXME; it does not work
+            print "[keyPressEvent] Ctrl-A"
+            self.triggerPageAction(QWebPage.MoveToStartOfDocument)
+            self.triggerPageAction(QWebPage.SelectEndOfDocument)
+
+
+    def contextMenuEvent(self, event):
+        '''
+        inner method
+        '''
+        menu = QtGui.QMenu(self)
+        link = self.anchorAt(event.pos())
+        if link :
+            self.keepnewtaburl = link
+            menu.addAction(u'在新标签页打开', self.openAtNewPage)
+            menu.exec_(event.globalPos())
+        if not self.selectedText().isEmpty():
+            menu.addAction(u'复制', self.copyToClipboard)
+            menu.exec_(event.globalPos())
 
     def onEncodingChanged(self, encoding):
         self.encoding = encoding
@@ -202,19 +225,6 @@ class PyChmWebView(QWebView):
     def goForward(self):
         self.history().forward()
 
-    def contextMenuEvent(self, event):
-        '''
-        inner method
-        '''
-        menu = QtGui.QMenu(self)
-        link = self.anchorAt(event.pos())
-        if link :
-            self.keepnewtaburl = link
-            menu.addAction(u'在新标签页打开', self.openAtNewPage)
-            menu.exec_(event.globalPos())
-        if not self.selectedText().isEmpty():
-            menu.addAction(u'复制', self.copyToClipboard)
-            menu.exec_(event.globalPos())
 
     def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())
