@@ -19,9 +19,9 @@ _, system_encoding = locale.getdefaultlocale()
 
 
 class Session(object):
-    def __init__(self, config_path=None):
-        self.config_dir      = os.path.join( os.environ["HOME"], ".pychmviewer")
-        self.config          = self._getConfig(config_path)
+    def __init__(self):
+        self.config_dir      = self._getConfigDir()
+        self.config          = self._getConfig()
         self.snapshot        = self._getSnapshot()
         self.system_encoding = system_encoding
 
@@ -33,16 +33,25 @@ class Session(object):
         self.email           = email
         self.url             = url
 
+    def _getConfigDir(self):
+        config_dir = os.path.join( os.environ["HOME"], ".pychmviewer")
 
-    def _getConfig(self, config_path=None):
-        config_path = config_path or \
-                      os.path.join(self.config_dir, "pychmviewer.cfg" )
+        if not os.path.exists(config_dir):
+            os.mkdir(config_dir)
+
+        return config_dir
+
+    def _getConfig(self):
+        config_path = os.path.join(self.config_dir, "pychmviewer.cfg" )
+
         return PyChmViewerConfig(config_path)
 
     def _getSnapshot(self):
-        path = os.path.join(  self.config_dir, "snapshot.db" )
-        return bsddb.hashopen(path)
+        snapshot_path = os.path.join( self.config_dir, "snapshot.db" )
 
-
-
+        try:
+            return bsddb.hashopen(snapshot_path)
+        except bsddb.db.DBNoSuchFileError:
+            # a dummy database
+            return { }
 

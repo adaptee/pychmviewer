@@ -212,8 +212,13 @@ class PyChmViewerConfig(ConfigMapper):
 
     def __init__(self, path):
 
-        with open(path) as stream:
-            super(PyChmViewerConfig, self).__init__( stream )
+        try:
+            stream = open(path)
+        except IOError:
+            stream = None
+
+        #with open(path) as stream:
+        super(PyChmViewerConfig, self).__init__( stream )
 
         self.path = path
 
