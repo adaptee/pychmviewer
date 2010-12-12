@@ -122,7 +122,8 @@ class PyChmWebView(QWebView):
         self.encoding   = "gb18030"
         self.url        = None
         self.openedpg   = None
-        self.currentPos = 0
+        ##self.currentPos = 0
+        self._suggestedPos = 0
 
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
@@ -136,7 +137,8 @@ class PyChmWebView(QWebView):
         view.enocding = self.encoding
         view.url = self.url
 
-        view.currentPos = self.currentPos
+        #view.currentPos = self.currentPos
+        view._suggestedPos = self.curretnPos()
         view.openedpg = self.openedpg
 
         return view
@@ -256,14 +258,6 @@ class PyChmWebView(QWebView):
         self.zoom = 1.0
         self.setTextSizeMultiplier(self.zoom)
 
-    def onLoadFinished(self, ok):
-        if ok:
-            self.page().currentFrame().setScrollBarValue(QtCore.Qt.Vertical, self.currentPos)
-            self.currentPos = 0
-            self.tabmanager.setTabName(self)
-        else:
-            print ("[loadFinished] page not found")
-
     def printPage(self):
         printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
         dialog = QtGui.QPrintDialog(printer, self)
@@ -336,12 +330,20 @@ class PyChmWebView(QWebView):
         self.openedpg = url[9:]
         return True
 
-    def getScrollPos(self):
+    def onLoadFinished(self, ok):
+        if ok:
+            self.setCurrentPos(self._suggestedPos)
+            self._suggestedPos = 0
+            self.tabmanager.setTabName(self)
+        else:
+            print ("[loadFinished] page not found")
+
+    def currentPos(self):
         return self.page().currentFrame().scrollBarValue(QtCore.Qt.Vertical)
 
-    def setScrollPos(self, pos):
+    def setCurrentPos(self, pos):
+        self._suggestedPos = pos
         self.page().currentFrame().setScrollBarValue(QtCore.Qt.Vertical, pos)
-        self.currentPos = pos
 
     def find(self, text, backward=False, casesens=False):
         '''
