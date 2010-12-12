@@ -98,7 +98,7 @@ class PyChmWebView(QWebView):
         zoom: zoom out times
         openedpg: current openedpage
         signal 'openURL' will be emited(with param url:unicode)
-        signal 'openAtNewTab' will be emited(with param url:unicode)
+        signal 'openURLatNewTab' will be emited(with param url:unicode)
         signal 'openRemoteURLatNewTab' will be emited(with param url:unicode)
         signal 'openRemoteURL' will be emited(with param url:unicode)
         '''
@@ -277,7 +277,7 @@ class PyChmWebView(QWebView):
             if self.keepnewtaburl[0:4] == 'http':
                 self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
                 return
-            self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
+            self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
 
     def onLinkClicked(self, qurl):
 

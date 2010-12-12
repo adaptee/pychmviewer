@@ -117,9 +117,9 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onOpenNewTab(self):
         "duplicate a new view showing same url as this one"
         url = self.tabWidget.currentWidget().openedpg
-        self.onOpenAtNewTab(url)
+        self.onOpenURLatNewTab(url)
 
-    def onOpenAtNewTab(self, url):
+    def onOpenURLatNewTab(self, url):
         "open specified url in a newly created view"
         if not self.currentView:
             raise ValueError("Something terrible has happened! Shame of the coder!")
@@ -143,12 +143,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.editFind.installEventFilter(self)
 
         self.connect(view, QtCore.SIGNAL('openURL'), view.openPage)
-        self.connect(view, QtCore.SIGNAL('openAtNewTab'), self.onOpenAtNewTab)
+        self.connect(view, QtCore.SIGNAL('openURLatNewTab'), self.onOpenURLatNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
         if self.config.openRemoteURL:
             self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.openPage)
-            self.connect(view, QtCore.SIGNAL('openRemoteURLatNewTab'), self.onOpenAtNewTab)
+            self.connect(view, QtCore.SIGNAL('openRemoteURLatNewTab'), self.onOpenURLatNewTab)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
