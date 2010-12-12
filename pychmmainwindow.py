@@ -74,7 +74,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.openFile(path)
 
     def _startUpWithNoPaths(self):
-        if self.config.loadlasttime:
+        if self.config.session_restore:
             self.tabmanager.loadFrom(self.session.snapshot)
 
     @property
@@ -307,7 +307,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onSetting(self):
         dialog = SettingDlg(mainwin=self, parent=self)
         if dialog.exec_() == QtGui.QDialog.Accepted:
-            self.config.loadlasttime = dialog.loadlasttime
+            self.config.session_restore = dialog.session_restore
             self.config.fontfamily = unicode(dialog.fontfamily)
             self.config.fontsize = dialog.fontsize
             self.config.openremote = dialog.openremote
