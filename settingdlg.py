@@ -29,13 +29,13 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
 
         self.config  = mainwin.session.config
 
-        self.session_restore = self.config.session_restore
+        self.sessionRestore = self.config.sessionRestore
         self.openRemoteURL = self.config.openRemoteURL
 
         self.fontfamily = self.config.fontfamily
         self.fontsize = self.config.fontsize
 
-        self.sessionRestoreCheckbox.setChecked(self.session_restore)
+        self.sessionRestoreCheckbox.setChecked(self.sessionRestore)
         self.openRemoteURLCheckbox.setChecked(self.openRemoteURL)
         self.fontInfoLabel.setText( get_fontinfo(self.config) )
 
@@ -44,7 +44,7 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.connect(self.openRemoteURLCheckbox, QtCore.SIGNAL('clicked()'), self.toggleOpenRemoteURl)
 
     def toggleSessionRestore(self):
-        self.session_restore = self.sessionRestoreCheckbox.isChecked()
+        self.sessionRestore = self.sessionRestoreCheckbox.isChecked()
 
     def toggleOpenRemoteURl(self):
         self.openRemoteURL = self.openRemoteURLCheckbox.isChecked()
