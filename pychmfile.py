@@ -141,14 +141,14 @@ class PyChmFile(object):
     def getSearchableURLs(self):
         searchable_extensions = [ ".htm", ".html", ".txt"   ]
 
-        def filterByExtension(names, exts):
-            names   = [ name.lower() for name in names ]
+        def filterByExtension(urls, exts):
+            urls   = [ url.lower() for url in urls ]
 
             results = [ ]
-            for name in names:
+            for url in urls:
                 for ext in exts:
-                    if name.endswith(ext):
-                        results.append(name)
+                    if url.endswith(ext):
+                        results.append(url)
 
             return results
 
