@@ -67,8 +67,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
                             default=u"new bookmark",
                         ):
 
-        #TODO: make sure the dialog is always wide enough ,
-        # to show the title completely.
+        #FIXME ; the dialog maybe not wide enough to show title completely.
         name, ok = QtGui.QInputDialog.getText( self,
                                                title,
                                                prompt,
