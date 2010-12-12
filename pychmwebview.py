@@ -152,7 +152,6 @@ class PyChmWebView(QWebView):
             QWebView.keyPressEvent(self,event)
 
 
-
     def contextMenuEvent(self, event):
         menu = QtGui.QMenu(self)
         link = self.anchorAt(event.pos())
@@ -163,74 +162,6 @@ class PyChmWebView(QWebView):
         if not self.selectedText().isEmpty():
             menu.addAction(u'复制', self.copyToClipboard)
             menu.exec_(event.globalPos())
-
-    def onEncodingChanged(self, encoding):
-        self.encoding = encoding
-        chmfile = self.chmfile
-        chmfile.loadFile(chmfile.path, encoding)
-
-        self.reload()
-
-
-    def zoomOut(self):
-        '''
-        zoom out fontsize
-        '''
-        self.zoom /= 1.2
-        self.setTextSizeMultiplier(self.zoom)
-
-    def zoomIn(self):
-        '''
-        zoom in the fontsize
-        '''
-        self.zoom *= 1.2
-        self.setTextSizeMultiplier(self.zoom)
-
-    def zoomOff(self):
-        '''
-        to make the font size normal
-        '''
-        self.zoom = 1.0
-        self.setTextSizeMultiplier(self.zoom)
-
-    def find(self, text, backward=False, casesens=False):
-        '''
-        text: the search text
-        backward:bool
-        '''
-        flags = QWebPage.FindWrapsAroundDocument
-        if backward:
-            flags |= QWebPage.FindBackward
-        if casesens:
-            flags |= QWebPage.FindCaseSensitively
-        self.findText(text, flags)
-
-    def onLoadFinished(self, ok):
-        if ok:
-            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
-            self.currentPos = 0
-            self.tabmanager.setTabName(self)
-        else:
-            print ("[loadFinished] page not found")
-
-    def printPage(self):
-        printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
-        dialog = QtGui.QPrintDialog(printer, self)
-        if dialog.exec_() == QtGui.QDialog.Accepted:
-            self.print_(printer)
-
-    def goHome(self):
-        self.openPage(self.chmfile.home)
-
-    def goBack(self):
-        self.history().back()
-
-    def goForward(self):
-        self.history().forward()
-
-
-    def copyToClipboard(self):
-        QtGui.QApplication.clipboard().setText(self.selectedText())
 
     def mousePressEvent(self, event):
         if event.button() != QtCore.Qt.MidButton:
@@ -243,7 +174,6 @@ class PyChmWebView(QWebView):
                 self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
             else:
                 self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
-
 
     def anchorAt(self, pos):
 
@@ -272,12 +202,71 @@ class PyChmWebView(QWebView):
         url = os.path.normpath(url)
         return url
 
+
+
+    def copyToClipboard(self):
+        QtGui.QApplication.clipboard().setText(self.selectedText())
+
+    def zoomIn(self):
+        self.zoom *= 1.2
+        self.setTextSizeMultiplier(self.zoom)
+
+    def zoomOut(self):
+        self.zoom /= 1.2
+        self.setTextSizeMultiplier(self.zoom)
+
+    def zoomOff(self):
+        " to make the font size normal "
+        self.zoom = 1.0
+        self.setTextSizeMultiplier(self.zoom)
+
+
+    def onLoadFinished(self, ok):
+        if ok:
+            self.page().currentFrame().setScrollBarValue(Qt.Vertical, self.currentPos)
+            self.currentPos = 0
+            self.tabmanager.setTabName(self)
+        else:
+            print ("[loadFinished] page not found")
+
+    def printPage(self):
+        printer = QtGui.QPrinter(QtGui.QPrinter.HighResolution)
+        dialog = QtGui.QPrintDialog(printer, self)
+        if dialog.exec_() == QtGui.QDialog.Accepted:
+            self.print_(printer)
+
+    def goHome(self):
+        self.openPage(self.chmfile.home)
+
+    def goBack(self):
+        self.history().back()
+
+    def goForward(self):
+        self.history().forward()
+
+    def canGoBack(self):
+        return self.history().canGoBack()
+
+    def canGoForward(self):
+        return self.history().canGoForward()
+
+
+
+
+
     def openAtNewPage(self):
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
                 self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
                 return
             self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
+
+    def onEncodingChanged(self, encoding):
+        self.encoding = encoding
+        self.chmfile.loadFile(self.chmfile.path, encoding)
+
+        self.reload()
+
 
     def onLinkClicked(self, qurl):
 
@@ -351,11 +340,18 @@ class PyChmWebView(QWebView):
         self.currentPos = pos
         self.page().currentFrame().setScrollBarValue(Qt.Vertical, pos)
 
-    def canGoBack(self):
-        return self.history().canGoBack()
+    def find(self, text, backward=False, casesens=False):
+        '''
+        text: the search text
+        backward:bool
+        '''
+        flags = QWebPage.FindWrapsAroundDocument
+        if backward:
+            flags |= QWebPage.FindBackward
+        if casesens:
+            flags |= QWebPage.FindCaseSensitively
+        self.findText(text, flags)
 
-    def canGoForward(self):
-        return self.history().canGoForward()
 
 if __name__ == '__main__':
     raise NotImplementedError()
