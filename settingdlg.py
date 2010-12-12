@@ -35,19 +35,18 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.fontfamily = self.config.fontfamily
         self.fontsize = self.config.fontsize
 
-
         self.sessionRestoreCheckbox.setChecked(self.session_restore)
         self.openRemoteURLCheckbox.setChecked(self.openremote)
         self.fontInfoLabel.setText( get_fontinfo(self.config) )
 
         self.connect(self.selectFontButton, QtCore.SIGNAL('clicked()'), self.selectFont)
-        self.connect(self.sessionRestoreCheckbox, QtCore.SIGNAL('clicked()'), self.onLoadLast)
-        self.connect(self.openRemoteURLCheckbox, QtCore.SIGNAL('clicked()'), self.onOpenRemote)
+        self.connect(self.sessionRestoreCheckbox, QtCore.SIGNAL('clicked()'), self.toggleSessionRestore)
+        self.connect(self.openRemoteURLCheckbox, QtCore.SIGNAL('clicked()'), self.toggleOpenRemoteURl)
 
-    def onLoadLast(self):
+    def toggleSessionRestore(self):
         self.session_restore = self.sessionRestoreCheckbox.isChecked()
 
-    def onOpenRemote(self):
+    def toggleOpenRemoteURl(self):
         self.openremote = self.openRemoteURLCheckbox.isChecked()
 
     def selectFont(self):
