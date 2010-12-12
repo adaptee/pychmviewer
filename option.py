@@ -199,7 +199,7 @@ class PyChmViewerConfig(ConfigMapper):
     defaultencoding = StringConfigItem("userconfig", "gb18030")
     fontfamily   = StringConfigItem("userconfig", "")
     fontsize     = IntegerConfigItem("userconfig", 10)
-    session_restore = YesNoConfigItem("userconfig", True)
+    sessionRestore = YesNoConfigItem("userconfig", True)
     openRemoteURL   = YesNoConfigItem("userconfig", True)
 
     lastdir = StringConfigItem("userdata", ".")
