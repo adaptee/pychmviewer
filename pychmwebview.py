@@ -223,18 +223,24 @@ class PyChmWebView(QWebView):
         url = unicode(url)
         print ("[webview.openPage] loading url: %s" % url)
 
-        if url[0:4] == 'http':
+        finalurl = ""
+
+        if url[0:4] == 'http' :
+            finalurl = url
             self.load(QtCore.QUrl(url))
             self.tabmanager.setTabName(self, self.title() )
             self.openedpg = url
             return
+
         if url == u'/':
+            finalurl = self.chmfile.home
             url = self.chmfile.home
+
         try:
             pos = url.index(u'://')
             if url[0:pos] != u'ms-its': #just for url in chmfile
                 return
-            url = url[0:pos]+os.path.normpath(url[pos+3:])
+            url = url[0:pos] + os.path.normpath(url[pos+3:])
         except:
             url = os.path.normpath(url)
             if url[0] != u'/':
@@ -242,12 +248,16 @@ class PyChmWebView(QWebView):
             url = os.path.normpath(url)
 
         if not url.lower().startswith(u'ms-its://'):
+            finalurl = u'ms-its://' + url
             url = u'ms-its://' + url
+
+        #self.load(QtCore.QUrl(finalurl))
         self.load(QtCore.QUrl(url))
         self.show()
         self.tabmanager.setTabName(self, self.title() )
         self.openedpg = url[9:]
-        return True
+
+        #return True
 
     def anchorAt(self, pos):
 
