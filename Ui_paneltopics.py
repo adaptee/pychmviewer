@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'paneltopics.ui'
 #
-# Created: Tue Dec 14 06:13:08 2010
+# Created: Tue Dec 14 06:21:49 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -24,6 +24,7 @@ class Ui_PanelTopics(object):
         self.vboxlayout.setObjectName(_fromUtf8("vboxlayout"))
         self.tree = QtGui.QTreeWidget(PanelTopics)
         self.tree.setHeaderHidden(True)
+        self.tree.setColumnCount(1)
         self.tree.setObjectName(_fromUtf8("tree"))
         self.tree.headerItem().setText(0, _fromUtf8("1"))
         self.vboxlayout.addWidget(self.tree)
