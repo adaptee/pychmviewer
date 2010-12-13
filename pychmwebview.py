@@ -191,20 +191,24 @@ class PyChmWebView(QWebView):
         if qurl.scheme() in [ "http", "https"] :
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
             return
-        if qurl.scheme() != 'ms-its':
-            return
-        url = unicode(qurl.path())
-        if url == u'/':
-            url = chmfile.home
-        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
-        if isnew:
-            ochm = os.path.join(os.path.dirname(chmpath), ochm)
-            if ochm != chmpath:
-                url = pg
-            else:
-                return
-        url = os.path.normpath(url)
-        self.emit(QtCore.SIGNAL('openURL'), url)
+
+        elif qurl.scheme() == 'ms-its':
+            url = unicode(qurl.path())
+            if url == u'/':
+                url = chmfile.home
+            isnew, ochm, pg = urltools.parseChmURL(unicode(qurl.toString()))
+            if isnew:
+                ochm = os.path.join(os.path.dirname(chmpath), ochm)
+                if ochm != chmpath:
+                    url = pg
+                else:
+                    return
+            url = os.path.normpath(url)
+            self.emit(QtCore.SIGNAL('openURL'), url)
+
+        else:
+            pass
+
 
     def anchorAt(self, pos):
         chmfile = self.chmfile
@@ -222,7 +226,7 @@ class PyChmWebView(QWebView):
         url = unicode(qurl.path())
         if url == u'/':
             url = chmfile.home
-        isnew, ochm, pg = urltools.isNewChmURL(unicode(qurl.toString()))
+        isnew, ochm, pg = urltools.parseChmURL(unicode(qurl.toString()))
         if isnew:
             ochm = os.path.join(os.path.dirname(chmpath), ochm)
             if ochm != chmpath:
@@ -338,7 +342,7 @@ class PyChmWebView(QWebView):
             print ("[loadFinished] page not found")
 
     def title(self):
-        "override the title() method of QWebView"
+        "override the QWebView.title() "
 
         page_title = QWebView.title(self)
         chm_title  = self.chmfile.title
