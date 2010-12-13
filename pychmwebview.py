@@ -134,12 +134,10 @@ class PyChmWebView(QWebView):
                             chmfile=self.chmfile,
                             parent=self.parent() )
 
-        view.enocding = self.encoding
-        view.url = self.url
-
-        #view.currentPos = self.currentPos
-        view.suggestedPos = self.curretnPos()
-        view.openedpg = self.openedpg
+        view.enocding     = self.encoding
+        view.suggestedPos = self.currentPos()
+        view.url          = self.url
+        view.openedpg     = self.openedpg
 
         return view
 
@@ -304,7 +302,7 @@ class PyChmWebView(QWebView):
             url = unicode(url)
         if url[0:4] == 'http':
             self.load(QtCore.QUrl(url))
-            self.tabmanager.setTabName(self)
+            #self.tabmanager.setTabName(self)
 
             self.openedpg = url
             return
@@ -326,7 +324,7 @@ class PyChmWebView(QWebView):
         print ("[webview.openPage] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
         self.show()
-        self.tabmanager.setTabName(self)
+        #self.tabmanager.setTabName(self)
         self.openedpg = url[9:]
         return True
 
@@ -335,8 +333,7 @@ class PyChmWebView(QWebView):
             self.setCurrentPos(self.suggestedPos)
             self.suggestedPos = 0
 
-            self.tabmanager.setTabName(self)
-            #self.tabmanager.setTabName(self, self.title() )
+            self.tabmanager.setTabName(self, self.title() )
         else:
             print ("[loadFinished] page not found")
 

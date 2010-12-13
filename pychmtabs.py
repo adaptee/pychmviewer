@@ -192,18 +192,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onLoadFinished(self):
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
-    def setTabName(self, view):
-    #def setTabName(self, view, title):
+    def setTabName(self, view, title):
+        def shortenTitle(title):
+            return title[0:12] + u"..." if len(title) > 15 else title
+
         index = self.tabWidget.indexOf(view)
-        if index == -1:
-            return
-
-        title = view.title() or view.chmfile.title or u"no title"
-        if len(title) > 15:
-            title = title[0:12] + u'...'
-        self.tabWidget.setTabText(index, title)
-
-
+        if index != -1 :
+            title = shortenTitle(title)
+            self.tabWidget.setTabText(index, title)
 
     def onFindReturnPressed(self):
         self.find()
@@ -255,7 +251,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             path, url, pos = Pickle.loads(value)
             try:
                 view = self.openChmFile(path)
-            except StandardError:
+            except IOError:
                 # accumulated all failures paths
                 failures.append(path)
             else:
