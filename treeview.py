@@ -14,6 +14,13 @@ class AbstractTreeView(object):
                      self.onDoubleClicked,
                     )
 
+    def keyPressEvent(self, keyevent):
+        # when 'enter' is pressed, simulated double click action
+        if keyevent.key() == QtCore.Qt.Key_Return:
+            self.onDoubleClicked( self.tree.currentItem(), 0)
+        else:
+            keyevent.ignore()
+
     def clear(self):
         self.tree.clear()
 
