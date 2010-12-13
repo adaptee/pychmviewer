@@ -302,7 +302,7 @@ class PyChmWebView(QWebView):
             url = unicode(url)
         if url[0:4] == 'http':
             self.load(QtCore.QUrl(url))
-            #self.tabmanager.setTabName(self)
+            self.tabmanager.setTabName(self, self.title() )
 
             self.openedpg = url
             return
@@ -324,7 +324,7 @@ class PyChmWebView(QWebView):
         print ("[webview.openPage] loading url: %s" % url)
         self.load(QtCore.QUrl(url))
         self.show()
-        #self.tabmanager.setTabName(self)
+        self.tabmanager.setTabName(self, self.title() )
         self.openedpg = url[9:]
         return True
 
