@@ -86,18 +86,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         button.setToolTip(tooltip)
         return button
 
-    def keyPressEvent(self, event):
-        if event.matches(QtGui.QKeySequence.Find):
-            self.frameFind.show()
-            self.editFind.setFocus()
-            self.editFind.setSelection(0, len(self.editFind.text()))
-        #elif event.matches(QtGui.QKeySequence.Close):
-            #self.closeTab(self.currentView)
-        #elif event.matches(QtGui.QKeySequence.AddTab):
-            #self.onOpenNewTab()
+    def keyPressEvent(self, keyevent):
+        if keyevent.key() == QtCore.Qt.Key_Escape:
+            # Hide it, for the sake of Vi-users !
+            self.frameFind.hide()
         else:
-            QtGui.QWidget.keyPressEvent(self, event)
-
+            QtGui.QWidget.keyPressEvent(self, keyevent)
 
 
     def openChmFile(self, path):
