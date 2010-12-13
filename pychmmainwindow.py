@@ -278,7 +278,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onAddBookmark)
 
     def onAddBookmark(self):
-        self.bookmarkview.addBookmark()
+        self.bookmarkview.onAddBookmark()
 
 
     def _setupTabsMenu(self):

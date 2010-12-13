@@ -53,12 +53,19 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         # { } used as dummy database, to prevent NoneType Error
         self.db      = { }
 
-        self.connect(self.buttonAddBookmark, QtCore.SIGNAL('clicked()'), self.addBookmark)
-        self.connect(self.buttonEditBookmark, QtCore.SIGNAL('clicked()'), self.delBookmark)
-        self.connect(self.buttonDelBookmark, QtCore.SIGNAL('clicked()'), self.editBookmark)
+        self.connect(self.buttonAddBookmark,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onAddBookmark)
+        self.connect(self.buttonDelBookmark,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onEditBookmark)
+        self.connect(self.buttonEditBookmark,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onDelBookmark)
+
         self.connect(self.list,
                      QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'),
-                     self.openBookmark
+                     self.onOpenBookmark
                     )
 
     def _getNameFromUser(   self,
@@ -142,7 +149,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
     def _getCurrentChmFile(self):
         return self._getCurrentView().chmfile
 
-    def addBookmark(self):
+    def onAddBookmark(self):
         webview = self._getCurrentView()
 
         url   = webview.loadedURL
@@ -158,7 +165,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
             item.setText(name)
             item.saveTo(self.db)
 
-    def editBookmark(self):
+    def onEditBookmark(self):
         item = self.list.currentItem()
         if item :
             name = self._getNameForBookmark( title=u"rename bookmark",
@@ -168,13 +175,13 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
                 item.name = name
                 item.setText(name)
 
-    def delBookmark(self):
+    def onDelBookmark(self):
         item = self.list.currentItem()
         if item :
             item.delFrom(self.db)
             self.list.takeItem(self.list.row(item))
 
-    def openBookmark(self, item):
+    def onOpenBookmark(self, item):
         if item :
             webview = self._getCurrentView()
 
