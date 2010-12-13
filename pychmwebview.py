@@ -212,7 +212,7 @@ class PyChmWebView(QWebView):
     # FIXME; currently only support 3 scheme:
     # http,
     # https,
-    # path(with out ms-its scheme prefix  within .chm)
+    # path within .chm
 
     def loadURL(self, url):
         '''
@@ -274,8 +274,9 @@ class PyChmWebView(QWebView):
                 self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
 
     def copyToClipboard(self):
-        QtGui.QApplication.clipboard().setText(self.selectedText())
-        #self.triggerPageAction(QWebPage.Copy)
+        # TODO; which on is better?
+        #QtGui.QApplication.clipboard().setText(self.selectedText())
+        self.triggerPageAction(QWebPage.Copy)
 
     def selectAll(self):
         #FIXME; it does not work
