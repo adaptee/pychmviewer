@@ -206,31 +206,31 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _setupPanelMenu(self):
 
-        self.connect(self.actionToggleSidebar,
+        self.connect(self.actionTogglePanels,
                      QtCore.SIGNAL('triggered(bool)'),
-                     self.onToggleSidebar)
+                     self.onTogglePanels)
 
         self.actionIndex = self.dockIndex.toggleViewAction()
         self.actionIndex.setCheckable(True)
         self.actionIndex.setChecked(True)
-        self.menu_Panels.addAction(self.actionIndex)
+        self.menuPanels.addAction(self.actionIndex)
 
         self.actionTopics = self.dockTopics.toggleViewAction()
         self.actionTopics.setCheckable(True)
         self.actionTopics.setChecked(True)
-        self.menu_Panels.addAction(self.actionTopics)
+        self.menuPanels.addAction(self.actionTopics)
 
         self.actionSearch = self.dockSearch.toggleViewAction()
         self.actionSearch.setCheckable(True)
         self.actionSearch.setChecked(True)
-        self.menu_Panels.addAction(self.actionSearch)
+        self.menuPanels.addAction(self.actionSearch)
 
         self.actionBookmark = self.dockBookmark.toggleViewAction()
         self.actionBookmark.setCheckable(True)
         self.actionBookmark.setChecked(True)
-        self.menu_Panels.addAction(self.actionBookmark)
+        self.menuPanels.addAction(self.actionBookmark)
 
-    def onToggleSidebar(self):
+    def onTogglePanels(self):
         pass
 
     def _setupPanelDock(self):
