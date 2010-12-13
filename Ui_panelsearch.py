@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/tab_search.ui'
+# Form implementation generated from reading ui file 'panelsearch.ui'
 #
-# Created: Thu Dec  9 03:23:43 2010
+# Created: Tue Dec 14 06:30:06 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,11 +14,11 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_TabSearch(object):
-    def setupUi(self, TabSearch):
-        TabSearch.setObjectName(_fromUtf8("TabSearch"))
-        TabSearch.resize(236, 409)
-        self.vboxlayout = QtGui.QVBoxLayout(TabSearch)
+class Ui_PanelSearch(object):
+    def setupUi(self, PanelSearch):
+        PanelSearch.setObjectName(_fromUtf8("PanelSearch"))
+        PanelSearch.resize(236, 409)
+        self.vboxlayout = QtGui.QVBoxLayout(PanelSearch)
         self.vboxlayout.setSpacing(6)
         self.vboxlayout.setMargin(9)
         self.vboxlayout.setObjectName(_fromUtf8("vboxlayout"))
@@ -26,7 +26,7 @@ class Ui_TabSearch(object):
         self.hboxlayout.setSpacing(6)
         self.hboxlayout.setMargin(0)
         self.hboxlayout.setObjectName(_fromUtf8("hboxlayout"))
-        self.label = QtGui.QLabel(TabSearch)
+        self.label = QtGui.QLabel(PanelSearch)
         self.label.setObjectName(_fromUtf8("label"))
         self.hboxlayout.addWidget(self.label)
         self.vboxlayout.addLayout(self.hboxlayout)
@@ -34,7 +34,7 @@ class Ui_TabSearch(object):
         self.hboxlayout1.setSpacing(6)
         self.hboxlayout1.setMargin(0)
         self.hboxlayout1.setObjectName(_fromUtf8("hboxlayout1"))
-        self.searchBox = QtGui.QComboBox(TabSearch)
+        self.searchBox = QtGui.QComboBox(PanelSearch)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(0)
@@ -44,11 +44,11 @@ class Ui_TabSearch(object):
         self.searchBox.setMaxCount(10)
         self.searchBox.setObjectName(_fromUtf8("searchBox"))
         self.hboxlayout1.addWidget(self.searchBox)
-        self.go = QtGui.QPushButton(TabSearch)
+        self.go = QtGui.QPushButton(PanelSearch)
         self.go.setObjectName(_fromUtf8("go"))
         self.hboxlayout1.addWidget(self.go)
         self.vboxlayout.addLayout(self.hboxlayout1)
-        self.tree = QtGui.QTreeWidget(TabSearch)
+        self.tree = QtGui.QTreeWidget(PanelSearch)
         self.tree.setRootIsDecorated(False)
         self.tree.setItemsExpandable(False)
         self.tree.setAllColumnsShowFocus(True)
@@ -56,24 +56,14 @@ class Ui_TabSearch(object):
         self.tree.setObjectName(_fromUtf8("tree"))
         self.vboxlayout.addWidget(self.tree)
 
-        self.retranslateUi(TabSearch)
-        QtCore.QMetaObject.connectSlotsByName(TabSearch)
+        self.retranslateUi(PanelSearch)
+        QtCore.QMetaObject.connectSlotsByName(PanelSearch)
 
-    def retranslateUi(self, TabSearch):
-        TabSearch.setWindowTitle(QtGui.QApplication.translate("TabSearch", "Form1", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("TabSearch", "Type in word(s) to search for:", None, QtGui.QApplication.UnicodeUTF8))
-        self.go.setText(QtGui.QApplication.translate("TabSearch", "&Go", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, PanelSearch):
+        PanelSearch.setWindowTitle(QtGui.QApplication.translate("PanelSearch", "Form1", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("PanelSearch", "Type in word(s) to search for:", None, QtGui.QApplication.UnicodeUTF8))
+        self.go.setText(QtGui.QApplication.translate("PanelSearch", "&Go", None, QtGui.QApplication.UnicodeUTF8))
         self.tree.setSortingEnabled(False)
-        self.tree.headerItem().setText(0, QtGui.QApplication.translate("TabSearch", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.tree.headerItem().setText(1, QtGui.QApplication.translate("TabSearch", "Location", None, QtGui.QApplication.UnicodeUTF8))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    TabSearch = QtGui.QWidget()
-    ui = Ui_TabSearch()
-    ui.setupUi(TabSearch)
-    TabSearch.show()
-    sys.exit(app.exec_())
+        self.tree.headerItem().setText(0, QtGui.QApplication.translate("PanelSearch", "Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.tree.headerItem().setText(1, QtGui.QApplication.translate("PanelSearch", "Location", None, QtGui.QApplication.UnicodeUTF8))
 

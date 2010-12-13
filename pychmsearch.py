@@ -11,9 +11,9 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-from Ui_tab_search import Ui_TabSearch
+from Ui_panelsearch import Ui_PanelSearch
 
-class PyChmSearchView(QtGui.QWidget, Ui_TabSearch):
+class PyChmSearchView(QtGui.QWidget, Ui_PanelSearch):
     def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
