@@ -185,8 +185,7 @@ class PyChmWebView(QWebView):
             QWebView.mousePressEvent(self, event)
 
     def onLinkClicked(self, qurl):
-        chmfile = self.chmfile
-        chmpath = chmfile.path
+        print "[linkClicked] url: %s" % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
@@ -194,8 +193,12 @@ class PyChmWebView(QWebView):
 
         elif qurl.scheme() == 'ms-its':
             url = unicode(qurl.path())
+            chmfile = self.chmfile
+            chmpath = chmfile.path
+
             if url == u'/':
                 url = chmfile.home
+
             isnew, ochm, pg = urltools.parseChmURL(unicode(qurl.toString()))
             if isnew:
                 ochm = os.path.join(os.path.dirname(chmpath), ochm)
@@ -204,11 +207,48 @@ class PyChmWebView(QWebView):
                 else:
                     return
             url = os.path.normpath(url)
+
+            print "[finalurl] url: %s" % url.encode('utf-8')
             self.emit(QtCore.SIGNAL('openURL'), url)
 
         else:
             pass
 
+    # this method is only reponsible for loading url in current view
+    # whether creating new tab is not with its concern
+    def openPage(self, url):
+        '''
+        url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
+        '''
+        assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
+        url = unicode(url)
+        print ("[webview.openPage] loading url: %s" % url)
+
+        if url[0:4] == 'http':
+            self.load(QtCore.QUrl(url))
+            self.tabmanager.setTabName(self, self.title() )
+            self.openedpg = url
+            return
+        if url == u'/':
+            url = self.chmfile.home
+        try:
+            pos = url.index(u'://')
+            if url[0:pos] != u'ms-its': #just for url in chmfile
+                return
+            url = url[0:pos]+os.path.normpath(url[pos+3:])
+        except:
+            url = os.path.normpath(url)
+            if url[0] != u'/':
+                url = u'/' + url
+            url = os.path.normpath(url)
+
+        if not url.lower().startswith(u'ms-its://'):
+            url = u'ms-its://' + url
+        self.load(QtCore.QUrl(url))
+        self.show()
+        self.tabmanager.setTabName(self, self.title() )
+        self.openedpg = url[9:]
+        return True
 
     def anchorAt(self, pos):
         chmfile = self.chmfile
@@ -297,40 +337,6 @@ class PyChmWebView(QWebView):
         self.reload()
 
 
-    def openPage(self, url):
-        '''
-        url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
-        '''
-        assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
-        if isinstance(url, QtCore.QString):
-            url = unicode(url)
-        if url[0:4] == 'http':
-            self.load(QtCore.QUrl(url))
-            self.tabmanager.setTabName(self, self.title() )
-
-            self.openedpg = url
-            return
-        if url == u'/':
-            url = self.chmfile.home
-        try:
-            pos = url.index(u'://')
-            if url[0:pos] != u'ms-its': #just for url in chmfile
-                return
-            url = url[0:pos]+os.path.normpath(url[pos+3:])
-        except:
-            url = os.path.normpath(url)
-            if url[0] != u'/':
-                url = u'/' + url
-            url = os.path.normpath(url)
-
-        if not url.lower().startswith(u'ms-its://'):
-            url = u'ms-its://' + url
-        print ("[webview.openPage] loading url: %s" % url)
-        self.load(QtCore.QUrl(url))
-        self.show()
-        self.tabmanager.setTabName(self, self.title() )
-        self.openedpg = url[9:]
-        return True
 
     def onLoadFinished(self, ok):
         if ok:
