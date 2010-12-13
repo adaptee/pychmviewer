@@ -47,6 +47,8 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpenFile"/>
+    <addaction name="actionOpenRecents"/>
+    <addaction name="separator"/>
     <addaction name="actionPrintPage"/>
     <addaction name="actionExtractFile"/>
     <addaction name="separator"/>
@@ -537,6 +539,11 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionOpenRecents">
+   <property name="text">
+    <string>Open &amp;Recents</string>
    </property>
   </action>
  </widget>

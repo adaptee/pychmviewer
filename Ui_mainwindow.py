@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Dec 13 19:11:02 2010
+# Created: Mon Dec 13 19:29:24 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -175,8 +175,12 @@ class Ui_MainWindow(object):
         self.actionCloseCurrentTab.setObjectName(_fromUtf8("actionCloseCurrentTab"))
         self.actionAboutQt = QtGui.QAction(MainWindow)
         self.actionAboutQt.setObjectName(_fromUtf8("actionAboutQt"))
+        self.actionOpenRecents = QtGui.QAction(MainWindow)
+        self.actionOpenRecents.setObjectName(_fromUtf8("actionOpenRecents"))
         self.menuSettings.addAction(self.actionOpenSettings)
         self.menuFile.addAction(self.actionOpenFile)
+        self.menuFile.addAction(self.actionOpenRecents)
+        self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionPrintPage)
         self.menuFile.addAction(self.actionExtractFile)
         self.menuFile.addSeparator()
@@ -322,6 +326,7 @@ class Ui_MainWindow(object):
         self.actionCloseCurrentTab.setText(QtGui.QApplication.translate("MainWindow", "&Close Tab", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCloseCurrentTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAboutQt.setText(QtGui.QApplication.translate("MainWindow", "About Qt", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenRecents.setText(QtGui.QApplication.translate("MainWindow", "Open &Recents", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc
