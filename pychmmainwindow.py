@@ -94,11 +94,60 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.config.sessionRestore:
             self.tabmanager.loadFrom(self.session.snapshot)
 
-    @property
-    def currentView(self):
-        return self.tabmanager.currentView
 
 
+    def _setupFileMenu(self):
+        self.connect(self.actionOpenFile,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onFileOpen)
+        self.connect(self.actionPrintPage,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onPrintPage)
+        self.connect(self.actionExtractFile,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onExtractFile)
+        self.connect(self.actionQuitApp,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onQuitApp)
+
+    def _setupViewMenu(self):
+        self.connect(self.actionZoomIn,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onZoonIn)
+        self.connect(self.actionZoomOut,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onZoomOut)
+        self.connect(self.actionZoomOff,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onZoomOff)
+        self.connect(self.actionViewHtmlSource,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onViewHtmlSource)
+        self.connect(self.actionLocate,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onLocateInTopics)
+
+        self._setupEncodingsSubMenu()
+
+
+    def _setupEncodingsSubMenu(self):
+        encodings_menu = QMenu(self)
+        self.groupOfEncodings = QtGui.QActionGroup(self)
+
+        for language, encoding in encodings:
+            action = QAction(self)
+            action.setText( u"%s ( %s )" % (language, encoding) )
+            action.encoding = encoding
+            action.setCheckable(True)
+            self.groupOfEncodings.addAction(action)
+            encodings_menu.addAction(action)
+
+        self.actionChangeEncoding.setMenu(encodings_menu)
+
+        self.connect(self.groupOfEncodings,
+                     QtCore.SIGNAL('triggered(QAction*)'),
+                     self.onEncodingChanged,
+                    )
 
     def _setWebFont(self):
         settings   = QtWebKit.QWebSettings.globalSettings()
@@ -170,26 +219,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.dockTopics.raise_()
 
 
-    def _setupFileMenu(self):
-        self.connect(self.file_Open_action, QtCore.SIGNAL('triggered(bool)'), self.onFileOpen)
-        self.connect(self.file_Print_action, QtCore.SIGNAL('triggered(bool)'), self.onFilePrint)
-        self.connect(self.file_Extract_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onExtractCurrentCHMFile)
-
-    def _setupViewMenu(self):
-        self.connect(self.view_Increase_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoonIn)
-        self.connect(self.view_Decrease_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoomOut)
-        self.connect(self.view_norm_font_size_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onZoomOff)
-        self.connect(self.view_View_HTML_source_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onViewSource)
-        self.connect(self.view_Locate_in_contents_action,
-                QtCore.SIGNAL('triggered(bool)'), self.onLocateInTopics)
-
-        self._setupEncodingsSubMenu()
-
     def _setupNavigation(self):
         self.connect(self.nav_actionHome,
                 QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
@@ -236,25 +265,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.bookmark_AddAction,
                 QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
 
-    def _setupEncodingsSubMenu(self):
-        encodings_menu = QMenu(self)
-        self.groupOfEncodings = QtGui.QActionGroup(self)
 
-        for language, encoding in encodings:
-            action = QAction(self)
-            action.setText( u"%s ( %s )" % (language, encoding) )
-            action.encoding = encoding
-            action.setCheckable(True)
-            self.groupOfEncodings.addAction(action)
-            encodings_menu.addAction(action)
+    def onQuitApp(self):
+        self.close()
 
-        self.view_Set_encoding_action.setMenu(encodings_menu)
-
-        self.connect(self.groupOfEncodings,
-                     QtCore.SIGNAL('triggered(QAction*)'),
-                     self.onEncodingChanged,
-                    )
-
+    @property
+    def currentView(self):
+        return self.tabmanager.currentView
 
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Open):
@@ -263,12 +280,17 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             QtGui.QMainWindow.keyPressEvent(self, event)
 
     def closeEvent(self, event):
-        self.config.save_into_file()
-        self.tabmanager.saveTo(self.session.snapshot)
-        self.storeLayoutInfo()
+
+        def beforeQuit():
+            self.config.save_into_file()
+            self.tabmanager.saveTo(self.session.snapshot)
+            self.storeLayoutInfo()
+
+        beforeQuit()
 
         # delegate other tasks to super class
         QtGui.QMainWindow.closeEvent(self, event)
+
 
     def storeLayoutInfo(self):
         settings = QtCore.QSettings()
@@ -335,7 +357,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             for webview in self.tabmanager.webviews:
                 webview.reload()
 
-    def onViewSource(self):
+    def onViewHtmlSource(self):
         dialog = HtmlDialog(self)
         editor = dialog.sourceEdit
         editor.setPlainText(self.currentView.page().currentFrame().toHtml())
@@ -358,7 +380,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onEncodingChanged(self, action):
         self.currentView.onEncodingChanged(action.encoding)
 
-    def onFilePrint(self):
+    def onPrintPage(self):
         self.currentView.printPage()
 
     def onZoonIn(self):
@@ -385,7 +407,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         self.currentView.goForward()
 
-    def onExtractCurrentCHMFile(self):
+    def onExtractFile(self):
         output_dir = QtGui.QFileDialog.getExistingDirectory(self,
                 'select a directory to store files',
                 '',
