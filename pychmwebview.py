@@ -214,13 +214,13 @@ class PyChmWebView(QWebView):
     # https,
     # path(with out ms-its scheme prefix  within .chm)
 
-    def openPage(self, url):
+    def loadURL(self, url):
         '''
         url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
         '''
         assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
         url = unicode(url)
-        print ("[webview.openPage] original url: %s" % url)
+        print ("[webview.loadURL] original url: %s" % url)
 
         finalurl = ""
 
@@ -236,7 +236,7 @@ class PyChmWebView(QWebView):
 
             finalurl =  u"ms-its://" + url
 
-        print ("[webview.openPage] final url:  %s" % finalurl )
+        print ("[webview.loadURL] final url:  %s" % finalurl )
 
         self.load(QtCore.QUrl(finalurl))
         self.show()
@@ -302,7 +302,7 @@ class PyChmWebView(QWebView):
             self.print_(printer)
 
     def goHome(self):
-        self.openPage(self.chmfile.home)
+        self.loadURL(self.chmfile.home)
 
     def goBack(self):
         self.history().back()

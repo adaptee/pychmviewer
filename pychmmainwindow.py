@@ -358,7 +358,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.topicsview.locateUrl(self.currentView.loadedURL)
 
     def openInCurrentTab(self, url):
-        self.currentView.openPage(url)
+        self.currentView.loadURL(url)
 
     def onGoHome(self):
         self.currentView.goHome()
