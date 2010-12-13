@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project pychmviewer -->
-<!-- Saved: 2010-12-13, 14:25:11 -->
+<!-- Saved: 2010-12-13, 17:16:14 -->
 <!-- Copyright (C) 2010 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -19,7 +19,6 @@
     <Source>Ui_tab_index.py</Source>
     <Source>Ui_tab_search.py</Source>
     <Source>Ui_window_main.py</Source>
-    <Source>Ui_dialog_topicselector.py</Source>
     <Source>resources/images_rc.py</Source>
     <Source>Ui_settingdlg.py</Source>
   </Sources>

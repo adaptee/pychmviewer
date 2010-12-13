@@ -66,11 +66,11 @@
     <addaction name="actionLocate"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menu_Panels">
+   <widget class="QMenu" name="menuPanels">
     <property name="title">
-     <string>&amp;Sidebar</string>
+     <string>&amp;Panels</string>
     </property>
-    <addaction name="actionToggleSidebar"/>
+    <addaction name="actionTogglePanels"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -90,22 +90,27 @@
     <addaction name="actionFindNext"/>
     <addaction name="actionFindPrevious"/>
    </widget>
-   <widget class="QMenu" name="menuWindows">
+   <widget class="QMenu" name="menuTabs">
     <property name="title">
-     <string>&amp;Windows</string>
+     <string>&amp;Tabs</string>
     </property>
+    <addaction name="actionCreateNewTab"/>
+    <addaction name="actionCloseCurrentTab"/>
+    <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menu_Bookmarks">
+   <widget class="QMenu" name="menuBookmarks">
     <property name="title">
      <string>&amp;Bookmarks</string>
     </property>
+    <addaction name="actionAddBookmark"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
-   <addaction name="menu_Panels"/>
-   <addaction name="menu_Bookmarks"/>
-   <addaction name="menuWindows"/>
+   <addaction name="menuPanels"/>
+   <addaction name="menuBookmarks"/>
+   <addaction name="menuTabs"/>
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -467,9 +472,9 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionToggleSidebar">
+  <action name="actionTogglePanels">
    <property name="text">
-    <string>Toggle Sidebar</string>
+    <string>Toggle &amp;Panels</string>
    </property>
   </action>
   <action name="actionCopy">
@@ -510,6 +515,19 @@
    </property>
    <property name="shortcut">
     <string>Shift+F3</string>
+   </property>
+  </action>
+  <action name="actionCreateNewTab">
+   <property name="text">
+    <string>&amp;Add tab</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="actionCloseCurrentTab">
+   <property name="text">
+    <string>&amp;Close Tab</string>
    </property>
   </action>
  </widget>
