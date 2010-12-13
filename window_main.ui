@@ -36,13 +36,13 @@
      <height>23</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_Settings">
+   <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>&amp;Settings</string>
     </property>
-    <addaction name="settings_SettingsAction"/>
+    <addaction name="actionOpenSettings"/>
    </widget>
-   <widget class="QMenu" name="menu_File">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
     </property>
@@ -52,7 +52,7 @@
     <addaction name="separator"/>
     <addaction name="actionQuitApp"/>
    </widget>
-   <widget class="QMenu" name="menu_View">
+   <widget class="QMenu" name="menuView">
     <property name="title">
      <string>&amp;View</string>
     </property>
@@ -68,7 +68,7 @@
    </widget>
    <widget class="QMenu" name="menu_Panels">
     <property name="title">
-     <string>&amp;Panels</string>
+     <string>&amp;Sidebar</string>
     </property>
     <addaction name="actionToggleSidebar"/>
     <addaction name="separator"/>
@@ -79,7 +79,7 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menu_Edit">
+   <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>&amp;Edit</string>
     </property>
@@ -90,17 +90,23 @@
     <addaction name="actionFindNext"/>
     <addaction name="actionFindPrevious"/>
    </widget>
-   <widget class="QMenu" name="menu_Windows">
+   <widget class="QMenu" name="menuWindows">
     <property name="title">
      <string>&amp;Windows</string>
     </property>
    </widget>
-   <addaction name="menu_File"/>
-   <addaction name="menu_Edit"/>
-   <addaction name="menu_View"/>
+   <widget class="QMenu" name="menu_Bookmarks">
+    <property name="title">
+     <string>&amp;Bookmarks</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menu_Panels"/>
-   <addaction name="menu_Settings"/>
-   <addaction name="menu_Windows"/>
+   <addaction name="menu_Bookmarks"/>
+   <addaction name="menuWindows"/>
+   <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolbar">
@@ -132,9 +138,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="nav_actionHome"/>
-   <addaction name="nav_actionBack"/>
-   <addaction name="nav_actionForward"/>
+   <addaction name="actionGoHome"/>
+   <addaction name="actionGoBack"/>
+   <addaction name="actionGoForward"/>
   </widget>
   <widget class="QToolBar" name="viewToolbar">
    <property name="windowTitle">
@@ -154,7 +160,7 @@
    <addaction name="actionZoomOut"/>
    <addaction name="actionZoomOff"/>
    <addaction name="actionViewHtmlSource"/>
-   <addaction name="bookmark_AddAction"/>
+   <addaction name="actionAddBookmark"/>
   </widget>
   <widget class="QStatusBar" name="mainStatusBar"/>
   <widget class="QDockWidget" name="dockTopics">
@@ -235,7 +241,7 @@
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="settings_SettingsAction">
+  <action name="actionOpenSettings">
    <property name="text">
     <string>&amp;Application settings...</string>
    </property>
@@ -246,7 +252,7 @@
     <string>Change the application settings</string>
    </property>
   </action>
-  <action name="bookmark_AddAction">
+  <action name="actionAddBookmark">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_add_bookmark.png</normaloff>:/images/icon_add_bookmark.png</iconset>
@@ -339,43 +345,6 @@
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="view_Toggle_fullscreen_action">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Enable &amp;full screen mode</string>
-   </property>
-   <property name="whatsThis">
-    <string>Enters or leaves the fullscreen mode</string>
-   </property>
-   <property name="shortcut">
-    <string>F11</string>
-   </property>
-   <property name="autoRepeat">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="view_Toggle_contents_action">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Enable &amp;side window</string>
-   </property>
-   <property name="whatsThis">
-    <string>Shows or hides the size window (with Content, Index, Search and Bookmark tabs)</string>
-   </property>
-   <property name="shortcut">
-    <string>F9</string>
-   </property>
-   <property name="autoRepeat">
-    <bool>false</bool>
-   </property>
-  </action>
   <action name="actionLocate">
    <property name="icon">
     <iconset resource="resources/images.qrc">
@@ -420,7 +389,7 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="nav_actionBack">
+  <action name="actionGoBack">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_back.png</normaloff>:/images/icon_back.png</iconset>
@@ -435,7 +404,7 @@
     <string>Navigate back in navigation history</string>
    </property>
   </action>
-  <action name="nav_actionForward">
+  <action name="actionGoForward">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_forward.png</normaloff>:/images/icon_forward.png</iconset>
@@ -450,7 +419,7 @@
     <string>Navigate forward in navigation history</string>
    </property>
   </action>
-  <action name="nav_actionHome">
+  <action name="actionGoHome">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_home.png</normaloff>:/images/icon_home.png</iconset>
@@ -515,6 +484,9 @@
    <property name="text">
     <string>&amp;Select All</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
   </action>
   <action name="actionFind">
    <property name="text">
@@ -522,11 +494,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
    </property>
   </action>
   <action name="actionFindNext">
