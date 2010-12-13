@@ -43,7 +43,7 @@ def isJSURL(url):
 
     return url.lower().startswith(u"javascript://")
 
-def isNewChmURL(url):
+def parseChmURL(url):
     '''
     url:unicode
     return: tuple(bool,unicode,unicode)
@@ -61,6 +61,7 @@ def isNewChmURL(url):
         return (True, chmfile, page)
     return (False, None, None)
 
+
 def getAbsoluteURLIfNeeded(url):
     '''
     url:unicode
@@ -69,7 +70,7 @@ def getAbsoluteURLIfNeeded(url):
     '''
     assert isinstance(url, unicode)
 
-    if ( not isRemoteURL(url)[0] ) and ( not isJSURL(url) )  and ( not isNewChmURL(url)[0] ):
+    if ( not isRemoteURL(url)[0] ) and ( not isJSURL(url) )  and ( not parseChmURL(url)[0] ):
         url = os.path.normpath(url)
         if url[0] != u'/':
             url = u'/' + url
