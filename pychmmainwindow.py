@@ -95,7 +95,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _startUpWithNoPaths(self):
         if self.config.sessionRestore:
-            self.tabmanager.loadFrom(self.session.snapshot)
+            try:
+                self.tabmanager.loadFrom(self.session.snapshot)
+            except StandardError:
+                # ignore failures cause by non-existing-anymore files
+                pass
 
 
     def _setupFileMenu(self):
