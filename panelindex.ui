@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TabIndex</class>
- <widget class="QWidget" name="TabIndex">
+ <class>PanelIndex</class>
+ <widget class="QWidget" name="PanelIndex">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,6 +25,9 @@
    </item>
    <item>
     <widget class="QTreeWidget" name="tree">
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
      <property name="indentation">
       <number>10</number>
      </property>

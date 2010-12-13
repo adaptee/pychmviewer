@@ -10,9 +10,10 @@
 from PyQt4 import QtCore, QtGui
 
 from treeview import AbstractTreeView
-from Ui_tab_index import Ui_TabIndex
+#from Ui_tab_index import Ui_PanelIndex
+from Ui_panelindex import Ui_PanelIndex
 
-class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
+class PyChmIndexView(QtGui.QWidget, Ui_PanelIndex, AbstractTreeView):
     '''
     signal 'openURL' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
