@@ -185,6 +185,8 @@ class PyChmWebView(QWebView):
             QWebView.mousePressEvent(self, event)
 
     def onLinkClicked(self, qurl):
+        # toString() provides full info,
+        # path() only provide the
         print "[linkClicked] url: %s" % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
@@ -193,29 +195,26 @@ class PyChmWebView(QWebView):
 
         elif qurl.scheme() == 'ms-its':
             url = unicode(qurl.path())
+            print "[finalurl] url: %s" % url.encode('utf-8')
+
             chmfile = self.chmfile
-            chmpath = chmfile.path
 
             if url == u'/':
                 url = chmfile.home
 
-            isnew, ochm, pg = urltools.parseChmURL(unicode(qurl.toString()))
-            if isnew:
-                ochm = os.path.join(os.path.dirname(chmpath), ochm)
-                if ochm != chmpath:
-                    url = pg
-                else:
-                    return
             url = os.path.normpath(url)
-
-            print "[finalurl] url: %s" % url.encode('utf-8')
             self.emit(QtCore.SIGNAL('openURL'), url)
 
         else:
-            pass
+            raise NotImplementedError("")
 
     # this method is only reponsible for loading url in current view
     # whether creating new tab is not with its concern
+    # FIXME; currently only support 3 scheme:
+    # http,
+    # https,
+    # path(with out ms-its scheme prefix  within .chm)
+
     def openPage(self, url):
         '''
         url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
@@ -251,32 +250,25 @@ class PyChmWebView(QWebView):
         return True
 
     def anchorAt(self, pos):
-        chmfile = self.chmfile
-        chmpath = chmfile.path
 
+        # Performs a hit test on the frame contents at the given position
         res = self.page().currentFrame().hitTestContent(pos)
         qurl = res.linkUrl()
         if not qurl.isValid():
             return None
+        else:
+            if qurl.scheme() in [ "http", "https"] :
+                return unicode(qurl.toString())
+            elif qurl.scheme() == "ms-its":
+                url = unicode(qurl.path())
 
-        if qurl.scheme() in [ "http", "https"] :
-            return unicode(qurl.toString())
-        if qurl.scheme() != "ms-its":
-            return None
-        url = unicode(qurl.path())
-        if url == u'/':
-            url = chmfile.home
-        isnew, ochm, pg = urltools.parseChmURL(unicode(qurl.toString()))
-        if isnew:
-            ochm = os.path.join(os.path.dirname(chmpath), ochm)
-            if ochm != chmpath:
-                url = pg
+                if url == u'/':
+                    url = self.chmfile.home
+
+                return  os.path.normpath(url)
+
             else:
                 return None
-
-        url = os.path.normpath(url)
-        return url
-
 
     def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())

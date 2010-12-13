@@ -59,7 +59,6 @@ def parseChmURL(url):
     if match:
         newchmfile = match.group(1)
         page = match.group(2)
-        print "[parseChmURL] %s" % (True, newchmfile, page)
         return (True, newchmfile, page)
     return (False, None, None)
 
