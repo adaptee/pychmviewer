@@ -147,7 +147,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
 
         url   = webview.openedpg
         title = webview.title()
-        pos   = webview.getScrollPos()
+        pos   = webview.currentPos()
 
         default_name = title or u"new bookmark"
 
