@@ -51,24 +51,15 @@ class PyChmIndexView(QtGui.QWidget, Ui_TabIndex, AbstractTreeView):
 
     #FIXME; I feel somthing wrong these 2 functions related with `lastitem`
     def onTextChanged(self, text):
-        '''
-        inner method for search item
-        '''
+        "search index tree at real time"
         items = self.tree.findItems(text, QtCore.Qt.MatchStartsWith)
         if items:
             item = items[0]
             self.tree.setCurrentItem(item)
             self.tree.scrollToItem(item)
-            self.lastitem = item
-        else:
-            self.lastitem = None
+
     def onReturnPressed(self):
-        '''
-        inner method for openurl
-        '''
-        if self.lastitem :
-            item = self.lastitem
-            self.emit(QtCore.SIGNAL('openURL'), item.entry.url)
+        raise NotImplementedError("")
 
 
 if __name__  ==  "__main__":
