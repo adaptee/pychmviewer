@@ -25,7 +25,7 @@ from encodinglist import encodings
 from settingdlg import SettingDlg
 from htmldlg import HtmlDialog
 from about import AboutDialog
-from Ui_window_main import Ui_MainWindow
+from Ui_mainwindow import Ui_MainWindow
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

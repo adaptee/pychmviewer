@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/window_main.ui'
+# Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/mainwindow.ui'
 #
-# Created: Mon Dec 13 17:50:16 2010
+# Created: Mon Dec 13 17:56:51 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
