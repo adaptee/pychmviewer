@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Dec 13 19:29:24 2010
+# Created: Tue Dec 14 06:58:47 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -177,6 +177,10 @@ class Ui_MainWindow(object):
         self.actionAboutQt.setObjectName(_fromUtf8("actionAboutQt"))
         self.actionOpenRecents = QtGui.QAction(MainWindow)
         self.actionOpenRecents.setObjectName(_fromUtf8("actionOpenRecents"))
+        self.actionEditBookmark = QtGui.QAction(MainWindow)
+        self.actionEditBookmark.setObjectName(_fromUtf8("actionEditBookmark"))
+        self.actionDeleteBookmark = QtGui.QAction(MainWindow)
+        self.actionDeleteBookmark.setObjectName(_fromUtf8("actionDeleteBookmark"))
         self.menuSettings.addAction(self.actionOpenSettings)
         self.menuFile.addAction(self.actionOpenFile)
         self.menuFile.addAction(self.actionOpenRecents)
@@ -208,6 +212,8 @@ class Ui_MainWindow(object):
         self.menuTabs.addAction(self.actionCloseCurrentTab)
         self.menuTabs.addSeparator()
         self.menuBookmarks.addAction(self.actionAddBookmark)
+        self.menuBookmarks.addAction(self.actionEditBookmark)
+        self.menuBookmarks.addAction(self.actionDeleteBookmark)
         self.menuBookmarks.addSeparator()
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuEdit.menuAction())
@@ -327,6 +333,8 @@ class Ui_MainWindow(object):
         self.actionCloseCurrentTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAboutQt.setText(QtGui.QApplication.translate("MainWindow", "About Qt", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpenRecents.setText(QtGui.QApplication.translate("MainWindow", "Open &Recents", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionEditBookmark.setText(QtGui.QApplication.translate("MainWindow", "&Edit bookmark", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionDeleteBookmark.setText(QtGui.QApplication.translate("MainWindow", "&Delete bookmark", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc
