@@ -263,16 +263,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def _setupNavigation(self):
-        self.connect(self.nav_actionHome,
+        self.connect(self.actionGoHome,
                 QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
-        self.connect(self.nav_actionBack,
+        self.connect(self.actionGoBack,
                 QtCore.SIGNAL('triggered(bool)'), self.onGoBack)
-        self.connect(self.nav_actionForward,
+        self.connect(self.actionGoForward,
                 QtCore.SIGNAL('triggered(bool)'), self.onGoForward)
 
     def _setupSettingsMenu(self):
-        self.connect(self.settings_SettingsAction,
-                QtCore.SIGNAL('triggered(bool)'), self.onSetting)
+        self.connect(self.actionOpenSettings,
+                QtCore.SIGNAL('triggered(bool)'), self.onOpenSettings)
 
     def _setupHelpMenu(self):
         self.connect(self.actionAbout,
@@ -305,7 +305,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.searchview.onTabSwitched,
                     )
 
-        self.connect(self.bookmark_AddAction,
+        self.connect(self.actionAddBookmark,
                 QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
 
 
@@ -388,7 +388,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         dialog = AboutDialog(self)
         dialog.exec_()
 
-    def onSetting(self):
+    def onOpenSettings(self):
         dialog = SettingDlg(mainwin=self, parent=self)
         if dialog.exec_() == QtGui.QDialog.Accepted:
             self.config.sessionRestore = dialog.sessionRestore
@@ -413,11 +413,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onCheckToolBar(self):
         if self.currentView :
-            self.nav_actionBack.setEnabled(   self.currentView.canGoBack() )
-            self.nav_actionForward.setEnabled(self.currentView.canGoForward())
+            self.actionGoBack.setEnabled(   self.currentView.canGoBack() )
+            self.actionGoForward.setEnabled(self.currentView.canGoForward())
         else:
-            self.nav_actionBack.setEnabled(False)
-            self.nav_actionForward.setEnabled(False)
+            self.actionGoBack.setEnabled(False)
+            self.actionGoForward.setEnabled(False)
 
 
     def onEncodingChanged(self, action):
