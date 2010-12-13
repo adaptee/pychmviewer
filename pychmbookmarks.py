@@ -53,9 +53,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         # { } used as dummy database, to prevent NoneType Error
         self.db      = { }
 
-        self.connect(self.btnAdd, QtCore.SIGNAL('clicked()'), self.addBookmark)
-        self.connect(self.btnDel, QtCore.SIGNAL('clicked()'), self.delBookmark)
-        self.connect(self.btnEdit, QtCore.SIGNAL('clicked()'), self.editBookmark)
+        self.connect(self.buttonAddBookmark, QtCore.SIGNAL('clicked()'), self.addBookmark)
+        self.connect(self.buttonEditBookmark, QtCore.SIGNAL('clicked()'), self.delBookmark)
+        self.connect(self.buttonDelBookmark, QtCore.SIGNAL('clicked()'), self.editBookmark)
         self.connect(self.list,
                      QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem*)'),
                      self.openBookmark
