@@ -429,12 +429,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def currentView(self):
         return self.tabmanager.currentView
 
-    #def keyPressEvent(self, event):
-        #if event.matches(QtGui.QKeySequence.Open):
-            #self.onFileOpen()
-        #else:
-            #QtGui.QMainWindow.keyPressEvent(self, event)
-
     def closeEvent(self, event):
 
         def beforeQuit():
