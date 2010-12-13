@@ -13,7 +13,7 @@ import cPickle as Pickle
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QListWidgetItem
 
-from Ui_tab_bookmarks import Ui_TabBookmarks
+from Ui_panelbookmarks import Ui_PanelBookmarks
 
 class PyChmBookmarkItem(QListWidgetItem):
     def __init__(self, parent, name=None, url=None, pos=None):
@@ -39,7 +39,7 @@ class PyChmBookmarkItem(QListWidgetItem):
     def setValue(self, db_value):
         self.url, self.pos = Pickle.loads(db_value)
 
-class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
+class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
 
     def __init__(self, mainwin=None, parent=None, ):
         '''

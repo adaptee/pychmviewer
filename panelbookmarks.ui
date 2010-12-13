@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>TabBookmarks</class>
- <widget class="QWidget" name="TabBookmarks" >
+ <class>PanelBookmarks</class>
+ <widget class="QWidget" name="PanelBookmarks" >
   <property name="geometry" >
    <rect>
     <x>0</x>
