@@ -355,7 +355,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.currentView.zoomOff()
 
     def onLocateInTopics(self):
-        self.topicsview.locateUrl(self.currentView.openedpg)
+        self.topicsview.locateUrl(self.currentView.loadedURL)
 
     def openInCurrentTab(self, url):
         self.currentView.openPage(url)

@@ -116,7 +116,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def onOpenNewTab(self):
         "duplicate a new view showing same url as this one"
-        url = self.tabWidget.currentWidget().openedpg
+        url = self.tabWidget.currentWidget().loadedURL
         self.onOpenURLatNewTab(url)
 
     def onOpenURLatNewTab(self, url):
@@ -230,12 +230,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             return url.find(u"://") != -1
 
         for index, view in enumerate(self.webviews):
-            if isRemoteURL(view.openedpg) and not self.config.openRemoteURL:
+            if isRemoteURL(view.loadedURL) and not self.config.openRemoteURL:
                 continue
 
             key   = str(index + 1)  # avoid 0
             value = Pickle.dumps((view.chmfile.path,
-                                  view.openedpg,
+                                  view.loadedURL,
                                   view.currentPos(),
                                   )
                                 )
