@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project pychmviewer -->
-<!-- Saved: 2010-12-13, 18:01:06 -->
+<!-- Saved: 2010-12-14, 06:54:31 -->
 <!-- Copyright (C) 2010 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -15,20 +15,17 @@
     <Source>pychmwebview.py</Source>
     <Source>pychmfile.py</Source>
     <Source>content_type.py</Source>
-    <Source>Ui_tab_contents.py</Source>
-    <Source>Ui_tab_index.py</Source>
-    <Source>Ui_tab_search.py</Source>
-    <Source>Ui_window_main.py</Source>
     <Source>resources/images_rc.py</Source>
     <Source>Ui_settingdlg.py</Source>
     <Source>Ui_mainwindow.py</Source>
   </Sources>
   <Forms>
-    <Form>tab_contents.ui</Form>
-    <Form>tab_index.ui</Form>
-    <Form>tab_search.ui</Form>
     <Form>settingdlg.ui</Form>
     <Form>mainwindow.ui</Form>
+    <Form>panelindex.ui</Form>
+    <Form>panelsearch.ui</Form>
+    <Form>paneltopics.ui</Form>
+    <Form>panelbookmarks.ui</Form>
   </Forms>
   <Translations>
   </Translations>

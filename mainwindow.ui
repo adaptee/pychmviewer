@@ -14,7 +14,7 @@
    <string>pychmviewer</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resources/images.qrc">
     <normaloff>:/images/pychmviewer.png</normaloff>:/images/pychmviewer.png</iconset>
   </property>
   <property name="dockOptions">
@@ -106,6 +106,8 @@
      <string>&amp;Bookmarks</string>
     </property>
     <addaction name="actionAddBookmark"/>
+    <addaction name="actionEditBookmark"/>
+    <addaction name="actionDeleteBookmark"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -546,6 +548,16 @@
     <string>Open &amp;Recents</string>
    </property>
   </action>
+  <action name="actionEditBookmark">
+   <property name="text">
+    <string>&amp;Edit bookmark</string>
+   </property>
+  </action>
+  <action name="actionDeleteBookmark">
+   <property name="text">
+    <string>&amp;Delete bookmark</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -553,6 +565,7 @@
    <class>PyChmTabs</class>
    <extends>QWidget</extends>
    <container>1</container>
+   <header>pychmtabs.h</header>
   </customwidget>
  </customwidgets>
  <resources>
