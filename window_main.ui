@@ -94,7 +94,7 @@
     <property name="title">
      <string>&amp;Tabs</string>
     </property>
-    <addaction name="actionCreateNewTab"/>
+    <addaction name="actionOpenNewTab"/>
     <addaction name="actionCloseCurrentTab"/>
     <addaction name="separator"/>
    </widget>
@@ -517,7 +517,7 @@
     <string>Shift+F3</string>
    </property>
   </action>
-  <action name="actionCreateNewTab">
+  <action name="actionOpenNewTab">
    <property name="text">
     <string>&amp;Add tab</string>
    </property>
@@ -528,6 +528,9 @@
   <action name="actionCloseCurrentTab">
    <property name="text">
     <string>&amp;Close Tab</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
