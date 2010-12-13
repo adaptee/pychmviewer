@@ -7,41 +7,7 @@
 # File Name: urltools.py
 # Description:
 #########################################################################
-import os.path
 import re
-
-def isRemoteURL(url):
-    '''
-    check if url is a remote url
-    url: unicode
-    return : tuple, first is bool to tell if it's remote
-             second is remote protocol(unicode)
-    '''
-    assert isinstance(url, unicode)
-
-    if url.lower().startswith(u"mailto"):
-        protocol = u'mailto'
-        return (True, protocol)
-
-    pattern = re.compile(u"^(\\w+):\\/\\/", re.I)
-    match = pattern.search(url)
-
-    if match:
-        proto = match.group(1).lower()
-	if proto in ( u"http", u"ftp", u"news", ) :
-            return (True, proto)
-
-    return (False, u'')
-
-
-def isJSURL(url):
-    '''
-    check if url is a js url
-    url: unicode
-    '''
-    assert isinstance(url, unicode)
-
-    return url.lower().startswith(u"javascript://")
 
 def parseChmURL(url):
     '''
@@ -61,19 +27,3 @@ def parseChmURL(url):
         page = match.group(2)
         return (True, newchmfile, page)
     return (False, None, None)
-
-
-def getAbsoluteURLIfNeeded(url):
-    '''
-    url:unicode
-    return: unicode. if need(not romote,js,newchm url),return
-            a clean absolute url;else, return url passed in.
-    '''
-    assert isinstance(url, unicode)
-
-    if ( not isRemoteURL(url)[0] ) and ( not isJSURL(url) )  and ( not parseChmURL(url)[0] ):
-        url = os.path.normpath(url)
-        if url[0] != u'/':
-            url = u'/' + url
-    return url
-
