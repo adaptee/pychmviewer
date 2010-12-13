@@ -56,10 +56,10 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         self.connect(self.buttonAddBookmark,
                      QtCore.SIGNAL('clicked()'),
                      self.onAddBookmark)
-        self.connect(self.buttonDelBookmark,
+        self.connect(self.buttonEditBookmark,
                      QtCore.SIGNAL('clicked()'),
                      self.onEditBookmark)
-        self.connect(self.buttonEditBookmark,
+        self.connect(self.buttonDelBookmark,
                      QtCore.SIGNAL('clicked()'),
                      self.onDelBookmark)
 
