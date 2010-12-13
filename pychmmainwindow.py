@@ -384,8 +384,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 QtCore.SIGNAL('triggered(bool)'), self.onOpenSettings)
 
     def _setupHelpMenu(self):
-        self.connect(self.actionAbout,
-                QtCore.SIGNAL('triggered(bool)'), self.onAbout)
+        self.connect(self.actionAboutApp,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onAboutApp)
+        self.connect(self.actionAboutQt,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onAboutQt)
 
     def _setupMiscActions(self):
         self.connect(self.tabmanager,
@@ -473,9 +477,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def openFile(self, path):
         self.tabmanager.openChmFile(path)
 
-    def onAbout(self):
+    def onAboutApp(self):
         dialog = AboutDialog(self)
         dialog.exec_()
+
+    def onAboutQt(self):
+        QtGui.QMessageBox.aboutQt(self,
+                            title=QtCore.QCoreApplication.applicationName() )
+
 
     def onOpenSettings(self):
         dialog = SettingDlg(mainwin=self, parent=self)
