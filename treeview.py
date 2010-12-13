@@ -8,7 +8,6 @@ class AbstractTreeView(object):
 
     def __init__(self):
         self.setupUi(self)
-        self.tree.headerItem().setHidden(True)
 
         self.connect(self.tree,
                      QtCore.SIGNAL('itemDoubleClicked(QTreeWidgetItem*,int)'),
