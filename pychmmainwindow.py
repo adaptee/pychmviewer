@@ -33,6 +33,15 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 
+#TODO
+# fullscreen:
+# void QWidget::showFullScreen ()
+# void QWidget::showNormal ()
+# bool  isFullScreen () const
+# Qt::WindowStates QWidget::windowState ()
+
+
+
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, session, paths=None, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
