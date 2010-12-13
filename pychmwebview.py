@@ -16,9 +16,8 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
 from PyQt4.QtWebKit import QWebView, QWebPage
 from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
-from PyQt4.QtCore import QIODevice, Qt
+from PyQt4.QtCore import QIODevice
 
-import urltools
 from utils import remove_comment
 from content_type import content_types
 
@@ -37,7 +36,9 @@ class PyChmNetReply(QNetworkReply):
 
         self.left     = self.m_length
 
-        self.setHeader(QNetworkRequest.ContentLengthHeader, QVariant(QtCore.QByteArray.number(self.m_length)))
+        self.setHeader(QNetworkRequest.ContentLengthHeader,
+                       QVariant(QtCore.QByteArray.number(self.m_length)),
+                      )
 
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
 
@@ -70,7 +71,9 @@ class PyChmNetReply(QNetworkReply):
         if content_type.startswith('text') and self.qwebview.encoding :
             content_type += ("; charset=%s" % self.qwebview.encoding)
 
-        self.setHeader(QNetworkRequest.ContentTypeHeader, QVariant(content_type))
+        self.setHeader(QNetworkRequest.ContentTypeHeader,
+                       QVariant(content_type),
+                      )
 
 
     def bytesAvailable(self):
@@ -97,9 +100,12 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 
         # special case for links related with .CHM
         if scheme == QLatin1String("ms-its"):
-            return PyChmNetReply(request, request.url(), self.qwebview, self.qwebview)
+            return PyChmNetReply(request, request.url(),
+                                 self.qwebview, self.qwebview )
         else:
-            return QNetworkAccessManager.createRequest(self, op, request, outgoingdata)
+            return QNetworkAccessManager.createRequest(self,
+                                                       op, request,
+                                                       outgoingdata)
 
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
@@ -125,8 +131,12 @@ class PyChmWebView(QWebView):
         self.suggestedPos = 0
         self.zoom         = 1.0
 
-        self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
-        self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
+        self.connect(self,
+                     QtCore.SIGNAL('linkClicked(const QUrl&)'),
+                     self.onLinkClicked)
+        self.connect(self,
+                     QtCore.SIGNAL('loadFinished(bool)'),
+                     self.onLoadFinished)
 
     # FIXME; maybe not needed?
     def clone(self):
@@ -142,9 +152,9 @@ class PyChmWebView(QWebView):
 
     def keyPressEvent(self, event):
         if event.matches(QtGui.QKeySequence.Copy):
-            self.copyToClipboard()
+            self._copyToClipboard()
         elif event.matches(QtGui.QKeySequence.SelectAll):
-            self.selectAll()
+            self._selectAll()
         elif event.matches(QtGui.QKeySequence.Refresh):
             self.reload()
         elif event.matches(QtGui.QKeySequence.Back):
@@ -156,7 +166,7 @@ class PyChmWebView(QWebView):
         #elif event.matches(QtGui.QKeySequence.ZoomOut) :
             #self.zoomOut()
         else:
-            QWebView.keyPressEvent(self,event)
+            QWebView.keyPressEvent(self, event)
 
 
     def contextMenuEvent(self, event):
@@ -167,7 +177,7 @@ class PyChmWebView(QWebView):
             menu.addAction(u"在新标签页打开", self.openAtNewPage)
             menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
-            menu.addAction(u"复制", self.copyToClipboard)
+            menu.addAction(u"复制", self._copyToClipboard)
             menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -177,7 +187,8 @@ class PyChmWebView(QWebView):
             self.keepnewtaburl = self.anchorAt(event.pos())
             if self.keepnewtaburl :
                 if self.keepnewtaburl[0:4] == "http":
-                    self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
+                    self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'),
+                              self.keepnewtaburl)
                 else:
                     self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
         else:
@@ -269,16 +280,18 @@ class PyChmWebView(QWebView):
     def openAtNewPage(self):
         if self.keepnewtaburl :
             if self.keepnewtaburl[0:4] == 'http':
-                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
+                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'),
+                          self.keepnewtaburl)
             else:
-                self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
+                self.emit(QtCore.SIGNAL('openURLatNewTab'),
+                          self.keepnewtaburl)
 
-    def copyToClipboard(self):
+    def _copyToClipboard(self):
         # TODO; which on is better?
         #QtGui.QApplication.clipboard().setText(self.selectedText())
         self.triggerPageAction(QWebPage.Copy)
 
-    def selectAll(self):
+    def _selectAll(self):
         #FIXME; it does not work
         self.triggerPageAction(QWebPage.MoveToStartOfDocument)
         self.triggerPageAction(QWebPage.SelectEndOfDocument)
