@@ -122,7 +122,6 @@ class PyChmWebView(QWebView):
         self.encoding   = "gb18030"
         self.url        = None
         self.openedpg   = None
-        ##self.currentPos = 0
         self.suggestedPos = 0
 
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
@@ -221,49 +220,36 @@ class PyChmWebView(QWebView):
         '''
         assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
         url = unicode(url)
-        print ("[webview.openPage] loading url: %s" % url)
+        print ("[webview.openPage] original url: %s" % url)
 
         finalurl = ""
 
-        if url[0:4] == 'http' :
-            finalurl = url
-            self.load(QtCore.QUrl(url))
-            self.tabmanager.setTabName(self, self.title() )
-            self.openedpg = url
-            return
-
-        if url == u'/':
+        if url == '/':
             finalurl = self.chmfile.home
-            url = self.chmfile.home
-
-        try:
-            pos = url.index(u'://')
-            if url[0:pos] != u'ms-its': #just for url in chmfile
-                return
-            url = url[0:pos] + os.path.normpath(url[pos+3:])
-        except:
+        elif url.lower().startswith("http://") or \
+            url.lower().startswith("ms-its://") :
+            finalurl = url
+        else:
             url = os.path.normpath(url)
             if url[0] != u'/':
                 url = u'/' + url
-            url = os.path.normpath(url)
 
-        if not url.lower().startswith(u'ms-its://'):
-            finalurl = u'ms-its://' + url
-            url = u'ms-its://' + url
+            finalurl =  u"ms-its://" + url
 
-        #self.load(QtCore.QUrl(finalurl))
-        self.load(QtCore.QUrl(url))
+        print ("[webview.openPage] final url:  %s" % finalurl )
+
+        self.load(QtCore.QUrl(finalurl))
         self.show()
         self.tabmanager.setTabName(self, self.title() )
-        self.openedpg = url[9:]
 
-        #return True
+        self.openedpg = finalurl
 
     def anchorAt(self, pos):
 
         # Performs a hit test on the frame contents at the given position
-        res = self.page().currentFrame().hitTestContent(pos)
-        qurl = res.linkUrl()
+        result = self.page().currentFrame().hitTestContent(pos)
+        qurl   = result.linkUrl()
+
         if not qurl.isValid():
             return None
         else:
@@ -279,6 +265,13 @@ class PyChmWebView(QWebView):
 
             else:
                 return None
+
+    def openAtNewPage(self):
+        if self.keepnewtaburl :
+            if self.keepnewtaburl[0:4] == 'http':
+                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
+            else:
+                self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
 
     def copyToClipboard(self):
         QtGui.QApplication.clipboard().setText(self.selectedText())
@@ -324,21 +317,11 @@ class PyChmWebView(QWebView):
         return self.history().canGoForward()
 
 
-
-    def openAtNewPage(self):
-        if self.keepnewtaburl :
-            if self.keepnewtaburl[0:4] == 'http':
-                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'), self.keepnewtaburl)
-                return
-            self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
-
     def onEncodingChanged(self, encoding):
         self.encoding = encoding
         self.chmfile.loadFile(self.chmfile.path, encoding)
 
         self.reload()
-
-
 
     def onLoadFinished(self, ok):
         if ok:
@@ -356,7 +339,6 @@ class PyChmWebView(QWebView):
         chm_title  = self.chmfile.title
 
         return page_title or chm_title or u"No Title"
-
 
     def currentPos(self):
         return self.page().currentFrame().scrollBarValue(QtCore.Qt.Vertical)
