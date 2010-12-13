@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/window_main.ui'
 #
-# Created: Mon Dec 13 17:16:07 2010
+# Created: Mon Dec 13 17:50:16 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -169,8 +169,8 @@ class Ui_MainWindow(object):
         self.actionFindNext.setObjectName(_fromUtf8("actionFindNext"))
         self.actionFindPrevious = QtGui.QAction(MainWindow)
         self.actionFindPrevious.setObjectName(_fromUtf8("actionFindPrevious"))
-        self.actionCreateNewTab = QtGui.QAction(MainWindow)
-        self.actionCreateNewTab.setObjectName(_fromUtf8("actionCreateNewTab"))
+        self.actionOpenNewTab = QtGui.QAction(MainWindow)
+        self.actionOpenNewTab.setObjectName(_fromUtf8("actionOpenNewTab"))
         self.actionCloseCurrentTab = QtGui.QAction(MainWindow)
         self.actionCloseCurrentTab.setObjectName(_fromUtf8("actionCloseCurrentTab"))
         self.menuSettings.addAction(self.actionOpenSettings)
@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.menuEdit.addAction(self.actionFind)
         self.menuEdit.addAction(self.actionFindNext)
         self.menuEdit.addAction(self.actionFindPrevious)
-        self.menuTabs.addAction(self.actionCreateNewTab)
+        self.menuTabs.addAction(self.actionOpenNewTab)
         self.menuTabs.addAction(self.actionCloseCurrentTab)
         self.menuTabs.addSeparator()
         self.menuBookmarks.addAction(self.actionAddBookmark)
@@ -314,9 +314,10 @@ class Ui_MainWindow(object):
         self.actionFindNext.setShortcut(QtGui.QApplication.translate("MainWindow", "F3", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindPrevious.setText(QtGui.QApplication.translate("MainWindow", "Find &Previous", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindPrevious.setShortcut(QtGui.QApplication.translate("MainWindow", "Shift+F3", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionCreateNewTab.setText(QtGui.QApplication.translate("MainWindow", "&Add tab", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionCreateNewTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+T", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenNewTab.setText(QtGui.QApplication.translate("MainWindow", "&Add tab", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenNewTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+T", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCloseCurrentTab.setText(QtGui.QApplication.translate("MainWindow", "&Close Tab", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionCloseCurrentTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc

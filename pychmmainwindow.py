@@ -68,6 +68,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupViewMenu()
         self._setupPanelMenu()
         self._setupPanelDock()
+        self._setupBookmarkMenu()
+        self._setupTabsMenu()
         self._setupNavigation()
         self._setupSettingsMenu()
         self._setupHelpMenu()
@@ -110,6 +112,61 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onQuitApp)
 
+    def onFileOpen(self):
+        path = QtGui.QFileDialog.getOpenFileName(None,
+                                                 u'Choose file',
+                                                 self.config.lastdir,
+                                                 u'CHM files (*.chm)',
+                                                 )
+        if path:
+            path = unicode(path)
+            # update lastdir after each succeful dialog
+            self.config.lastdir = os.path.dirname(path)
+
+            try:
+                self.openFile(path)
+            except IOError:
+                # FIXME ; should give GUI warning, instead
+                print ("[Error] failed to open: %s" % path)
+
+    def onPrintPage(self):
+        self.currentView.printPage()
+
+    def onExtractFile(self):
+        output_dir = QtGui.QFileDialog.getExistingDirectory(self,
+                'select a directory to store files',
+                '',
+                QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
+        if not output_dir:
+            return
+
+        output_dir = unicode(output_dir).encode(self.session.system_encoding)
+
+        chmfile = self.currentView.chmfile
+        maximum = len( chmfile.allURLs )
+
+
+        progress = QtGui.QProgressDialog(u'Extract chm file',
+                                         u'Abort',
+                                         0,
+                                         maximum,
+                                         self
+                                         )
+        progress.forceShow()
+
+        reports = chmfile.extractAll(output_dir)
+        logs = [ ]
+
+        for index, report in enumerate(reports):
+            logs.append(report)
+            progress.setValue(index+1)
+            if (index + 1) % 16 == 0 and progress.wasCanceled() :
+                break
+
+    def onQuitApp(self):
+        self.close()
+
+
     def _setupEditMenu(self):
         self.connect(self.actionCopy,
                      QtCore.SIGNAL('triggered(bool)'),
@@ -132,10 +189,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onFindPrevious)
 
     def onCopy(self):
-        pass
+        self.currentView.onCopy()
 
     def onSelectAll(self):
-        pass
+        self.currentView.onSelectAll()
 
     def onFind(self):
         self.tabmanager.onFind()
@@ -145,6 +202,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onFindPrevious(self):
         self.tabmanager.onFindPrevious()
+
 
     def _setupViewMenu(self):
         self.connect(self.actionZoomIn,
@@ -166,6 +224,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupEncodingsSubMenu()
 
 
+
+
     def _setupEncodingsSubMenu(self):
         encodings_menu = QMenu(self)
         self.groupOfEncodings = QtGui.QActionGroup(self)
@@ -184,6 +244,55 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(QAction*)'),
                      self.onEncodingChanged,
                     )
+
+    def onZoonIn(self):
+        self.currentView.zoomIn()
+
+    def onZoomOut(self):
+        self.currentView.zoomOut()
+
+    def onZoomOff(self):
+        self.currentView.zoomOff()
+
+    def onViewHtmlSource(self):
+        dialog = HtmlDialog(self)
+        editor = dialog.sourceEdit
+        editor.setPlainText(self.currentView.page().currentFrame().toHtml())
+        editor.setWindowTitle(self.currentView.title())
+        dialog.resize(800, 600)
+        dialog.exec_()
+
+    def onLocateInTopics(self):
+        self.topicsview.locateUrl(self.currentView.loadedURL)
+
+
+
+    def _setupBookmarkMenu(self):
+
+        self.connect(self.actionAddBookmark,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onAddBookmark)
+
+    def onAddBookmark(self):
+        self.bookmarkview.addBookmark()
+
+
+    def _setupTabsMenu(self):
+
+        self.connect(self.actionOpenNewTab,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onOpenNewTab)
+
+        self.connect(self.actionCloseCurrentTab,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onCloseCurrentTab)
+
+    def onOpenNewTab(self):
+        self.tabmanager.onOpenNewTab()
+
+    def onCloseCurrentTab(self):
+        self.tabmanager.onCloseCurrentTab()
+
 
     def _setWebFont(self):
         settings   = QtWebKit.QWebSettings.globalSettings()
@@ -305,22 +414,18 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.searchview.onTabSwitched,
                     )
 
-        self.connect(self.actionAddBookmark,
-                QtCore.SIGNAL('triggered(bool)'), self.onAddBookmark)
 
 
-    def onQuitApp(self):
-        self.close()
 
     @property
     def currentView(self):
         return self.tabmanager.currentView
 
-    def keyPressEvent(self, event):
-        if event.matches(QtGui.QKeySequence.Open):
-            self.onFileOpen()
-        else:
-            QtGui.QMainWindow.keyPressEvent(self, event)
+    #def keyPressEvent(self, event):
+        #if event.matches(QtGui.QKeySequence.Open):
+            #self.onFileOpen()
+        #else:
+            #QtGui.QMainWindow.keyPressEvent(self, event)
 
     def closeEvent(self, event):
 
@@ -364,22 +469,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.setWindowTitle(window_title)
 
-    def onFileOpen(self):
-        path = QtGui.QFileDialog.getOpenFileName(None,
-                                                   u'Choose file',
-                                                   self.config.lastdir,
-                                                   u'CHM files (*.chm)',
-                                                 )
-        if path:
-            path = unicode(path)
-            # update lastdir after each succeful dialog
-            self.config.lastdir = os.path.dirname(path)
-
-            try:
-                self.openFile(path)
-            except IOError:
-                # FIXME ; should give GUI warning, instead
-                print ("[Error] failed to open: %s" % path)
 
     def openFile(self, path):
         self.tabmanager.openChmFile(path)
@@ -400,16 +489,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             for webview in self.tabmanager.webviews:
                 webview.reload()
 
-    def onViewHtmlSource(self):
-        dialog = HtmlDialog(self)
-        editor = dialog.sourceEdit
-        editor.setPlainText(self.currentView.page().currentFrame().toHtml())
-        editor.setWindowTitle(self.currentView.title())
-        dialog.resize(800, 600)
-        dialog.exec_()
 
-    def onAddBookmark(self):
-        self.bookmarkview.addBookmark()
 
     def onCheckToolBar(self):
         if self.currentView :
@@ -423,20 +503,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onEncodingChanged(self, action):
         self.currentView.onEncodingChanged(action.encoding)
 
-    def onPrintPage(self):
-        self.currentView.printPage()
 
-    def onZoonIn(self):
-        self.currentView.zoomIn()
 
-    def onZoomOut(self):
-        self.currentView.zoomOut()
-
-    def onZoomOff(self):
-        self.currentView.zoomOff()
-
-    def onLocateInTopics(self):
-        self.topicsview.locateUrl(self.currentView.loadedURL)
 
     def openInCurrentTab(self, url):
         self.currentView.loadURL(url)
@@ -450,36 +518,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onGoForward(self):
         self.currentView.goForward()
 
-    def onExtractFile(self):
-        output_dir = QtGui.QFileDialog.getExistingDirectory(self,
-                'select a directory to store files',
-                '',
-                QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
-        if not output_dir:
-            return
-
-        output_dir = unicode(output_dir).encode(self.session.system_encoding)
-
-        chmfile = self.currentView.chmfile
-        maximum = len( chmfile.allURLs )
-
-
-        progress = QtGui.QProgressDialog(u'Extract chm file',
-                                         u'Abort',
-                                         0,
-                                         maximum,
-                                         self
-                                         )
-        progress.forceShow()
-
-        reports = chmfile.extractAll(output_dir)
-        logs = [ ]
-
-        for index, report in enumerate(reports):
-            logs.append(report)
-            progress.setValue(index+1)
-            if (index + 1) % 16 == 0 and progress.wasCanceled() :
-                break
 
 if __name__  ==  "__main__":
     raise NotImplementedError("")

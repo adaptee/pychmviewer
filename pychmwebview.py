@@ -151,23 +151,14 @@ class PyChmWebView(QWebView):
         return view
 
     def keyPressEvent(self, event):
-        if event.matches(QtGui.QKeySequence.Copy):
-            self._copyToClipboard()
-        elif event.matches(QtGui.QKeySequence.SelectAll):
-            self._selectAll()
-        elif event.matches(QtGui.QKeySequence.Refresh):
+        if event.matches(QtGui.QKeySequence.Refresh):
             self.reload()
         elif event.matches(QtGui.QKeySequence.Back):
             self.goBack()
         elif event.matches(QtGui.QKeySequence.Forward):
             self.goForward()
-        #elif event.matches(QtGui.QKeySequence.ZoomIn):
-            #self.zoomIn()
-        #elif event.matches(QtGui.QKeySequence.ZoomOut) :
-            #self.zoomOut()
         else:
             QWebView.keyPressEvent(self, event)
-
 
     def contextMenuEvent(self, event):
         menu = QtGui.QMenu(self)
@@ -177,7 +168,7 @@ class PyChmWebView(QWebView):
             menu.addAction(u"在新标签页打开", self.openAtNewPage)
             menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
-            menu.addAction(u"复制", self._copyToClipboard)
+            menu.addAction(u"复制", self.onCopy)
             menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
@@ -286,12 +277,12 @@ class PyChmWebView(QWebView):
                 self.emit(QtCore.SIGNAL('openURLatNewTab'),
                           self.keepnewtaburl)
 
-    def _copyToClipboard(self):
+    def onCopy(self):
         # TODO; which on is better?
-        #QtGui.QApplication.clipboard().setText(self.selectedText())
         self.triggerPageAction(QWebPage.Copy)
+        #QtGui.QApplication.clipboard().setText(self.selectedText())
 
-    def _selectAll(self):
+    def onSelectAll(self):
         #FIXME; it does not work
         self.triggerPageAction(QWebPage.MoveToStartOfDocument)
         self.triggerPageAction(QWebPage.SelectEndOfDocument)
