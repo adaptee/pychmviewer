@@ -193,6 +193,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.emit(QtCore.SIGNAL('checkToolBar'))
 
     def setTabName(self, view):
+    #def setTabName(self, view, title):
         index = self.tabWidget.indexOf(view)
         if index == -1:
             return
@@ -258,8 +259,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                 # accumulated all failures paths
                 failures.append(path)
             else:
+                view.suggestedPos = pos
                 view.openPage(url)
-                view.setCurrentPos(pos)
 
         if failures:
             raise StandardError(failures)

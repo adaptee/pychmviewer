@@ -123,7 +123,7 @@ class PyChmWebView(QWebView):
         self.url        = None
         self.openedpg   = None
         ##self.currentPos = 0
-        self._suggestedPos = 0
+        self.suggestedPos = 0
 
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
@@ -138,7 +138,7 @@ class PyChmWebView(QWebView):
         view.url = self.url
 
         #view.currentPos = self.currentPos
-        view._suggestedPos = self.curretnPos()
+        view.suggestedPos = self.curretnPos()
         view.openedpg = self.openedpg
 
         return view
@@ -332,17 +332,27 @@ class PyChmWebView(QWebView):
 
     def onLoadFinished(self, ok):
         if ok:
-            self.setCurrentPos(self._suggestedPos)
-            self._suggestedPos = 0
+            self.setCurrentPos(self.suggestedPos)
+            self.suggestedPos = 0
+
             self.tabmanager.setTabName(self)
+            #self.tabmanager.setTabName(self, self.title() )
         else:
             print ("[loadFinished] page not found")
+
+    def title(self):
+        "override the title() method of QWebView"
+
+        page_title = QWebView.title(self)
+        chm_title  = self.chmfile.title
+
+        return page_title or chm_title or u"No Title"
+
 
     def currentPos(self):
         return self.page().currentFrame().scrollBarValue(QtCore.Qt.Vertical)
 
     def setCurrentPos(self, pos):
-        self._suggestedPos = pos
         self.page().currentFrame().setScrollBarValue(QtCore.Qt.Vertical, pos)
 
     def find(self, text, backward=False, casesens=False):
