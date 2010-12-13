@@ -64,6 +64,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tabmanager = self.WebViewsWidget
 
         self._setupFileMenu()
+        self._setupEditMenu()
         self._setupViewMenu()
         self._setupPanelMenu()
         self._setupPanelDock()
@@ -95,7 +96,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.tabmanager.loadFrom(self.session.snapshot)
 
 
-
     def _setupFileMenu(self):
         self.connect(self.actionOpenFile,
                      QtCore.SIGNAL('triggered(bool)'),
@@ -109,6 +109,42 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.actionQuitApp,
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onQuitApp)
+
+    def _setupEditMenu(self):
+        self.connect(self.actionCopy,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onCopy)
+
+        self.connect(self.actionSelectAll,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onSelectAll)
+
+        self.connect(self.actionFind,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onFind)
+
+        self.connect(self.actionFindNext,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onFindNext)
+
+        self.connect(self.actionFindPrevious,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onFindPrevious)
+
+    def onCopy(self):
+        pass
+
+    def onSelectAll(self):
+        pass
+
+    def onFind(self):
+        self.tabmanager.onFind()
+
+    def onFindNext(self):
+        self.tabmanager.onFindNext()
+
+    def onFindPrevious(self):
+        self.tabmanager.onFindPrevious()
 
     def _setupViewMenu(self):
         self.connect(self.actionZoomIn,
@@ -170,6 +206,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _setupPanelMenu(self):
 
+        self.connect(self.actionToggleSidebar,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onToggleSidebar)
+
         self.actionIndex = self.dockIndex.toggleViewAction()
         self.actionIndex.setCheckable(True)
         self.actionIndex.setChecked(True)
@@ -189,6 +229,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.actionBookmark.setCheckable(True)
         self.actionBookmark.setChecked(True)
         self.menu_Panels.addAction(self.actionBookmark)
+
+    def onToggleSidebar(self):
+        pass
 
     def _setupPanelDock(self):
 

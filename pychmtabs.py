@@ -99,6 +99,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             QtGui.QWidget.keyPressEvent(self, event)
 
 
+
     def openChmFile(self, path):
         chmfile = PyChmFile(self.session, path)
 
@@ -200,6 +201,11 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if index != -1 :
             title = shortenTitle(title)
             self.tabWidget.setTabText(index, title)
+
+    def onFind(self):
+        self.frameFind.show()
+        self.editFind.setFocus()
+        self.editFind.setSelection(0, len(self.editFind.text()))
 
     def onFindReturnPressed(self):
         self.find()
