@@ -10,7 +10,6 @@
 from PyQt4 import QtCore, QtGui
 
 from treeview import AbstractTreeView
-#from Ui_tab_index import Ui_PanelIndex
 from Ui_panelindex import Ui_PanelIndex
 
 class PyChmIndexView(QtGui.QWidget, Ui_PanelIndex, AbstractTreeView):

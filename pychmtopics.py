@@ -12,7 +12,6 @@ from PyQt4.QtGui import QTreeWidgetItem
 
 from utils import remove_comment
 from treeview import AbstractTreeView
-#from Ui_tab_contents import Ui_TabContents
 from Ui_paneltopics import Ui_PanelTopics
 
 
