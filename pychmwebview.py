@@ -105,7 +105,7 @@ class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
         '''
         zoom: zoom out times
-        openedpg: current openedpage
+        loadedURL: current openedpage
         signal 'openURL' will be emited(with param url:unicode)
         signal 'openURLatNewTab' will be emited(with param url:unicode)
         signal 'openRemoteURLatNewTab' will be emited(with param url:unicode)
@@ -121,7 +121,7 @@ class PyChmWebView(QWebView):
         self.chmfile    = chmfile
         self.encoding   = "gb18030"
         self.url        = None
-        self.openedpg   = None
+        self.loadedURL   = None
         self.suggestedPos = 0
 
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
@@ -136,7 +136,7 @@ class PyChmWebView(QWebView):
         view.enocding     = self.encoding
         view.suggestedPos = self.currentPos()
         view.url          = self.url
-        view.openedpg     = self.openedpg
+        view.loadedURL     = self.loadedURL
 
         return view
 
@@ -242,7 +242,7 @@ class PyChmWebView(QWebView):
         self.show()
         self.tabmanager.setTabName(self, self.title() )
 
-        self.openedpg = finalurl
+        self.loadedURL = finalurl
 
     def anchorAt(self, pos):
 
