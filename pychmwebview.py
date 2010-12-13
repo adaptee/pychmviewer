@@ -161,14 +161,15 @@ class PyChmWebView(QWebView):
             QWebView.keyPressEvent(self, event)
 
     def contextMenuEvent(self, event):
+        # [Note] got triggerd when user right-click mouse or press context key
         menu = QtGui.QMenu(self)
         link = self.anchorAt(event.pos())
         if link :
             self.keepnewtaburl = link
-            menu.addAction(u"在新标签页打开", self.openAtNewPage)
+            menu.addAction(u"Open in new tab", self.openAtNewPage)
             menu.exec_(event.globalPos())
         if not self.selectedText().isEmpty():
-            menu.addAction(u"复制", self.onCopy)
+            menu.addAction(u"Copy", self.onCopy)
             menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
