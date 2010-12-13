@@ -113,16 +113,17 @@ class PyChmWebView(QWebView):
         '''
         QWebView.__init__(self, parent)
         self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
+
+        # Whenever a link is activated, the linkClicked() signal is emitted.
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
 
-        self.zoom = 1.0
-        self.tabmanager = tabmanager
-        self.session    = tabmanager.session
-        self.chmfile    = chmfile
-        self.encoding   = "gb18030"
-        self.url        = None
-        self.loadedURL   = None
+        self.tabmanager   = tabmanager
+        self.session      = tabmanager.session
+        self.chmfile      = chmfile
+        self.encoding     = "gb18030"
+        self.loadedURL    = None
         self.suggestedPos = 0
+        self.zoom         = 1.0
 
         self.connect(self, QtCore.SIGNAL('linkClicked(const QUrl&)'), self.onLinkClicked)
         self.connect(self, QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
@@ -135,8 +136,7 @@ class PyChmWebView(QWebView):
 
         view.enocding     = self.encoding
         view.suggestedPos = self.currentPos()
-        view.url          = self.url
-        view.loadedURL     = self.loadedURL
+        view.loadedURL    = self.loadedURL
 
         return view
 
@@ -209,7 +209,7 @@ class PyChmWebView(QWebView):
 
     # this method is only reponsible for loading url in current view
     # whether creating new tab is not with its concern
-    # FIXME; currently only support 3 scheme:
+    # currently only support 3 scheme:
     # http,
     # https,
     # path within .chm
