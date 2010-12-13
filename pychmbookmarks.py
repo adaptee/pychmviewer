@@ -179,6 +179,6 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_TabBookmarks):
             webview = self._getCurrentView()
 
             if webview.loadedURL != item.url:
-                webview.openPage(item.url)
+                webview.loadURL(item.url)
 
             webview.setScrollPos(item.pos)

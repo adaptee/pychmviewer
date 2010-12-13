@@ -126,7 +126,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         view = self.currentView.clone()
         self.addNewTab(view)
-        view.openPage(url)
+        view.loadURL(url)
 
         return view
 
@@ -142,12 +142,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.editFind.installEventFilter(self)
 
-        self.connect(view, QtCore.SIGNAL('openURL'), view.openPage)
+        self.connect(view, QtCore.SIGNAL('openURL'), view.loadURL)
         self.connect(view, QtCore.SIGNAL('openURLatNewTab'), self.onOpenURLatNewTab)
         self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
 
         if self.config.openRemoteURL:
-            self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.openPage)
+            self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.loadURL)
             self.connect(view, QtCore.SIGNAL('openRemoteURLatNewTab'), self.onOpenURLatNewTab)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
@@ -256,7 +256,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                 failures.append(path)
             else:
                 view.suggestedPos = pos
-                view.openPage(url)
+                view.loadURL(url)
 
         if failures:
             raise StandardError(failures)
