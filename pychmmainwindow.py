@@ -73,7 +73,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         for path in paths:
             try:
                 self.openFile(path)
-            except StandardError:
+            except IOError:
                 pass
 
     def _startUpWithNoPaths(self):
@@ -296,7 +296,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
             try:
                 self.openFile(path)
-            except StandardError:
+            except IOError:
                 # FIXME ; should give GUI warning, instead
                 print ("[Error] failed to open: %s" % path)
 

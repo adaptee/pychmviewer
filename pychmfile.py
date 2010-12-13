@@ -203,7 +203,7 @@ class PyChmFile(object):
             fullpath = os.path.join(output_dir, path)
             try:
                 prepare_for_extracting_to(fullpath)
-            except StandardError:
+            except OSError:
                 yield ( False, u"[failure] %s" % url )
             else:
                 contents = self.getContentsByURL(url)
@@ -213,7 +213,7 @@ class PyChmFile(object):
                         with open(fullpath, 'w') as writer:
                             writer.write(contents)
                         yield ( True,  u"[success] %s" % url )
-                    except StandardError :
+                    except IOError :
                         yield ( False, u"[failure] %s" % url )
                 else:
                     yield( True, "[skip] %s (empty)" % url )
