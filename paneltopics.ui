@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TabContents</class>
- <widget class="QWidget" name="TabContents">
+ <class>PanelTopics</class>
+ <widget class="QWidget" name="PanelTopics">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Content</string>
+   <string>Topics</string>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -22,18 +22,9 @@
    </property>
    <item>
     <widget class="QTreeWidget" name="tree">
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="headerDefaultSectionSize">
-      <number>0</number>
-     </attribute>
-     <attribute name="headerMinimumSectionSize">
-      <number>0</number>
-     </attribute>
-     <attribute name="headerStretchLastSection">
-      <bool>false</bool>
-     </attribute>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
        <string notr="true">1</string>

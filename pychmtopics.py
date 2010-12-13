@@ -12,7 +12,8 @@ from PyQt4.QtGui import QTreeWidgetItem
 
 from utils import remove_comment
 from treeview import AbstractTreeView
-from Ui_tab_contents import Ui_TabContents
+#from Ui_tab_contents import Ui_TabContents
+from Ui_paneltopics import Ui_PanelTopics
 
 
 def normalize_key(key):
@@ -22,7 +23,7 @@ def normalize_key(key):
     return remove_comment(key)
 
 
-class PyChmTopicsView(QtGui.QWidget, Ui_TabContents, AbstractTreeView):
+class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
     '''
     signal 'openURL' will be emited(with param url:unicode) when the index item be doubleclicked
     '''
