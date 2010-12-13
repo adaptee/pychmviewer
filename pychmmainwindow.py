@@ -64,6 +64,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupMiscActions()
         self._setWebFont()
 
+        # FIXME; dirty
+        # FIXME; flash still does not work
+        #settings   = QtWebKit.QWebSettings.globalSettings()
+        #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
+
         if paths:
             self._startUpWithPaths(paths)
         else:
@@ -83,6 +88,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @property
     def currentView(self):
         return self.tabmanager.currentView
+
+
 
     def _setWebFont(self):
         settings   = QtWebKit.QWebSettings.globalSettings()
