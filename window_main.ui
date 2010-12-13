@@ -46,28 +46,32 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="file_Open_action"/>
-    <addaction name="file_Print_action"/>
+    <addaction name="actionOpenFile"/>
+    <addaction name="actionPrintPage"/>
+    <addaction name="actionExtractFile"/>
     <addaction name="separator"/>
-    <addaction name="file_Extract_action"/>
+    <addaction name="actionQuitApp"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="view_Increase_font_size_action"/>
-    <addaction name="view_Decrease_font_size_action"/>
-    <addaction name="view_norm_font_size_action"/>
-    <addaction name="view_View_HTML_source_action"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="actionZoomOff"/>
     <addaction name="separator"/>
-    <addaction name="view_Locate_in_contents_action"/>
+    <addaction name="actionChangeEncoding"/>
+    <addaction name="actionViewHtmlSource"/>
     <addaction name="separator"/>
-    <addaction name="view_Set_encoding_action"/>
+    <addaction name="actionLocate"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Panels">
     <property name="title">
      <string>&amp;Panels</string>
     </property>
+    <addaction name="actionToggleSidebar"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -75,10 +79,28 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionCopy"/>
+    <addaction name="actionSelectAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionFindNext"/>
+    <addaction name="actionFindPrevious"/>
+   </widget>
+   <widget class="QMenu" name="menu_Windows">
+    <property name="title">
+     <string>&amp;Windows</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Panels"/>
    <addaction name="menu_Settings"/>
+   <addaction name="menu_Windows"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolbar">
@@ -94,8 +116,8 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="file_Open_action"/>
-   <addaction name="file_Print_action"/>
+   <addaction name="actionOpenFile"/>
+   <addaction name="actionPrintPage"/>
   </widget>
   <widget class="QToolBar" name="navToolbar">
    <property name="windowTitle">
@@ -127,11 +149,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="view_Locate_in_contents_action"/>
-   <addaction name="view_Increase_font_size_action"/>
-   <addaction name="view_Decrease_font_size_action"/>
-   <addaction name="view_norm_font_size_action"/>
-   <addaction name="view_View_HTML_source_action"/>
+   <addaction name="actionLocate"/>
+   <addaction name="actionZoomIn"/>
+   <addaction name="actionZoomOut"/>
+   <addaction name="actionZoomOff"/>
+   <addaction name="actionViewHtmlSource"/>
    <addaction name="bookmark_AddAction"/>
   </widget>
   <widget class="QStatusBar" name="mainStatusBar"/>
@@ -192,7 +214,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_4"/>
   </widget>
-  <action name="file_Print_action">
+  <action name="actionPrintPage">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_print.png</normaloff>:/images/icon_print.png</iconset>
@@ -211,88 +233,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
-   </property>
-  </action>
-  <action name="file_exit_action">
-   <property name="text">
-    <string>&amp;Quit</string>
-   </property>
-   <property name="iconText">
-    <string>Exit</string>
-   </property>
-   <property name="whatsThis">
-    <string>Exits the application</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Q</string>
-   </property>
-  </action>
-  <action name="edit_Copy_action">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/images/icon_copy.png</normaloff>:/images/icon_copy.png</iconset>
-   </property>
-   <property name="text">
-    <string>C&amp;opy</string>
-   </property>
-   <property name="iconText">
-    <string>Copy</string>
-   </property>
-   <property name="whatsThis">
-    <string>Copies selected content to clipboard</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
-   </property>
-  </action>
-  <action name="edit_SelectAll_action">
-   <property name="icon">
-    <iconset>
-     <normaloff>../../.designer/backup/image8</normaloff>../../.designer/backup/image8</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Select All</string>
-   </property>
-   <property name="iconText">
-    <string>Paste</string>
-   </property>
-   <property name="whatsThis">
-    <string>Selects everything in the document</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V</string>
-   </property>
-  </action>
-  <action name="edit_FindAction">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/images/icon_find.png</normaloff>:/images/icon_find.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Find...</string>
-   </property>
-   <property name="iconText">
-    <string>Find</string>
-   </property>
-   <property name="toolTip">
-    <string>Find text in currently opened page</string>
-   </property>
-   <property name="whatsThis">
-    <string>Enters the Find in page mode</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+F</string>
-   </property>
-  </action>
-  <action name="file_ExtractCHMAction">
-   <property name="text">
-    <string>E&amp;xtract CHM content...</string>
-   </property>
-   <property name="toolTip">
-    <string>Extract the CHM content to the directory</string>
-   </property>
-   <property name="whatsThis">
-    <string>Exctracts the CHM archive content to the specified directory. All the files are extracted.</string>
    </property>
   </action>
   <action name="settings_SettingsAction">
@@ -324,13 +264,13 @@
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="view_Increase_font_size_action">
+  <action name="actionZoomIn">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_font_increase.png</normaloff>:/images/icon_font_increase.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Increase font size</string>
+    <string>Zoom &amp;in</string>
    </property>
    <property name="toolTip">
     <string>Increase the font size</string>
@@ -339,16 +279,16 @@
     <string>Increases the document font size.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl++</string>
+    <string>=</string>
    </property>
   </action>
-  <action name="view_Decrease_font_size_action">
+  <action name="actionZoomOut">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_font_decrease.png</normaloff>:/images/icon_font_decrease.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Decrease font size</string>
+    <string>Zoom &amp;out</string>
    </property>
    <property name="toolTip">
     <string>Decrease the font size</string>
@@ -357,34 +297,37 @@
     <string>Decreases the document font size.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+-</string>
+    <string>-</string>
    </property>
   </action>
-  <action name="view_norm_font_size_action">
+  <action name="actionZoomOff">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_font_norm.png</normaloff>:/images/icon_font_norm.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;normal size font</string>
+    <string>Zoom &amp;off</string>
    </property>
    <property name="toolTip">
-    <string>set the font size normal</string>
+    <string>restore normal font size</string>
    </property>
    <property name="whatsThis">
     <string>set the document font size normal.</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+R</string>
    </property>
   </action>
-  <action name="view_View_HTML_source_action">
+  <action name="actionViewHtmlSource">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_view_source.png</normaloff>:/images/icon_view_source.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;View HTML source</string>
+    <string>&amp;HTML Source</string>
+   </property>
+   <property name="iconText">
+    <string>HTML source</string>
    </property>
    <property name="toolTip">
     <string>View HTML source of current page</string>
@@ -433,33 +376,33 @@
     <bool>false</bool>
    </property>
   </action>
-  <action name="view_Locate_in_contents_action">
+  <action name="actionLocate">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_locate_in_content.png</normaloff>:/images/icon_locate_in_content.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Locate in contents window</string>
+    <string>&amp;Locate </string>
    </property>
    <property name="toolTip">
-    <string>Locate the current page in contents window</string>
+    <string>Locate the current page in side panel</string>
    </property>
    <property name="whatsThis">
     <string>If the current page is present in the Table of Contents, locate it there. </string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+</string>
+    <string>Ctrl+L</string>
    </property>
   </action>
-  <action name="view_Set_encoding_action">
+  <action name="actionChangeEncoding">
    <property name="text">
-    <string>Set &amp;encoding</string>
+    <string>&amp;Encoding</string>
    </property>
    <property name="whatsThis">
     <string>Changes the current document encoding. </string>
    </property>
   </action>
-  <action name="file_Open_action">
+  <action name="actionOpenFile">
    <property name="icon">
     <iconset resource="resources/images.qrc">
      <normaloff>:/images/icon_open_file.png</normaloff>:/images/icon_open_file.png</iconset>
@@ -472,6 +415,9 @@
    </property>
    <property name="whatsThis">
     <string>Opens a new CHM file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="nav_actionBack">
@@ -521,10 +467,13 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>about</string>
+    <string>&amp;About</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
-  <action name="file_Extract_action">
+  <action name="actionExtractFile">
    <property name="text">
     <string>&amp;Extract</string>
    </property>
@@ -536,6 +485,61 @@
    </property>
    <property name="whatsThis">
     <string>Extract current CHM </string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionQuitApp">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionToggleSidebar">
+   <property name="text">
+    <string>Toggle Sidebar</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>&amp;Select All</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>&amp;Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionFindNext">
+   <property name="text">
+    <string>Find &amp;Next</string>
+   </property>
+   <property name="shortcut">
+    <string>F3</string>
+   </property>
+  </action>
+  <action name="actionFindPrevious">
+   <property name="text">
+    <string>Find &amp;Previous</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F3</string>
    </property>
   </action>
  </widget>
