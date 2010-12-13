@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/mnt/personal/code/pychmviewer/mainwindow.ui'
+# Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Dec 13 17:56:51 2010
+# Created: Mon Dec 13 19:11:02 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -151,8 +151,8 @@ class Ui_MainWindow(object):
         icon11.addPixmap(QtGui.QPixmap(_fromUtf8(":/images/icon_home.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionGoHome.setIcon(icon11)
         self.actionGoHome.setObjectName(_fromUtf8("actionGoHome"))
-        self.actionAbout = QtGui.QAction(MainWindow)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAboutApp = QtGui.QAction(MainWindow)
+        self.actionAboutApp.setObjectName(_fromUtf8("actionAboutApp"))
         self.actionExtractFile = QtGui.QAction(MainWindow)
         self.actionExtractFile.setObjectName(_fromUtf8("actionExtractFile"))
         self.actionQuitApp = QtGui.QAction(MainWindow)
@@ -173,6 +173,8 @@ class Ui_MainWindow(object):
         self.actionOpenNewTab.setObjectName(_fromUtf8("actionOpenNewTab"))
         self.actionCloseCurrentTab = QtGui.QAction(MainWindow)
         self.actionCloseCurrentTab.setObjectName(_fromUtf8("actionCloseCurrentTab"))
+        self.actionAboutQt = QtGui.QAction(MainWindow)
+        self.actionAboutQt.setObjectName(_fromUtf8("actionAboutQt"))
         self.menuSettings.addAction(self.actionOpenSettings)
         self.menuFile.addAction(self.actionOpenFile)
         self.menuFile.addAction(self.actionPrintPage)
@@ -190,7 +192,8 @@ class Ui_MainWindow(object):
         self.menuView.addSeparator()
         self.menuPanels.addAction(self.actionTogglePanels)
         self.menuPanels.addSeparator()
-        self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addAction(self.actionAboutApp)
+        self.menuHelp.addAction(self.actionAboutQt)
         self.menuEdit.addAction(self.actionCopy)
         self.menuEdit.addAction(self.actionSelectAll)
         self.menuEdit.addSeparator()
@@ -231,7 +234,7 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuView.setTitle(QtGui.QApplication.translate("MainWindow", "&View", None, QtGui.QApplication.UnicodeUTF8))
         self.menuPanels.setTitle(QtGui.QApplication.translate("MainWindow", "&Panels", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuHelp.setTitle(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuHelp.setTitle(QtGui.QApplication.translate("MainWindow", "&Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuEdit.setTitle(QtGui.QApplication.translate("MainWindow", "&Edit", None, QtGui.QApplication.UnicodeUTF8))
         self.menuTabs.setTitle(QtGui.QApplication.translate("MainWindow", "&Tabs", None, QtGui.QApplication.UnicodeUTF8))
         self.menuBookmarks.setTitle(QtGui.QApplication.translate("MainWindow", "&Bookmarks", None, QtGui.QApplication.UnicodeUTF8))
@@ -294,8 +297,8 @@ class Ui_MainWindow(object):
         self.actionGoHome.setText(QtGui.QApplication.translate("MainWindow", "Home", None, QtGui.QApplication.UnicodeUTF8))
         self.actionGoHome.setToolTip(QtGui.QApplication.translate("MainWindow", "Navigate home", None, QtGui.QApplication.UnicodeUTF8))
         self.actionGoHome.setWhatsThis(QtGui.QApplication.translate("MainWindow", "Navigate to the document Home page, as specified in the document.", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "&About", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout.setShortcut(QtGui.QApplication.translate("MainWindow", "F1", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAboutApp.setText(QtGui.QApplication.translate("MainWindow", "&About PyChmViewer", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAboutApp.setShortcut(QtGui.QApplication.translate("MainWindow", "F1", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExtractFile.setText(QtGui.QApplication.translate("MainWindow", "&Extract", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExtractFile.setIconText(QtGui.QApplication.translate("MainWindow", "Extract", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExtractFile.setToolTip(QtGui.QApplication.translate("MainWindow", "Extract current CHM file", None, QtGui.QApplication.UnicodeUTF8))
@@ -314,20 +317,11 @@ class Ui_MainWindow(object):
         self.actionFindNext.setShortcut(QtGui.QApplication.translate("MainWindow", "F3", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindPrevious.setText(QtGui.QApplication.translate("MainWindow", "Find &Previous", None, QtGui.QApplication.UnicodeUTF8))
         self.actionFindPrevious.setShortcut(QtGui.QApplication.translate("MainWindow", "Shift+F3", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpenNewTab.setText(QtGui.QApplication.translate("MainWindow", "&Add tab", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenNewTab.setText(QtGui.QApplication.translate("MainWindow", "&Open Tab", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpenNewTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+T", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCloseCurrentTab.setText(QtGui.QApplication.translate("MainWindow", "&Close Tab", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCloseCurrentTab.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAboutQt.setText(QtGui.QApplication.translate("MainWindow", "About Qt", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    MainWindow = QtGui.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
-
