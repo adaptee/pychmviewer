@@ -128,8 +128,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             try:
                 self.openFile(path)
             except IOError:
-                # FIXME ; should give GUI warning, instead
-                print ("[Error] failed to open: %s" % path)
+                QtGui.QMessageBox.warning( self,
+                                           u"Failed to open file",
+                                           u"%s does not exist" % path,
+                                         )
 
     def onPrintPage(self):
         self.currentView.printPage()
