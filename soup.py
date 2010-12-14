@@ -11,92 +11,92 @@ def indent(text, level):
     return "  " * level + text
 
 
-class Node(object):
-    def __init__(self, name=u"Unknown", url=u"", children=( ) ):
-        self.name     = name
-        self.url      = url
-        self.parent   = None
-        self.level    = -1
-        self.children = children
+#class Node(object):
+    #def __init__(self, name=u"Unknown", url=u"", children=( ) ):
+        #self.name     = name
+        #self.url      = url
+        #self.parent   = None
+        #self.level    = -1
+        #self.children = children
 
-        for child in children:
-            child.parent = self
+        #for child in children:
+            #child.parent = self
 
-    def __unicode__(self):
-        result = u"[%s] [%s]\n" % (self.name, self.url)
-        result = indent(result, self.level)
+    #def __unicode__(self):
+        #result = u"[%s] [%s]\n" % (self.name, self.url)
+        #result = indent(result, self.level)
 
-        for child in self.children:
-            result += unicode(child)
+        #for child in self.children:
+            #result += unicode(child)
 
-        return result
+        #return result
 
-    def __str__(self):
-        return self.__unicode__().encode('utf-8')
+    #def __str__(self):
+        #return self.__unicode__().encode('utf-8')
 
-    def calc_level(self):
-        self.level = self.parent.level + 1
-        for child in self.children:
-            child.calc_level()
+    #def calc_level(self):
+        #self.level = self.parent.level + 1
+        #for child in self.children:
+            #child.calc_level()
 
-class Tree(Node):
-    def __init__(self, children=() ):
-        super(Tree, self).__init__( name=u'Root', url=u"", children=children)
-        self.parent = self
-        self.calc_level()
+#class Tree(Node):
+    #def __init__(self, children=() ):
+        #super(Tree, self).__init__( name=u'Root', url=u"", children=children)
+        #self.parent = self
+        #self.calc_level()
 
-def parse(data):
-    soup = BeautifulSoup(data)
+#def parse(data):
+    #soup = BeautifulSoup(data)
 
-    body  = soup.html.body
-    style = body.object.param['value']
-    root  = body.ul
+    #body  = soup.html.body
+    #style = body.object.param['value']
+    #root  = body.ul
 
-    return style, createTree(root)
-
-
-def createTree(root):
-
-    lis = root.findAll(name='li', recursive=False)
-
-    children = [ createNode(li) for li in lis ]
-
-    return Tree(children=children)
+    #return style, createTree(root)
 
 
-def createNode(li):
+#def createTree(root):
 
-    def get_sub_lis(li):
-        results = []
+    #lis = root.findAll(name='li', recursive=False)
 
-        sub_uls = li.findAll(name='ul', recursive=False)
+    #children = [ createNode(li) for li in lis ]
 
-        for sub_ul  in sub_uls:
-           results.extend( sub_ul.findAll(name='li', recursive=False ) )
-
-        return results
+    #return Tree(children=children)
 
 
-    def get_value_by_name(params, name):
-        for param in params:
-            if param['name'].lower() == name.lower() :
-                return param['value']
+#def createNode(li):
 
-        return u""
+    #def get_sub_lis(li):
+        #results = []
 
-    params = li.object.findAll(name='param', recursive=False)
-    name = get_value_by_name(params, 'Name')
-    url = get_value_by_name(params, 'Local')
-    image_num = get_value_by_name(params, 'ImageNumber')
+        #sub_uls = li.findAll(name='ul', recursive=False)
 
-    children = [ ]
-    #sub_lis = li.findAll(name='li', recursive=False)
-    sub_lis = get_sub_lis(li)
+        #for sub_ul  in sub_uls:
+           #results.extend( sub_ul.findAll(name='li', recursive=False ) )
 
-    for sub_li in sub_lis:
-        children.append( createNode(sub_li) )
+        #return results
 
-    return Node( name=name, url=url, children=children)
+
+    #def get_value_by_name(params, name):
+        #for param in params:
+            #if param['name'].lower() == name.lower() :
+                #return param['value']
+
+        #return u""
+
+    #params = li.object.findAll(name='param', recursive=False)
+    #name = get_value_by_name(params, 'Name')
+    #url = get_value_by_name(params, 'Local')
+    #image_num = get_value_by_name(params, 'ImageNumber')
+
+    #children = [ ]
+    ##sub_lis = li.findAll(name='li', recursive=False)
+    #sub_lis = get_sub_lis(li)
+
+    #for sub_li in sub_lis:
+        #children.append( createNode(sub_li) )
+
+    #return Node( name=name, url=url, children=children)
 
 
 ################################################################################
@@ -145,8 +145,8 @@ class NewNode(object):
         for child in children:
             child.parent = self
 
-        for name in self.name_mappings :
-            setattr(self, name, self._map.get(name, "") )
+        for attr, key  in self.name_mappings.iteritems() :
+            setattr(self, attr, self._map.get(key, u"") )
 
     def __unicode__(self):
         result = u"[%s] [%s]\n" % (self.name, self.url)
@@ -165,7 +165,7 @@ class NewNode(object):
         for child in self.children:
             child.calc_level()
 
-class NewTree(Node):
+class NewTree(NewNode):
     def __init__(self, children=() ):
         super(NewTree, self).__init__( children=children,  )
         self.name = "Root"
@@ -192,7 +192,7 @@ def NewcreateNode(li):
     sub_lis = get_sub_lis(li)
 
     for sub_li in sub_lis:
-        children.append( createNode(sub_li) )
+        children.append( NewcreateNode(sub_li) )
 
     return NewNode( children=children, **info)
 
@@ -213,24 +213,21 @@ getItemTree   = NewcreateTree
 
 
 
-class Parser(object):
-    def __init__(self):
-        pass
+def newparse(data):
 
-    def parse(self, data):
-        soup = BeautifulSoup(data)
-        html = soup.html
+    soup = BeautifulSoup(data)
+    html = soup.html
 
-        # mandatory
-        meta = html.head.find( name="meta", recursive=False)
+    # mandatory
+    meta = html.head.find( name="meta", recursive=False)
 
-        # optional
-        object = html.body.find( name="object", recursive=False)
+    # optional
+    object = html.body.find( name="object", recursive=False)
 
-        # mandatory
-        root = html.body.find( name="ul", recursive=False)
+    # mandatory
+    root = html.body.find( name="ul", recursive=False)
 
-        return getMetaInfo(meta), getGlobalInfo(object), getItemTree(root)
+    return getMetaInfo(meta), getGlobalInfo(object), getItemTree(root)
 
 
 if __name__ == '__main__':
@@ -243,9 +240,7 @@ if __name__ == '__main__':
         #style, tree = parse(data)
         #print(tree)
 
-        parser = Parser()
-        metainfo, globalinfo, tree = parser.parse(data)
-
+        metainfo, globalinfo, tree = newparse(data)
         print (metainfo)
         print (globalinfo)
         print (tree)
