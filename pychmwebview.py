@@ -30,7 +30,7 @@ class PyChmNetReply(QNetworkReply):
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
 
-        self.m_data   = self.loadResource(url)
+        self.m_data   = self._loadResource(url)
         self.m_length = len(self.m_data)
         self.m_data   = StringIO.StringIO(self.m_data)
 
@@ -42,7 +42,7 @@ class PyChmNetReply(QNetworkReply):
 
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
 
-    def loadResource(self, url):
+    def _loadResource(self, url):
         chmfile = self.qwebview.chmfile
         if not chmfile:
             return ""
@@ -55,13 +55,13 @@ class PyChmNetReply(QNetworkReply):
         #print ("[loadResource] data length:%s" % len(data))
 
         if data:
-            self.setContentTypeHeader(path)
+            self._setContentTypeHeader(path)
             return data
         else:
             self.setError(404, "")
             return ""
 
-    def setContentTypeHeader(self, path):
+    def _setContentTypeHeader(self, path):
         "provide necessary charset info, so that webkit can show it nicely"
         ext = os.path.splitext(path)[1].lower()
         if ext :
@@ -75,6 +75,8 @@ class PyChmNetReply(QNetworkReply):
                        QVariant(content_type),
                       )
 
+    def abort(self):
+        pass
 
     def bytesAvailable(self):
         return self.left + QNetworkReply.bytesAvailable(self)
@@ -86,8 +88,6 @@ class PyChmNetReply(QNetworkReply):
             QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
         return data
 
-    def abort(self):
-        pass
 
 
 class PyChmNetworkAccessManager(QNetworkAccessManager):
@@ -96,16 +96,19 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
         self.qwebview = parent
 
     def createRequest(self, op, request, outgoingdata):
-        scheme = request.url().scheme()
-
         # special case for links related with .CHM
-        if scheme == QLatin1String("ms-its"):
-            return PyChmNetReply(request, request.url(),
-                                 self.qwebview, self.qwebview )
+        if request.url().scheme() == QString("ms-its"):
+            return PyChmNetReply(request,
+                                 request.url(),
+                                 self.qwebview,
+                                 self.qwebview,
+                                 )
         else:
             return QNetworkAccessManager.createRequest(self,
-                                                       op, request,
-                                                       outgoingdata)
+                                                       op,
+                                                       request,
+                                                       outgoingdata
+                                                       )
 
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
@@ -118,10 +121,18 @@ class PyChmWebView(QWebView):
         signal 'openRemoteURL' will be emited(with param url:unicode)
         '''
         QWebView.__init__(self, parent)
-        self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
 
         # Whenever a link is activated, the linkClicked() signal is emitted.
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
+
+        self.page().setNetworkAccessManager(PyChmNetworkAccessManager(self))
+
+        self.connect(self,
+                     QtCore.SIGNAL('linkClicked(const QUrl&)'),
+                     self.onLinkClicked)
+        self.connect(self,
+                     QtCore.SIGNAL('loadFinished(bool)'),
+                     self.onLoadFinished)
 
         self.tabmanager   = tabmanager
         self.session      = tabmanager.session
@@ -131,12 +142,6 @@ class PyChmWebView(QWebView):
         self.suggestedPos = 0
         self.zoom         = 1.0
 
-        self.connect(self,
-                     QtCore.SIGNAL('linkClicked(const QUrl&)'),
-                     self.onLinkClicked)
-        self.connect(self,
-                     QtCore.SIGNAL('loadFinished(bool)'),
-                     self.onLoadFinished)
 
     # FIXME; maybe not needed?
     def clone(self):
@@ -210,12 +215,13 @@ class PyChmWebView(QWebView):
         else:
             raise NotImplementedError("")
 
-    # this method is only reponsible for loading url in current view
+    # this method is only reponsible for loading url in itself
     # whether creating new tab is not with its concern
-    # currently only support 3 scheme:
+    # currently only support 4 scheme:
     # http,
     # https,
-    # path within .chm
+    # ms-its://xxxx/yy
+    # /xxx/yyy (relative to currrent chmfile)
 
     def loadURL(self, url):
         '''
