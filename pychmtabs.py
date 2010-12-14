@@ -87,11 +87,14 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         return button
 
     def keyPressEvent(self, keyevent):
+        print "[tabs] key captured: %x" % keyevent.key()
         if keyevent.key() == QtCore.Qt.Key_Escape:
-            # Hide it, for the sake of Vi-users !
+            # Vim user will love this behaviour !
+            # cancel find, return focus back
             self.frameFind.hide()
+            self.currentView.setFocus()
         else:
-            QtGui.QWidget.keyPressEvent(self, keyevent)
+            self.tabWidget.keyPressEvent(keyevent)
 
 
     def openChmFile(self, path):
