@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
-
-import sys
-from BeautifulSoup import NavigableString
 from BeautifulSoup import BeautifulSoup
-
 
 def indent(text, level):
     return "  " * level + text
@@ -15,8 +11,8 @@ def parse_meta_tag(meta):
     if meta:
         print meta
         info[ meta["name"].lower() ] = meta["content"]
-    return info
 
+    return info
 
 def parse_param_tag(param):
     info = { }
@@ -34,13 +30,11 @@ def parse_object_tag(object):
 
     return info
 
-
 class Node(object):
-
     name_mappings = {
                         "name"        : "name" ,
-                        "type"        : "type" ,
                         "url"         : "local",
+                        "type"        : "type" ,
                         "alternative" : "url",
                         "imagenum"    : "imagenumber"
                     }
@@ -48,18 +42,18 @@ class Node(object):
     def __init__(self, children=( ), **kwargs ):
         self.children = children
         self.parent   = None
-        self.level    = -1
-        self._map     = kwargs
+        self._info    = kwargs
+        self.depth    = -1
 
         for child in children:
             child.parent = self
 
         for attr, key  in self.name_mappings.iteritems() :
-            setattr(self, attr, self._map.get(key, u"") )
+            setattr(self, attr, self._info.get(key, u"") )
 
     def __unicode__(self):
         result = u"[%s] [%s]\n" % (self.name, self.url)
-        result = indent(result, self.level)
+        result = indent(result, self.depth)
 
         for child in self.children:
             result += unicode(child)
@@ -69,18 +63,20 @@ class Node(object):
     def __str__(self):
         return self.__unicode__().encode('utf-8')
 
-    def calc_level(self):
-        self.level = self.parent.level + 1
+    def calcDepth(self):
+        self.depth = self.parent.depth + 1
         for child in self.children:
-            child.calc_level()
+            child.calcDepth()
 
 class Tree(Node):
     def __init__(self, children=() ):
         super(Tree, self).__init__( children=children,  )
+
         self.name = "Root"
         self.url  = "/"
         self.parent = self
-        self.calc_level()
+
+        self.calcDepth()
 
 def createNode(li):
 
@@ -106,23 +102,15 @@ def createNode(li):
     return Node( children=children, **info)
 
 def createTree(root):
-
     lis = root.findAll(name='li', recursive=False)
-
     children = [ createNode(li) for li in lis ]
 
     return Tree(children=children)
 
-
-
-getMetaInfo   = parse_meta_tag
-getGlobalInfo = parse_object_tag
-getItemTree   = createTree
-
-
 def parse(data):
 
     soup = BeautifulSoup(data)
+
     html = soup.html
 
     # mandatory
@@ -134,18 +122,21 @@ def parse(data):
     # mandatory
     root = html.body.find( name="ul", recursive=False)
 
-    return getMetaInfo(meta), getGlobalInfo(object), getItemTree(root)
+    meta_info = parse_meta_tag(meta)
+    global_info = parse_object_tag(object)
+    tree = createTree(root)
 
+    return meta_info, global_info, tree
 
 if __name__ == '__main__':
-
+    import sys
     if len(sys.argv) > 1:
         filename = sys.argv[1]
 
         data = open(filename).read()
 
-        metainfo, globalinfo, tree = parse(data)
-        print (metainfo)
-        print (globalinfo)
+        meta_info, global_info, tree = parse(data)
+        print (meta_info)
+        print (global_info)
         print (tree)
 
