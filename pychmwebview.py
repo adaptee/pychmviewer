@@ -107,6 +107,12 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
                                                        outgoingdata
                                                        )
 
+
+# [Note]
+# setHtml(htmldata)  an alternative to load()
+# loadProgress()
+# loadStarted()
+
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
         '''
@@ -293,7 +299,10 @@ class PyChmWebView(QWebView):
 
     def zoomIn(self):
         self.zoom *= 1.2
+        # only influence text
         self.setTextSizeMultiplier(self.zoom)
+        # influence both text and image
+        #self.setZoomFactor(self.zoom)
 
     def zoomOut(self):
         self.zoom /= 1.2
