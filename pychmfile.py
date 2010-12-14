@@ -259,7 +259,7 @@ class PyChmFile(object):
 
         if index_data:
             #_, tree = soup.parse(index_data.decode(self.encoding))
-            _, _, tree = soup.newparse(index_data.decode(self.encoding))
+            _, _, tree = soup.parse(index_data.decode(self.encoding))
             return tree
 
     @CachedProperty
@@ -272,7 +272,7 @@ class PyChmFile(object):
 
         if topics_data :
             #_, tree = soup.parse(topics_data.decode(self.encoding))
-            _, _, tree = soup.newparse(topics_data.decode(self.encoding))
+            _, _, tree = soup.parse(topics_data.decode(self.encoding))
             return tree
 
     def checkURL(self, url):
