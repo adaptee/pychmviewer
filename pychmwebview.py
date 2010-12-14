@@ -141,7 +141,8 @@ class PyChmWebView(QWebView):
         self.tabmanager   = tabmanager
         self.session      = tabmanager.session
         self.chmfile      = chmfile
-        self.encoding     = chmfile.encoding or "gb18030"
+        #self.encoding     = chmfile.encoding or "gb18030"
+        self.encoding     = "gb18030"
         self.loadedURL    = None
         self.suggestedPos = 0
         self.zoom         = 1.0
