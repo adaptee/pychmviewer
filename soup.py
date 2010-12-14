@@ -80,7 +80,7 @@ def createNode(li):
 
     def get_value_by_name(params, name):
         for param in params:
-            if param['name'] == name :
+            if param['name'].lower() == name.lower() :
                 return param['value']
 
         return u""
