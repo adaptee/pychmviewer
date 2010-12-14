@@ -15,7 +15,7 @@ import cStringIO as StringIO
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
 from PyQt4.QtWebKit import QWebView, QWebPage
-from PyQt4.QtCore import QTimer, QLatin1String, QUrl, QVariant
+from PyQt4.QtCore import QTimer, QString, QUrl, QVariant
 from PyQt4.QtCore import QIODevice
 
 from utils import remove_comment
@@ -23,15 +23,14 @@ from content_type import content_types
 
 
 class PyChmNetReply(QNetworkReply):
-    def __init__(self, request, url, parent=None, qwebview=None):
+    def __init__(self, parent, request,  qwebview ):
         QNetworkReply.__init__(self, parent)
         self.qwebview = qwebview
 
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
 
-        #self._data   = self._loadResource(url)
-        rawdata      = self._loadResource(url)
+        rawdata      = self._loadResource( request.url() )
 
         self._data   = StringIO.StringIO(rawdata)
         self._length = len(rawdata)
@@ -89,8 +88,6 @@ class PyChmNetReply(QNetworkReply):
                            QVariant(content_type),
                           )
 
-
-
 class PyChmNetworkAccessManager(QNetworkAccessManager):
     def __init__(self, parent):
         QNetworkAccessManager.__init__(self, parent)
@@ -99,9 +96,8 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
     def createRequest(self, op, request, outgoingdata):
         # special case for links related with .CHM
         if request.url().scheme() == QString("ms-its"):
-            return PyChmNetReply(request,
-                                 request.url(),
-                                 self.qwebview,
+            return PyChmNetReply(self,
+                                 request,
                                  self.qwebview,
                                  )
         else:
