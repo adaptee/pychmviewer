@@ -76,8 +76,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setWebFont()
 
         settings = QtWebKit.QWebSettings.globalSettings()
-        settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
         settings.setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
+        #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
 
 
         if paths:
