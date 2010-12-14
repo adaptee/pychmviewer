@@ -33,10 +33,10 @@ def parse_object_tag(object):
 class Node(object):
     name_mappings = {
                         "name"        : "name" ,
+                        "keyword"     : "keyword" ,
                         "url"         : "local",
                         "type"        : "type" ,
-                        "alternative" : "url",
-                        "imagenum"    : "imagenumber"
+                        "imagenum"    : "imagenumber" ,
                     }
 
     def __init__(self, children=( ), **kwargs ):
