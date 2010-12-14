@@ -75,9 +75,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupMiscActions()
         self._setWebFont()
 
-        # FIXME; flash still does not work
-        #settings   = QtWebKit.QWebSettings.globalSettings()
-        #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
+        settings = QtWebKit.QWebSettings.globalSettings()
+        settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
+        settings.setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
+
 
         if paths:
             self._startUpWithPaths(paths)
