@@ -68,7 +68,7 @@ class PyChmNetReply(QNetworkReply):
         print "[Netreply] asked to load %s " % path.encode('utf-8')
         data = chmfile.getContentsByURL(path)
         if data:
-            print "[Netreply] data: \n %s " % data[:100]
+            #print "[Netreply] data: \n %s " % data[:100]
             self._setContentTypeHeader(path)
             return data
         else:
@@ -198,15 +198,15 @@ class PyChmWebView(QWebView):
     def onLinkClicked(self, qurl):
         # toString() provides full info,
         # path() only provide the
-        print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
             return
 
         elif qurl.scheme() == 'ms-its':
+
+            print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
             url = unicode(qurl.path())
-            print "[finalurl] url: %s" % url.encode('utf-8')
 
             chmfile = self.chmfile
 
@@ -214,6 +214,7 @@ class PyChmWebView(QWebView):
                 url = chmfile.home
 
             url = os.path.normpath(url)
+            print "[linkClicked] url: %s" % url.encode('utf-8')
             self.emit(QtCore.SIGNAL('openURL'), url)
 
         else:
