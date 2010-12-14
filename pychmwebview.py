@@ -40,6 +40,7 @@ class PyChmNetReply(QNetworkReply):
                        QVariant(QtCore.QByteArray.number(self._length)),
                       )
 
+        QTimer.singleShot(0, self, QtCore.SIGNAL('metaDataChanged()'))
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
 
     def abort(self):
