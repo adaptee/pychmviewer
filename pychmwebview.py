@@ -293,9 +293,7 @@ class PyChmWebView(QWebView):
         #QtGui.QApplication.clipboard().setText(self.selectedText())
 
     def onSelectAll(self):
-        #FIXME; it does not work
-        self.triggerPageAction(QWebPage.MoveToStartOfDocument)
-        self.triggerPageAction(QWebPage.SelectEndOfDocument)
+        self.triggerPageAction(QWebPage.SelectAll)
 
     def zoomIn(self):
         self.zoom *= 1.2
