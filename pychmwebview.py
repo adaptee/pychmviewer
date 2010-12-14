@@ -32,8 +32,13 @@ class PyChmNetReply(QNetworkReply):
 
         rawdata      = self._loadResource( request.url() )
 
-        self._data   = StringIO.StringIO(rawdata)
-        self._length = len(rawdata)
+        if rawdata :
+            self._data   = StringIO.StringIO(rawdata)
+            self._length = len(rawdata)
+        else:
+            self._data   = StringIO.StringIO("")
+            self._length = 0
+
         self._left   = self._length
 
         self.setHeader(QNetworkRequest.ContentLengthHeader,
