@@ -47,6 +47,14 @@ def normalize_url(url):
 
     return os.path.normpath(url)
 
+def filterURLByExtension(urls, exts):
+    results = [ ]
+    for url in urls:
+        for ext in exts:
+            if url.lower().endswith(ext):
+                results.append(url)
+
+    return results
 
 class PyChmFile(object):
     def __init__(self, session, path, force_encoding=None):
@@ -141,18 +149,7 @@ class PyChmFile(object):
     def getSearchableURLs(self):
         searchable_extensions = [ ".htm", ".html", ".txt"   ]
 
-        def filterByExtension(urls, exts):
-            urls   = [ url.lower() for url in urls ]
-
-            results = [ ]
-            for url in urls:
-                for ext in exts:
-                    if url.endswith(ext):
-                        results.append(url)
-
-            return results
-
-        return filterByExtension( self.allURLs, searchable_extensions )
+        return filterURLByExtension( self.allURLs, searchable_extensions )
 
     @CachedProperty
     def allURLs(self):
@@ -257,7 +254,14 @@ class PyChmFile(object):
         index_url  = self._chm.index.decode(self.encoding)
         index_data = self.getContentsByURL(index_url)
 
-        if index_data:
+        if not index_data:
+
+            potential_index_urls = filterURLByExtension( self.allURLs, [".hhk"])
+            if potential_index_urls:
+                index_url = unicode ( potential_index_urls[0] )
+                index_data = self.getContentsByURL(index_url)
+
+        if index_data :
             _meta_info, _global_info, tree = soup.parse(index_data.decode(self.encoding))
             return tree
 
@@ -268,6 +272,13 @@ class PyChmFile(object):
 
         topics_url  = self._chm.topics.decode(self.encoding)
         topics_data = self.getContentsByURL(topics_url)
+
+        if not topics_data:
+
+            potential_topics_urls = filterURLByExtension( self.allURLs, [".hhc"])
+            if potential_topics_urls:
+                topics_url = unicode ( potential_topics_urls[0] )
+                topics_data = self.getContentsByURL(topics_url)
 
         if topics_data :
             _meta_info, _global_info, tree = soup.parse(topics_data.decode(self.encoding))
