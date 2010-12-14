@@ -65,9 +65,10 @@ class PyChmNetReply(QNetworkReply):
         path = remove_comment(path)
         path = urllib.unquote_plus(path)
 
+        print "[Netreply] asked to load %s " % path.encode('utf-8')
         data = chmfile.getContentsByURL(path)
-
         if data:
+            print "[Netreply] data: \n %s " % data[:100]
             self._setContentTypeHeader(path)
             return data
         else:
@@ -197,7 +198,7 @@ class PyChmWebView(QWebView):
     def onLinkClicked(self, qurl):
         # toString() provides full info,
         # path() only provide the
-        print "[linkClicked] url: %s" % unicode(qurl.toString()).encode('utf-8')
+        print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
@@ -346,7 +347,7 @@ class PyChmWebView(QWebView):
 
             self.tabmanager.setTabName(self, self.title() )
         else:
-            print ("[loadFinished] page not found")
+            print ("[loadFinished] failed to load page")
 
     def title(self):
         "override the QWebView.title() "
