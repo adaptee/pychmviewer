@@ -48,7 +48,7 @@ class AbstractTreeView(object):
             item = QTreeWidgetItem(parent, prev)
 
             item.entry = child
-            item.setText(0, child.name)
+            item.setText(0, child.name or child.keyword )
             #if child.url :
                 #self.url2item[child.url] = item
 
