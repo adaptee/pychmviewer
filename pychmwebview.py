@@ -30,17 +30,32 @@ class PyChmNetReply(QNetworkReply):
         self.setRequest(request)
         self.setOpenMode(QIODevice.ReadOnly)
 
-        self.m_data   = self._loadResource(url)
-        self.m_length = len(self.m_data)
-        self.m_data   = StringIO.StringIO(self.m_data)
+        #self._data   = self._loadResource(url)
+        rawdata      = self._loadResource(url)
 
-        self.left     = self.m_length
+        self._data   = StringIO.StringIO(rawdata)
+        self._length = len(rawdata)
+        self._left   = self._length
 
         self.setHeader(QNetworkRequest.ContentLengthHeader,
-                       QVariant(QtCore.QByteArray.number(self.m_length)),
+                       QVariant(QtCore.QByteArray.number(self._length)),
                       )
 
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
+
+    def abort(self):
+        pass
+
+    def bytesAvailable(self):
+        return self._left + QNetworkReply.bytesAvailable(self)
+
+    def readData(self, maxlen):
+        data = self._data.read(maxlen)
+        self._left = self._length - self._data.tell()
+        if self._left == 0:
+            QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
+        return data
+
 
     def _loadResource(self, url):
         chmfile = self.qwebview.chmfile
@@ -52,7 +67,6 @@ class PyChmNetReply(QNetworkReply):
         path = urllib.unquote_plus(path)
 
         data = chmfile.getContentsByURL(path)
-        #print ("[loadResource] data length:%s" % len(data))
 
         if data:
             self._setContentTypeHeader(path)
@@ -67,26 +81,14 @@ class PyChmNetReply(QNetworkReply):
         if ext :
             ext = ext[1:]
 
-        content_type = content_types.get(ext, 'binary/octet').lower()
-        if content_type.startswith('text') and self.qwebview.encoding :
-            content_type += ("; charset=%s" % self.qwebview.encoding)
+            content_type = content_types.get(ext, 'binary/octet').lower()
+            if content_type.startswith('text') and self.qwebview.encoding :
+                content_type += ("; charset=%s" % self.qwebview.encoding)
 
-        self.setHeader(QNetworkRequest.ContentTypeHeader,
-                       QVariant(content_type),
-                      )
+            self.setHeader(QNetworkRequest.ContentTypeHeader,
+                        QVariant(content_type),
+                        )
 
-    def abort(self):
-        pass
-
-    def bytesAvailable(self):
-        return self.left + QNetworkReply.bytesAvailable(self)
-
-    def readData(self, maxlen):
-        data = self.m_data.read(maxlen)
-        self.left = self.m_length - self.m_data.tell()
-        if self.left == 0:
-            QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
-        return data
 
 
 
