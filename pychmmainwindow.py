@@ -9,7 +9,6 @@
 #########################################################################
 
 import os
-import sys
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QAction, QMenu
@@ -34,7 +33,7 @@ except AttributeError:
 
 
 #TODO
-# fullscreen:
+# fullscreen mode:
 # void QWidget::showFullScreen ()
 # void QWidget::showNormal ()
 # bool  isFullScreen () const
@@ -70,13 +69,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupPanelDock()
         self._setupBookmarkMenu()
         self._setupTabsMenu()
-        self._setupNavigation()
         self._setupSettingsMenu()
         self._setupHelpMenu()
+        self._setupNavigation()
         self._setupMiscActions()
         self._setWebFont()
 
-        # FIXME; dirty
         # FIXME; flash still does not work
         #settings   = QtWebKit.QWebSettings.globalSettings()
         #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
@@ -138,8 +136,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onExtractFile(self):
         output_dir = QtGui.QFileDialog.getExistingDirectory(self,
-                'select a directory to store files',
-                '',
+                "select a directory to store files",
+                "",
                 QtGui.QFileDialog.ShowDirsOnly|QtGui.QFileDialog.DontResolveSymlinks)
         if not output_dir:
             return
@@ -148,7 +146,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         chmfile = self.currentView.chmfile
         maximum = len( chmfile.allURLs )
-
 
         progress = QtGui.QProgressDialog(u'Extract chm file',
                                          u'Abort',
@@ -258,6 +255,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onZoomOff(self):
         self.currentView.zoomOff()
 
+    def onEncodingChanged(self, action):
+        self.currentView.onEncodingChanged(action.encoding)
+
     def onViewHtmlSource(self):
         dialog = HtmlDialog(self)
         editor = dialog.sourceEdit
@@ -366,26 +366,36 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.bookmarkview = PyChmBookmarksView(mainwin=self, parent=self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
-        self.connect(self.indexview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
-        self.connect(self.topicsview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
-        self.connect(self.searchview, QtCore.SIGNAL('openURL'), self.openInCurrentTab)
+        self.connect(self.indexview,
+                     QtCore.SIGNAL('openURL'),
+                     self.openInCurrentTab)
+        self.connect(self.topicsview,
+                     QtCore.SIGNAL('openURL'),
+                     self.openInCurrentTab)
+        self.connect(self.searchview,
+                     QtCore.SIGNAL('openURL'),
+                     self.openInCurrentTab)
 
         # Topics is the most useful one, so activiate it by force
         self.dockTopics.activateWindow()
         self.dockTopics.raise_()
 
-
-    def _setupNavigation(self):
-        self.connect(self.actionGoHome,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoHome)
-        self.connect(self.actionGoBack,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoBack)
-        self.connect(self.actionGoForward,
-                QtCore.SIGNAL('triggered(bool)'), self.onGoForward)
-
     def _setupSettingsMenu(self):
         self.connect(self.actionOpenSettings,
-                QtCore.SIGNAL('triggered(bool)'), self.onOpenSettings)
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onOpenSettings)
+
+    def onOpenSettings(self):
+        dialog = SettingDlg(mainwin=self, parent=self)
+        if dialog.exec_() == QtGui.QDialog.Accepted:
+            self.config.sessionRestore = dialog.sessionRestore
+            self.config.fontfamily = unicode(dialog.fontfamily)
+            self.config.fontsize = dialog.fontsize
+            self.config.openRemoteURL = dialog.openRemoteURL
+
+            self._setWebFont()
+            for webview in self.tabmanager.webviews:
+                webview.reload()
 
     def _setupHelpMenu(self):
         self.connect(self.actionAboutApp,
@@ -395,12 +405,40 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onAboutQt)
 
+    def onAboutApp(self):
+        dialog = AboutDialog(self)
+        dialog.exec_()
+
+    def onAboutQt(self):
+        QtGui.QMessageBox.aboutQt(self,
+                            title=QtCore.QCoreApplication.applicationName() )
+
+    def _setupNavigation(self):
+        self.connect(self.actionGoHome,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onGoHome)
+        self.connect(self.actionGoBack,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onGoBack)
+        self.connect(self.actionGoForward,
+                     QtCore.SIGNAL('triggered(bool)'),
+                     self.onGoForward)
+
+    def onGoHome(self):
+        self.currentView.goHome()
+
+    def onGoBack(self):
+        self.currentView.goBack()
+
+    def onGoForward(self):
+        self.currentView.goForward()
+
+
     def _setupMiscActions(self):
         self.connect(self.tabmanager,
-                QtCore.SIGNAL('tabSwitched'), self.onTabSwitched)
+                     QtCore.SIGNAL('tabSwitched'),
+                     self.onTabSwitched)
 
-        self.connect(self.tabmanager,
-                QtCore.SIGNAL('checkToolBar'), self.onCheckToolBar)
 
         self.connect(self.tabmanager,
                      QtCore.SIGNAL('tabSwitched'),
@@ -422,7 +460,37 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.searchview.onTabSwitched,
                     )
 
+        self.connect(self.tabmanager,
+                     QtCore.SIGNAL('checkToolBar'),
+                     self.onCheckToolBar)
 
+    def onTabSwitched(self):
+        self.onCheckToolBar()
+        self.updateWindowTitle()
+
+    def updateWindowTitle(self):
+        if self.currentView:
+            window_title = u"%s - PyChmViewer" % \
+                          self.currentView.chmfile.title
+        else:
+            window_title = u"PyChmViewer"
+
+        self.setWindowTitle(window_title)
+
+    def onCheckToolBar(self):
+        if self.currentView :
+            self.actionGoBack.setEnabled(   self.currentView.canGoBack() )
+            self.actionGoForward.setEnabled(self.currentView.canGoForward())
+        else:
+            self.actionGoBack.setEnabled(False)
+            self.actionGoForward.setEnabled(False)
+
+
+    def openFile(self, path):
+        self.tabmanager.openChmFile(path)
+
+    def openInCurrentTab(self, url):
+        self.currentView.loadURL(url)
 
 
     @property
@@ -430,17 +498,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         return self.tabmanager.currentView
 
     def closeEvent(self, event):
-
-        def beforeQuit():
-            self.config.save_into_file()
-            self.tabmanager.saveTo(self.session.snapshot)
-            self.storeLayoutInfo()
-
-        beforeQuit()
+        self.config.save_into_file()
+        self.tabmanager.saveTo(self.session.snapshot)
+        self.storeLayoutInfo()
 
         # delegate other tasks to super class
         QtGui.QMainWindow.closeEvent(self, event)
-
 
     def storeLayoutInfo(self):
         settings = QtCore.QSettings()
@@ -457,73 +520,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.restoreGeometry(geometry)
 
-
-    def onTabSwitched(self):
-        self.onCheckToolBar()
-        self.updateWindowTitle()
-
-    def updateWindowTitle(self):
-        if self.currentView:
-            window_title = u"%s - PyChmViewer" % \
-                          self.currentView.chmfile.title
-        else:
-            window_title = u"PyChmViewer"
-
-        self.setWindowTitle(window_title)
-
-
-    def openFile(self, path):
-        self.tabmanager.openChmFile(path)
-
-    def onAboutApp(self):
-        dialog = AboutDialog(self)
-        dialog.exec_()
-
-    def onAboutQt(self):
-        QtGui.QMessageBox.aboutQt(self,
-                            title=QtCore.QCoreApplication.applicationName() )
-
-
-    def onOpenSettings(self):
-        dialog = SettingDlg(mainwin=self, parent=self)
-        if dialog.exec_() == QtGui.QDialog.Accepted:
-            self.config.sessionRestore = dialog.sessionRestore
-            self.config.fontfamily = unicode(dialog.fontfamily)
-            self.config.fontsize = dialog.fontsize
-            self.config.openRemoteURL = dialog.openRemoteURL
-
-            self._setWebFont()
-            for webview in self.tabmanager.webviews:
-                webview.reload()
-
-
-
-    def onCheckToolBar(self):
-        if self.currentView :
-            self.actionGoBack.setEnabled(   self.currentView.canGoBack() )
-            self.actionGoForward.setEnabled(self.currentView.canGoForward())
-        else:
-            self.actionGoBack.setEnabled(False)
-            self.actionGoForward.setEnabled(False)
-
-
-    def onEncodingChanged(self, action):
-        self.currentView.onEncodingChanged(action.encoding)
-
-
-
-
-    def openInCurrentTab(self, url):
-        self.currentView.loadURL(url)
-
-    def onGoHome(self):
-        self.currentView.goHome()
-
-    def onGoBack(self):
-        self.currentView.goBack()
-
-    def onGoForward(self):
-        self.currentView.goForward()
 
 
 if __name__  ==  "__main__":
