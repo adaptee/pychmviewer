@@ -282,7 +282,7 @@ class PyChmWebView(QWebView):
                           self.keepnewtaburl)
 
     def onCopy(self):
-        # TODO; which on is better?
+        # which on is better?
         self.triggerPageAction(QWebPage.Copy)
         #QtGui.QApplication.clipboard().setText(self.selectedText())
 
