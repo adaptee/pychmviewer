@@ -13,14 +13,15 @@ from treeview import AbstractTreeView
 from Ui_panelindex import Ui_PanelIndex
 
 class PyChmIndexView(QtGui.QWidget, Ui_PanelIndex, AbstractTreeView):
-    '''
-    signal 'openURL' will be emited(with param url:unicode) when the index item be doubleclicked
-    '''
     def __init__(self, mainwin=None, parent=None):
         QtGui.QWidget.__init__(self, parent)
         AbstractTreeView.__init__(self)
-        self.connect(self.text, QtCore.SIGNAL('textChanged(const QString&)'), self.onTextChanged)
-        self.connect(self.text, QtCore.SIGNAL('returnPressed()'), self.onReturnPressed)
+        self.connect(self.text,
+                     QtCore.SIGNAL('textChanged(const QString&)'),
+                     self.onTextChanged)
+        self.connect(self.text,
+                     QtCore.SIGNAL('returnPressed()'),
+                     self.onReturnPressed)
 
         self.mainwin  = mainwin
 

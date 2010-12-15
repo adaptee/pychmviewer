@@ -12,7 +12,7 @@ import os
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QAction, QMenu
-from PyQt4 import QtWebKit
+from PyQt4.QtWebKit import QWebSettings
 
 from pychmindex import PyChmIndexView
 from pychmtopics import PyChmTopicsView
@@ -77,9 +77,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupMiscActions()
         self._setWebFont()
 
-        settings = QtWebKit.QWebSettings.globalSettings()
-        settings.setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
-        #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
+        settings = QWebSettings.globalSettings()
+        settings.setAttribute(QWebSettings.JavascriptEnabled, True)
+        #settings.setAttribute(QWebSettings.PluginsEnabled, True)
 
         self._setupRecentFiles()
 
@@ -369,23 +369,23 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def _setWebFont(self):
-        settings   = QtWebKit.QWebSettings.globalSettings()
+        settings   = QWebSettings.globalSettings()
 
         fontfamily = self.config.fontfamily
         fontsize   = self.config.fontsize
 
         if fontfamily :
-            settings.setFontFamily(QtWebKit.QWebSettings.StandardFont, fontfamily)
-            settings.setFontFamily(QtWebKit.QWebSettings.FixedFont, fontfamily)
-            settings.setFontFamily(QtWebKit.QWebSettings.SerifFont, fontfamily)
-            settings.setFontFamily(QtWebKit.QWebSettings.SansSerifFont, fontfamily)
-            settings.setFontFamily(QtWebKit.QWebSettings.CursiveFont, fontfamily)
-            settings.setFontFamily(QtWebKit.QWebSettings.FantasyFont, fontfamily)
+            settings.setFontFamily(QWebSettings.StandardFont, fontfamily)
+            settings.setFontFamily(QWebSettings.FixedFont, fontfamily)
+            settings.setFontFamily(QWebSettings.SerifFont, fontfamily)
+            settings.setFontFamily(QWebSettings.SansSerifFont, fontfamily)
+            settings.setFontFamily(QWebSettings.CursiveFont, fontfamily)
+            settings.setFontFamily(QWebSettings.FantasyFont, fontfamily)
         if fontsize :
-            settings.setFontSize(QtWebKit.QWebSettings.DefaultFontSize, fontsize)
-            settings.setFontSize(QtWebKit.QWebSettings.MinimumFontSize, fontsize)
-            settings.setFontSize(QtWebKit.QWebSettings.MinimumLogicalFontSize, fontsize)
-            settings.setFontSize(QtWebKit.QWebSettings.DefaultFixedFontSize, fontsize)
+            settings.setFontSize(QWebSettings.DefaultFontSize, fontsize)
+            settings.setFontSize(QWebSettings.MinimumFontSize, fontsize)
+            settings.setFontSize(QWebSettings.MinimumLogicalFontSize, fontsize)
+            settings.setFontSize(QWebSettings.DefaultFixedFontSize, fontsize)
 
     def _setupPanelMenu(self):
 
@@ -433,7 +433,8 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.searchview = PyChmSearchView(mainwin=self, parent=self.dockSearch)
         self.dockSearch.setWidget(self.searchview)
 
-        self.bookmarkview = PyChmBookmarksView(mainwin=self, parent=self.dockBookmark)
+        self.bookmarkview = PyChmBookmarksView(mainwin=self, \
+                                              parent=self.dockBookmark)
         self.dockBookmark.setWidget(self.bookmarkview)
 
         self.connect(self.indexview,
