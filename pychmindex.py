@@ -49,8 +49,6 @@ class PyChmIndexView(QtGui.QWidget, Ui_PanelIndex, AbstractTreeView):
 
     loadIndex = AbstractTreeView.loadData
 
-
-    #FIXME; I feel somthing wrong these 2 functions related with `lastitem`
     def onTextChanged(self, text):
         "search index tree at real time"
         items = self.tree.findItems(text, QtCore.Qt.MatchStartsWith)

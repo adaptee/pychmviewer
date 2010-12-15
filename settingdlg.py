@@ -39,9 +39,15 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
         self.openRemoteURLCheckbox.setChecked(self.openRemoteURL)
         self.fontInfoLabel.setText( get_fontinfo(self.config) )
 
-        self.connect(self.selectFontButton, QtCore.SIGNAL('clicked()'), self.selectFont)
-        self.connect(self.sessionRestoreCheckbox, QtCore.SIGNAL('clicked()'), self.toggleSessionRestore)
-        self.connect(self.openRemoteURLCheckbox, QtCore.SIGNAL('clicked()'), self.toggleOpenRemoteURl)
+        self.connect(self.selectFontButton,
+                     QtCore.SIGNAL('clicked()'),
+                     self.selectFont)
+        self.connect(self.sessionRestoreCheckbox,
+                     QtCore.SIGNAL('clicked()'),
+                     self.toggleSessionRestore)
+        self.connect(self.openRemoteURLCheckbox,
+                     QtCore.SIGNAL('clicked()'),
+                     self.toggleOpenRemoteURl)
 
     def toggleSessionRestore(self):
         self.sessionRestore = self.sessionRestoreCheckbox.isChecked()
@@ -59,5 +65,3 @@ class SettingDlg(QtGui.QDialog, Ui_Dialog):
             fontinfo = stringlize_fontinfo(self.fontfamily, self.fontsize)
             self.fontInfoLabel.setText(fontinfo)
 
-if __name__ == "__main__":
-    raise NotImplementedError("")
