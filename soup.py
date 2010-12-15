@@ -9,7 +9,6 @@ def indent(text, level):
 def parse_meta_tag(meta):
     info = { }
     if meta:
-        print meta
         info[ meta["name"].lower() ] = meta["content"]
 
     return info
