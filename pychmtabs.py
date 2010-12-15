@@ -19,11 +19,8 @@ from Ui_window_browser import Ui_TabbedBrowser
 class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def __init__(self, mainwin=None, parent=None):
         '''
-        attrs:
-            webviews: list of PyChmWebView
-            #signal 'newTabAdded' with parameter view(PyChmWebView) will be emited
-            signal 'checkToolBar' will emit when sth in view changed(use it to check the
-                      toolbar's forward and backward
+        webviews: list of PyChmWebView
+        #signal 'newTabAdded' with parameter view(PyChmWebView) will be emited
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -43,13 +40,21 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                      self.onTabSwitched
                     )
 
-        self.connect(self.editFind, QtCore.SIGNAL('textEdited(const QString&)'),
-                self.onTextEdited)
-        self.connect(self.editFind, QtCore.SIGNAL('returnPressed()'),
-                self.onFindReturnPressed)
-        self.connect(self.toolClose, QtCore.SIGNAL('clicked()'), self.frameFind.hide)
-        self.connect(self.toolPrevious, QtCore.SIGNAL('clicked()'), self.onFindPrevious)
-        self.connect(self.toolNext, QtCore.SIGNAL('clicked()'), self.onFindNext)
+        self.connect(self.editFind,
+                     QtCore.SIGNAL('textEdited(const QString&)'),
+                     self.onTextEdited)
+        self.connect(self.editFind,
+                     QtCore.SIGNAL('returnPressed()'),
+                     self.onFindReturnPressed)
+        self.connect(self.toolClose,
+                     QtCore.SIGNAL('clicked()'),
+                     self.frameFind.hide)
+        self.connect(self.toolPrevious,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onFindPrevious)
+        self.connect(self.toolNext,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onFindNext)
 
 
 
@@ -125,7 +130,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def onOpenURLatNewTab(self, url):
         "open specified url in a newly created view"
         if not self.currentView:
-            raise ValueError("Something terrible has happened! Shame of the coder!")
+            raise ValueError("[Terrible]! Shame of the coder!")
 
         view = self.currentView.clone()
         self.addNewTab(view)
@@ -145,13 +150,23 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         self.editFind.installEventFilter(self)
 
-        self.connect(view, QtCore.SIGNAL('openURL'), view.loadURL)
-        self.connect(view, QtCore.SIGNAL('openURLatNewTab'), self.onOpenURLatNewTab)
-        self.connect(view.page(), QtCore.SIGNAL('loadFinished(bool)'), self.onLoadFinished)
+        self.connect(view,
+                     QtCore.SIGNAL('openURL'),
+                     view.loadURL)
+        self.connect(view,
+                     QtCore.SIGNAL('openURLatNewTab'),
+                     self.onOpenURLatNewTab)
+        self.connect(view.page(),
+                     QtCore.SIGNAL('loadFinished(bool)'),
+                     self.onLoadFinished)
 
         if self.config.openRemoteURL:
-            self.connect(view, QtCore.SIGNAL('openRemoteURL'), view.loadURL)
-            self.connect(view, QtCore.SIGNAL('openRemoteURLatNewTab'), self.onOpenURLatNewTab)
+            self.connect(view,
+                        QtCore.SIGNAL('openRemoteURL'),
+                        view.loadURL)
+            self.connect(view,
+                        QtCore.SIGNAL('openRemoteURLatNewTab'),
+                        self.onOpenURLatNewTab)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
@@ -170,7 +185,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         if pos != -1:
             del self.webviews[pos]
         else:
-            raise ValueError("[Terrible] We are asked to close non-managed view! ")
+            raise ValueError("[Terrible] asked to close non-managed view! ")
 
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
         self.updateCloseButton()

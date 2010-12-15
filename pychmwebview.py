@@ -212,7 +212,8 @@ class PyChmWebView(QWebView):
 
         elif qurl.scheme() == 'ms-its':
 
-            #print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
+            #print "[linkClicked] original url: %s" \
+                    #% unicode(qurl.toString()).encode('utf-8')
             url = unicode(qurl.path())
 
             chmfile = self.chmfile
@@ -237,7 +238,8 @@ class PyChmWebView(QWebView):
 
     def loadURL(self, url):
         '''
-        url: unicode or Qstring. must be absolute url(ignore the first '/' is ok) in current chmfile
+        url: unicode or Qstring. must be absolute url
+        (ignore the first '/' is ok) in current chmfile
         '''
         assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
         url = unicode(url)

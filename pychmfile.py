@@ -119,7 +119,8 @@ class PyChmFile(object):
 
     def search(self, pattern):
         def guessEncoding(contents):
-            meta_charset = re.compile(r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
+            meta_charset = re.compile(
+                        r'<meta\b[^<]*?charset\s*?=\s*?([\w-]+)[\s\'"]', re.I)
 
             match = meta_charset.search(contents)
             if match:
@@ -255,13 +256,14 @@ class PyChmFile(object):
 
         if not index_data:
 
-            potential_index_urls = filterURLByExtension( self.allURLs, [".hhk"])
+            potential_index_urls = filterURLByExtension(self.allURLs, [".hhk"])
             if potential_index_urls:
                 index_url = unicode ( potential_index_urls[0] )
                 index_data = self.getContentsByURL(index_url)
 
         if index_data :
-            _meta_info, _global_info, tree = soup.parse(index_data.decode(self.encoding))
+            _meta_info, _global_info, tree = \
+                    soup.parse(index_data.decode(self.encoding))
             return tree
 
     @CachedProperty
@@ -274,13 +276,14 @@ class PyChmFile(object):
 
         if not topics_data:
 
-            potential_topics_urls = filterURLByExtension( self.allURLs, [".hhc"])
-            if potential_topics_urls:
-                topics_url = unicode ( potential_topics_urls[0] )
+            potential_urls = filterURLByExtension( self.allURLs, [".hhc"])
+            if potential_urls:
+                topics_url = unicode ( potential_urls[0] )
                 topics_data = self.getContentsByURL(topics_url)
 
         if topics_data :
-            _meta_info, _global_info, tree = soup.parse(topics_data.decode(self.encoding))
+            _meta_info, _global_info, tree = \
+                    soup.parse(topics_data.decode(self.encoding))
             return tree
 
     def checkURL(self, url):
