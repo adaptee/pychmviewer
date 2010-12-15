@@ -7,7 +7,6 @@
 # File Name: pychmbookmarks.py
 # Description:
 #########################################################################
-import os
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
