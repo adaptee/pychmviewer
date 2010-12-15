@@ -97,19 +97,26 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
     def openChmFile(self, path):
-        chmfile = PyChmFile(self.session, path)
+        try:
+            chmfile = PyChmFile(self.session, path)
 
-        view = PyChmWebView(tabmanager=self,
-                            chmfile=chmfile,
-                            parent=self.tabWidget
-                           )
+            view = PyChmWebView(tabmanager=self,
+                                chmfile=chmfile,
+                                parent=self.tabWidget
+                            )
 
-        self.addNewTab(view)
+            self.addNewTab(view)
 
-        # FIXME; dirty hack, but we sitll need it now.
-        view.goHome()
+            # FIXME; dirty hack, but we sitll need it now.
+            view.goHome()
 
-        return view
+            self.emit(QtCore.SIGNAL('fileOpened'), path)
+
+            return view
+
+        except StandardError :
+            self.emit(QtCore.SIGNAL('fileNotOpened'), path)
+
 
     def onOpenNewTab(self):
         "duplicate a new view showing same url as this one"

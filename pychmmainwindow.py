@@ -26,6 +26,8 @@ from htmldlg import HtmlDialog
 from about import AboutDialog
 from Ui_mainwindow import Ui_MainWindow
 
+from recentfiles import QtRecentFiles
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -79,11 +81,88 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         settings.setAttribute(QtWebKit.QWebSettings.JavascriptEnabled, True)
         #settings.setAttribute(QtWebKit.QWebSettings.PluginsEnabled, True)
 
+        self._setupRecentFiles()
 
         if paths:
             self._startUpWithPaths(paths)
         else:
             self._startUpWithNoPaths()
+
+    def _setupRecentFiles(self):
+        self.recentfiles = QtRecentFiles(10, self)
+        self.connect(self.recentfiles,
+                    QtCore.SIGNAL('recentFilesUpdated'),
+                    self.onRecentFilesUpdated ,
+                    )
+
+        self.onRecentFilesUpdated()
+
+        self.connect(self.tabmanager,
+                    QtCore.SIGNAL('fileOpened'),
+                    self.onFileOpened2 ,
+                    )
+
+        self.connect(self.tabmanager,
+                    QtCore.SIGNAL('fileNotOpened'),
+                    self.onFileNotOpened2 ,
+                    )
+
+        self.connect(self.tabmanager,
+                    QtCore.SIGNAL('fileOpened'),
+                    self.onFileOpened ,
+                    )
+
+        self.connect(self.tabmanager,
+                    QtCore.SIGNAL('fileNotOpened'),
+                    self.onFileNotOpened ,
+                    )
+
+    def onRecentFilesUpdated(self):
+
+        actions = self.recentfiles.actions
+
+        if actions:
+            menu = QMenu(self)
+
+            for action in self.recentfiles.actions:
+                menu.addAction(action)
+
+            menu.addSeparator()
+
+            actionClearRecentFiles = QAction(self)
+            actionClearRecentFiles.setText(u"Clear list")
+
+            self.connect(actionClearRecentFiles,
+                         QtCore.SIGNAL("triggered(bool)"),
+                         self.onClearRecentFiles2
+                        )
+
+            menu.addAction(actionClearRecentFiles)
+
+            self.actionOpenRecents.setMenu(menu)
+            self.actionOpenRecents.setEnabled(True)
+        else:
+            self.actionOpenRecents.setEnabled(False)
+
+
+    def onFileOpened2(self, path):
+        self.recentfiles.onFileOpened(path)
+
+    def onFileNotOpened2(self, path):
+        self.recentfiles.onFileNotOpened(path)
+
+    def onClearRecentFiles2(self):
+        self.recentfiles.onClearRecentFiles()
+
+    def onFileOpened(self, path) :
+        pass
+
+    def onFileNotOpened(self, path) :
+        QtGui.QMessageBox.warning( self,
+                                   u"Failed to open file",
+                                   u"%s does not exist" % path,
+                                  )
+
 
     def _startUpWithPaths(self, paths):
         for path in paths:
@@ -126,13 +205,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             # update lastdir after each succeful dialog
             self.config.lastdir = os.path.dirname(path)
 
-            try:
-                self.openFile(path)
-            except IOError:
-                QtGui.QMessageBox.warning( self,
-                                           u"Failed to open file",
-                                           u"%s does not exist" % path,
-                                         )
+            self.openFile(path)
 
     def onPrintPage(self):
         self.currentView.printPage()
@@ -495,7 +568,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def openInCurrentTab(self, url):
         self.currentView.loadURL(url)
 
-
     @property
     def currentView(self):
         return self.tabmanager.currentView
@@ -504,6 +576,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.config.save_into_file()
         self.tabmanager.saveTo(self.session.snapshot)
         self.storeLayoutInfo()
+        self.recentfiles.saveRecentFiles()
 
         # delegate other tasks to super class
         QtGui.QMainWindow.closeEvent(self, event)
@@ -523,7 +596,3 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.restoreGeometry(geometry)
 
-
-
-if __name__  ==  "__main__":
-    raise NotImplementedError("")
