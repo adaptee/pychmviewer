@@ -17,15 +17,12 @@ from PyQt4 import QtGui
 from session import Session
 from pychmmainwindow import PyChmMainWindow
 
-def getRealPath(path):
-    return os.path.realpath(path)
-
 
 if __name__ == "__main__":
     session = Session()
 
     argparser = ArgumentParser(
-                description= "A CHM reader written in PyQt."
+                                description= "A CHM reader written in PyQt."
                               )
 
     argparser.add_argument( "paths",
@@ -35,11 +32,11 @@ if __name__ == "__main__":
                           )
 
     args = argparser.parse_args()
-    paths = [ unicode( getRealPath(path), session.system_encoding )
+    paths = [ unicode( os.path.realpath(path), session.system_encoding )
               for path in args.paths
             ]
 
     app = QtGui.QApplication(sys.argv)
-    mainwin = PyChmMainWindow(session, paths)
-    mainwin.show()
+    mainwindow = PyChmMainWindow(session, paths)
+    mainwindow.show()
     sys.exit(app.exec_())
