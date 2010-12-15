@@ -3,8 +3,6 @@
 
 from BeautifulSoup import BeautifulSoup
 
-def indent(text, level):
-    return "  " * level + text
 
 def parse_meta_tag(meta):
     info = { }
@@ -51,6 +49,9 @@ class Node(object):
             setattr(self, attr, self._info.get(key, u"") )
 
     def __unicode__(self):
+        def indent(text, level):
+            return u"  " * level + text
+
         result = u"[%s] [%s]\n" % (self.name, self.url)
         result = indent(result, self.depth)
 
@@ -85,7 +86,7 @@ def createNode(li):
         sub_uls = li.findAll(name='ul', recursive=False)
 
         for sub_ul  in sub_uls:
-           results.extend( sub_ul.findAll(name='li', recursive=False ) )
+            results.extend( sub_ul.findAll(name='li', recursive=False ) )
 
         return results
 
