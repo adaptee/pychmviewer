@@ -80,6 +80,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
             parent = parent.parent()
 
     def onTabSwitched(self):
+        "update topics in correspondance with current chmfile "
         self.clear()
 
         if self.mainwin.currentView:
@@ -87,9 +88,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
             self.loadTopics(chmfile.topics)
 
     def clear(self):
-        '''
-        clear the data in the index view
-        '''
+        "clear underlying data  "
         AbstractTreeView.clear(self)
         self.url2item.clear()
 
