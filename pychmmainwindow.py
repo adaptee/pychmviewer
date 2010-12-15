@@ -104,7 +104,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def _setupFileMenu(self):
         self.connect(self.actionOpenFile,
                      QtCore.SIGNAL('triggered(bool)'),
-                     self.onFileOpen)
+                     self.onOpenFile)
         self.connect(self.actionPrintPage,
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onPrintPage)
@@ -115,7 +115,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onQuitApp)
 
-    def onFileOpen(self):
+    def onOpenFile(self):
         path = QtGui.QFileDialog.getOpenFileName(None,
                                                  u'Choose file',
                                                  self.config.lastdir,
