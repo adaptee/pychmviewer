@@ -13,40 +13,21 @@ class RecentFiles():
         #TODO; implement the maxlen feature
         self.maxlen = maxlen
         self.recentfiles = [ ]
-        self.hasChanged = False
-
 
     def addToRecentFiles(self, path):
         self._assert()
-
         if path in self.recentfiles :
             self.recentfiles.remove(path)
 
         self.recentfiles.insert(0, path)
-        self.hasChanged = True
-
-
-        #if  path == self.recentfiles[0]:
-            ## if already the latest, do nothing
-            #self.hasChanged = False
-        #else:
-            #if path in self.recentfiles :
-                #self.recentfiles.remove(path)
-            #self.recentfiles.insert(0, path)
-            #self.hasChanged = True
 
     def delFromRecentsFiles(self, path):
         self._assert()
-
         if path in self.recentfiles:
             self.recentfiles.remove(path)
-            self.hasChanged = True
-        else:
-            self.hasChanged = False
 
     def clearRecentFiles(self):
         self.recentfiles = [ ]
-        self.hasChanged = True
 
     def saveRecentFiles(self):
         raise NotImplementedError("")
@@ -56,14 +37,12 @@ class RecentFiles():
 
     def _assert(self):
         # should never contain duplication!
-        def duplicated(paths):
-            return len(paths) != len( list(set(paths) ) )
+        def duplicated(iterable):
+            return len(iterable) != len( list(set(iterable) ) )
 
         assert not duplicated(self.recentfiles), \
                "[Logic Error] duplication exist!"
 
-
-# responsible for interactive with others
 class QtRecentFiles(QtCore.QObject, RecentFiles, ):
     key = "recents/recents"
 
@@ -77,7 +56,7 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
     def onFileOpened(self, path):
         print "[onFileOpened] %s" % path
         self.addToRecentFiles(path)
-        #self.updateActions()
+        self.updateActions()
 
     def onFileNotOpened(self, path):
         self.delFromRecentsFiles(path)
@@ -88,8 +67,7 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         self.updateActions()
 
     def createAction(self, pair):
-        index  = pair[0]
-        path   = pair[1]
+        index, path = pair
 
         text   = u"&%s. %s" % ( index + 1, os.path.basename(path) )
 
@@ -108,12 +86,8 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
     def updateActions(self):
         self._assert()
 
-        if self.hasChanged:
-
-            self.actions = map( self.createAction, enumerate(self.recentfiles) )
-            self.emit(QtCore.SIGNAL('recentFilesUpdated'), True)
-
-            self.hasChanged = False
+        self.actions = map( self.createAction, enumerate(self.recentfiles) )
+        self.emit(QtCore.SIGNAL('recentFilesUpdated'), True)
 
     def openRecentFile(self):
         action = self.sender()
@@ -139,4 +113,3 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         for path in paths:
             self.recentfiles.append( unicode(path) )
 
-        self.hasChanged  = True
