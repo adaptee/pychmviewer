@@ -94,6 +94,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                     QtCore.SIGNAL('recentFilesUpdated'),
                     self.onRecentFilesUpdated ,
                     )
+        self.connect(self.recentfiles,
+                    QtCore.SIGNAL('openRecentFile'),
+                    self.onOpenRecentFile ,
+                    )
 
         self.onRecentFilesUpdated()
 
@@ -144,8 +148,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         else:
             self.actionOpenRecents.setEnabled(False)
 
+    def onOpenRecentFile(self, path):
+        self.openFile(path)
 
     def onFileOpened2(self, path):
+        print "[onFileOpened 2]"
         self.recentfiles.onFileOpened(path)
 
     def onFileNotOpened2(self, path):
@@ -166,18 +173,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _startUpWithPaths(self, paths):
         for path in paths:
-            try:
-                self.openFile(path)
-            except IOError:
-                pass
+            self.openFile(path)
 
     def _startUpWithNoPaths(self):
         if self.config.sessionRestore:
-            try:
-                self.tabmanager.loadFrom(self.session.snapshot)
-            except StandardError:
-                # ignore failures cause by non-existing-anymore files
-                pass
+            #try:
+            self.tabmanager.loadFrom(self.session.snapshot)
+            #except StandardError:
+                ## ignore failures cause by non-existing-anymore files
+                #pass
 
 
     def _setupFileMenu(self):
