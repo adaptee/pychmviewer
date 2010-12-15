@@ -71,7 +71,7 @@ class PyChmNetReply(QNetworkReply):
         path = remove_comment(path)
         path = urllib.unquote_plus(path)
 
-        print "[Netreply] asked to load %s " % path.encode('utf-8')
+        #print "[Netreply] asked to load %s " % path.encode('utf-8')
         data = chmfile.getContentsByURL(path)
         if data:
             #print "[Netreply] data: \n %s " % data[:100]
@@ -212,7 +212,7 @@ class PyChmWebView(QWebView):
 
         elif qurl.scheme() == 'ms-its':
 
-            print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
+            #print "[linkClicked] original url: %s" % unicode(qurl.toString()).encode('utf-8')
             url = unicode(qurl.path())
 
             chmfile = self.chmfile
@@ -221,7 +221,7 @@ class PyChmWebView(QWebView):
                 url = chmfile.home
 
             url = os.path.normpath(url)
-            print "[linkClicked] url: %s" % url.encode('utf-8')
+            #print "[linkClicked] url: %s" % url.encode('utf-8')
             self.emit(QtCore.SIGNAL('openURL'), url)
 
         else:
@@ -241,7 +241,7 @@ class PyChmWebView(QWebView):
         '''
         assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
         url = unicode(url)
-        print ("[webview.loadURL] original url: %s" % url)
+        #print ("[webview.loadURL] original url: %s" % url)
 
         finalurl = ""
 
@@ -257,7 +257,7 @@ class PyChmWebView(QWebView):
 
             finalurl =  u"ms-its://" + url
 
-        print ("[webview.loadURL] final url:  %s" % finalurl )
+        #print ("[webview.loadURL] final url:  %s" % finalurl )
 
         self.load(QtCore.QUrl(finalurl))
         self.show()
