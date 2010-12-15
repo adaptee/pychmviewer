@@ -1,7 +1,8 @@
-  - support restoring previous state from snapshot
+    - support 'recent opened files'
+    - support restoring previous state from snapshot
 
 0.1.1
-  - Import from SVN and start hacking
-  - Cleanup Code and Refactor.
-  - initial support for real-multi-tabs-multi-docs browsing
+    - Import from SVN and start hacking
+    - Cleanup Code and Refactor.
+    - initial support for real-multi-tabs-multi-docs browsing
 
