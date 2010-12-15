@@ -22,7 +22,8 @@ instance gets populated with the data from the input file.
 from StringIO import StringIO
 from ConfigParser import RawConfigParser
 
-class ConfigError(Exception):pass
+class ConfigError(Exception):
+    pass
 
 
 class ConfigItem(object):
@@ -223,10 +224,10 @@ class PyChmViewerConfig(ConfigMapper):
 
     def __str__(self):
         """Showing all config options"""
-        o  = "Showing all Configuration options:\n"
-        o += "--------------------------------\n"
-        for k,v in self.config_items.items():
-            o += "{0:20} = {1}\n".format(k, v)
+        reports  = "Showing all Configuration options:\n"
+        reports += "--------------------------------\n"
+        for key, value in self.config_items.items():
+            reports += "{0:20} = {1}\n".format(key, value)
 
-        return o
+        return reports
 
