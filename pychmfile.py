@@ -157,7 +157,7 @@ class PyChmFile(object):
         [note], return raw url, not unicode
         '''
 
-        def collector(cf, ui, paths):
+        def collector(_chmfile, ui, paths):
             paths.append(ui.path)
             return chmlib.CHM_ENUMERATOR_CONTINUE
 
