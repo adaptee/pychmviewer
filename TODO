@@ -8,8 +8,8 @@
 [ ] refine context menu
 [x] remember the size and position of window
 [x] start correctly when config file is missing(e.g, running for the first time)
-[ ] 'locate' is broken, because of the recent change of url format in PychmView
-[ ] suport 'open recent files'
+[ ] 'locate' is broken, because of the recent change of url format in PyChmWebView
+[x] suport 'open recent files'
 
 * low priority *
 
