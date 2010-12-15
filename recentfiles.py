@@ -8,22 +8,25 @@ from PyQt4.QtCore import QString, QStringList
 
 class RecentFiles():
 
-    def __init__(self, maxlen=10):
-        #TODO; implement the maxlen feature
-        self.maxlen = maxlen
+    def __init__(self, maxsize=10):
+        self.maxsize = maxsize
         self.recentfiles = [ ]
 
     def addToRecentFiles(self, path):
         self._assert()
+        # remove outdated entry
         if path in self.recentfiles :
             self.recentfiles.remove(path)
 
         self.recentfiles.insert(0, path)
+        # simple and clear way to respect 'maxsize'
+        self.recentfiles = self.recentfiles[0:self.maxsize]
 
     def delFromRecentsFiles(self, path):
         self._assert()
         if path in self.recentfiles:
             self.recentfiles.remove(path)
+
 
     def clearRecentFiles(self):
         self.recentfiles = [ ]
@@ -45,9 +48,9 @@ class RecentFiles():
 class QtRecentFiles(QtCore.QObject, RecentFiles, ):
     key = "recents/recents"
 
-    def __init__(self, maxlen, parent=None):
+    def __init__(self, maxsize, parent=None):
         QtCore.QObject.__init__(self, parent)
-        RecentFiles.__init__(self, maxlen)
+        RecentFiles.__init__(self, maxsize)
         self.actions = [ ]
         self.loadRecentFiles()
         self.updateActions()
