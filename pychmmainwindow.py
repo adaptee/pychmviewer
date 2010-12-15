@@ -339,7 +339,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         dialog.exec_()
 
     def onLocateInTopics(self):
-        self.topicsview.locateUrl(self.currentView.loadedURL)
+        self.topicsview.locateTopicByURL(self.currentView.loadedURL)
 
     def _setupBookmarkMenu(self):
 
