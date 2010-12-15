@@ -129,23 +129,19 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             menu = QMenu(self)
 
             for action in self.recentfiles.actions:
-                #self.connect(action,
-                             #QtCore.SIGNAL('triggered()'),
-                             #self.onOpenRecentFile2,
-                            #)
-                menu.addAction(action)
+               menu.addAction(action)
 
             menu.addSeparator()
 
-            actionClearRecentFiles = QAction(self)
-            actionClearRecentFiles.setText(u"Clear list")
+            resetrecents = QAction(self)
+            resetrecents.setText(u"Clear Recents")
 
-            self.connect(actionClearRecentFiles,
+            self.connect(resetrecents,
                          QtCore.SIGNAL("triggered(bool)"),
                          self.onClearRecentFiles2
                         )
 
-            menu.addAction(actionClearRecentFiles)
+            menu.addAction(resetrecents)
 
             self.actionOpenRecents.setMenu(menu)
             self.actionOpenRecents.setEnabled(True)
@@ -153,11 +149,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.actionOpenRecents.setEnabled(False)
 
     def onOpenRecentFile(self, path):
-        print "[onOpenRecentFile]"
         self.openFile(path)
 
+    # FIXME; should be connected to recentfiles directly
     def onFileOpened2(self, path):
-        print "[onFileOpened 2]"
         self.recentfiles.onFileOpened(path)
 
     def onFileNotOpened2(self, path):
@@ -175,19 +170,13 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                    u"%s does not exist" % path,
                                   )
 
-
     def _startUpWithPaths(self, paths):
         for path in paths:
             self.openFile(path)
 
     def _startUpWithNoPaths(self):
         if self.config.sessionRestore:
-            #try:
             self.tabmanager.loadFrom(self.session.snapshot)
-            #except StandardError:
-                ## ignore failures cause by non-existing-anymore files
-                #pass
-
 
     def _setupFileMenu(self):
         self.connect(self.actionOpenFile,
@@ -310,8 +299,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupEncodingsSubMenu()
 
 
-
-
     def _setupEncodingsSubMenu(self):
         encodings_menu = QMenu(self)
         self.groupOfEncodings = QtGui.QActionGroup(self)
@@ -353,8 +340,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def onLocateInTopics(self):
         self.topicsview.locateUrl(self.currentView.loadedURL)
-
-
 
     def _setupBookmarkMenu(self):
 

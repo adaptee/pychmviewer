@@ -6,7 +6,6 @@ import os
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QString, QStringList
 
-# only responbile for data
 class RecentFiles():
 
     def __init__(self, maxlen=10):
@@ -54,7 +53,6 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         self.updateActions()
 
     def onFileOpened(self, path):
-        print "[onFileOpened] %s" % path
         self.addToRecentFiles(path)
         self.updateActions()
 
@@ -66,7 +64,7 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         self.clearRecentFiles()
         self.updateActions()
 
-    def createAction(self, pair):
+    def _createAction(self, pair):
         index, path = pair
 
         text   = u"&%s. %s" % ( index + 1, os.path.basename(path) )
@@ -83,17 +81,17 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
 
         return action
 
-    def updateActions(self):
-        self._assert()
-
-        self.actions = map( self.createAction, enumerate(self.recentfiles) )
-        self.emit(QtCore.SIGNAL('recentFilesUpdated'), True)
-
     def openRecentFile(self):
         action = self.sender()
         if action:
             path = action.path
             self.emit(QtCore.SIGNAL('openRecentFile'), path)
+
+    def updateActions(self):
+        self._assert()
+
+        self.actions = map( self._createAction, enumerate(self.recentfiles) )
+        self.emit(QtCore.SIGNAL('recentFilesUpdated'), True)
 
     def saveRecentFiles(self):
         self._assert()
@@ -112,4 +110,3 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         self.recentfiles = [ ]
         for path in paths:
             self.recentfiles.append( unicode(path) )
-
