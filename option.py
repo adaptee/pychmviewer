@@ -171,10 +171,11 @@ class ConfigMapper(object):
             if self.confobj.has_option(item.section, item.name):
                 item.value = item.inconv(self.confobj.get(item.section, item.name).strip())
             elif self.strict:
-                raise ConfigError("Didn't find section: %s with option: %s" % (
+                raise ConfigError(
+                    "Didn't find section: %s with option: %s" % (
                     item.section,
                     item.name
-                ))
+                    ))
 
     def save_into_file(self, path):
         """Write the default config settings to a file"""
