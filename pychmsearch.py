@@ -14,7 +14,7 @@ from PyQt4.QtGui import QTreeWidgetItem
 from Ui_panelsearch import Ui_PanelSearch
 
 class PyChmSearchView(QtGui.QWidget, Ui_PanelSearch):
-    def __init__(self, mainwin=None, parent=None):
+    def __init__(self, mainwin, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.searchBox.setFocus()
