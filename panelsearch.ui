@@ -29,7 +29,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelPrompt">
        <property name="text">
         <string>Type in word(s) to search for:</string>
        </property>
@@ -62,7 +62,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="go">
+      <widget class="QPushButton" name="buttonGo">
        <property name="text">
         <string>&amp;Go</string>
        </property>

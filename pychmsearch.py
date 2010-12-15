@@ -18,7 +18,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_PanelSearch):
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
         self.searchBox.setFocus()
-        self.connect(self.go,
+        self.connect(self.buttonGo,
                      QtCore.SIGNAL('clicked()'),
                      self.search)
         self.connect(self.searchBox.lineEdit(),
@@ -35,8 +35,7 @@ class PyChmSearchView(QtGui.QWidget, Ui_PanelSearch):
             self.emit(QtCore.SIGNAL('openURL'), item.url)
 
     def onTabSwitched(self):
-        #FIXME; currently, I have no good idea about what to do.
-        return
+        #FIXME; currently, I have no better idea
         self.clear()
 
 

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'panelsearch.ui'
 #
-# Created: Tue Dec 14 06:30:06 2010
+# Created: Wed Dec 15 21:20:09 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,9 +26,9 @@ class Ui_PanelSearch(object):
         self.hboxlayout.setSpacing(6)
         self.hboxlayout.setMargin(0)
         self.hboxlayout.setObjectName(_fromUtf8("hboxlayout"))
-        self.label = QtGui.QLabel(PanelSearch)
-        self.label.setObjectName(_fromUtf8("label"))
-        self.hboxlayout.addWidget(self.label)
+        self.labelPrompt = QtGui.QLabel(PanelSearch)
+        self.labelPrompt.setObjectName(_fromUtf8("labelPrompt"))
+        self.hboxlayout.addWidget(self.labelPrompt)
         self.vboxlayout.addLayout(self.hboxlayout)
         self.hboxlayout1 = QtGui.QHBoxLayout()
         self.hboxlayout1.setSpacing(6)
@@ -44,9 +44,9 @@ class Ui_PanelSearch(object):
         self.searchBox.setMaxCount(10)
         self.searchBox.setObjectName(_fromUtf8("searchBox"))
         self.hboxlayout1.addWidget(self.searchBox)
-        self.go = QtGui.QPushButton(PanelSearch)
-        self.go.setObjectName(_fromUtf8("go"))
-        self.hboxlayout1.addWidget(self.go)
+        self.buttonGo = QtGui.QPushButton(PanelSearch)
+        self.buttonGo.setObjectName(_fromUtf8("buttonGo"))
+        self.hboxlayout1.addWidget(self.buttonGo)
         self.vboxlayout.addLayout(self.hboxlayout1)
         self.tree = QtGui.QTreeWidget(PanelSearch)
         self.tree.setRootIsDecorated(False)
@@ -61,8 +61,8 @@ class Ui_PanelSearch(object):
 
     def retranslateUi(self, PanelSearch):
         PanelSearch.setWindowTitle(QtGui.QApplication.translate("PanelSearch", "Form1", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("PanelSearch", "Type in word(s) to search for:", None, QtGui.QApplication.UnicodeUTF8))
-        self.go.setText(QtGui.QApplication.translate("PanelSearch", "&Go", None, QtGui.QApplication.UnicodeUTF8))
+        self.labelPrompt.setText(QtGui.QApplication.translate("PanelSearch", "Type in word(s) to search for:", None, QtGui.QApplication.UnicodeUTF8))
+        self.buttonGo.setText(QtGui.QApplication.translate("PanelSearch", "&Go", None, QtGui.QApplication.UnicodeUTF8))
         self.tree.setSortingEnabled(False)
         self.tree.headerItem().setText(0, QtGui.QApplication.translate("PanelSearch", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.tree.headerItem().setText(1, QtGui.QApplication.translate("PanelSearch", "Location", None, QtGui.QApplication.UnicodeUTF8))
