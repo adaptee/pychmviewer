@@ -11,7 +11,6 @@
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtWebKit import QWebPage
 
 from pychmfile import PyChmFile
 from pychmwebview import PyChmWebView
@@ -256,7 +255,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         "restore previously open views from snapshot"
         failures = []
 
-        for key, value in db.iteritems():
+        #for key, value in db.iteritems():
+        for value in db.values():
             path, url, pos = Pickle.loads(value)
             try:
                 view = self.openChmFile(path)

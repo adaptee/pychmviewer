@@ -8,7 +8,7 @@
 # Description:
 #########################################################################
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 
 from Ui_htmlsourcedlg import Ui_Dialog
 
