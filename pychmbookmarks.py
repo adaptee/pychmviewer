@@ -101,8 +101,9 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
             # name confliction is not allowed
             while self.db.has_key(name.encode('utf-8')):
 
-                title = u"name confliction"
-                prompt = u"Bookmark named as '%s' already exists, choose another name." % name
+                title  = u"Name confliction"
+                prompt = u"Bookmark '%s' already exists, choose another name."\
+                         % name
                 name = self._getNameFromUser( title=title,
                                             prompt=prompt,
                                             default=name,
