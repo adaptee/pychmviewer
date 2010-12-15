@@ -18,14 +18,22 @@ class RecentFiles():
 
     def addToRecentFiles(self, path):
         self._assert()
-        if  path == self.recentfiles[0]:
-            # if already the latest, do nothing
-            self.hasChanged = False
-        else:
-            if path in self.recentfiles :
-                self.recentfiles.remove(path)
-            self.recentfiles.insert(0, path)
-            self.hasChanged = True
+
+        if path in self.recentfiles :
+            self.recentfiles.remove(path)
+
+        self.recentfiles.insert(0, path)
+        self.hasChanged = True
+
+
+        #if  path == self.recentfiles[0]:
+            ## if already the latest, do nothing
+            #self.hasChanged = False
+        #else:
+            #if path in self.recentfiles :
+                #self.recentfiles.remove(path)
+            #self.recentfiles.insert(0, path)
+            #self.hasChanged = True
 
     def delFromRecentsFiles(self, path):
         self._assert()
@@ -67,9 +75,9 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         self.updateActions()
 
     def onFileOpened(self, path):
-        #print "[onFileOpend] %s" % path
+        print "[onFileOpened] %s" % path
         self.addToRecentFiles(path)
-        self.updateActions()
+        #self.updateActions()
 
     def onFileNotOpened(self, path):
         self.delFromRecentsFiles(path)
@@ -83,13 +91,12 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         index  = pair[0]
         path   = pair[1]
 
-        text   = QString( u"&%s. %s" % ( index + 1, os.path.basename(path) ) )
-        path   = QString( path)
+        text   = u"&%s. %s" % ( index + 1, os.path.basename(path) )
 
         action = QtGui.QAction(self)
         action.setText(text)
-        action.setToolTip(path )
-        action.setData(path)
+        #action.setData(path)
+        action.path = path
 
         self.connect(action,
                      QtCore.SIGNAL('triggered(bool)'),
@@ -104,42 +111,32 @@ class QtRecentFiles(QtCore.QObject, RecentFiles, ):
         if self.hasChanged:
 
             self.actions = map( self.createAction, enumerate(self.recentfiles) )
-
-            for action in self.actions:
-                self.connect(action,
-                             QtCore.SIGNAL('triggered(bool)'),
-                             self.openRecentFile
-                            )
-
             self.emit(QtCore.SIGNAL('recentFilesUpdated'), True)
 
             self.hasChanged = False
 
-
     def openRecentFile(self):
         action = self.sender()
         if action:
-            path = action.data()
+            path = action.path
             self.emit(QtCore.SIGNAL('openRecentFile'), path)
-
 
     def saveRecentFiles(self):
         self._assert()
-        settings = QtCore.QSettings()
 
         recentfiles = QStringList()
         for path in self.recentfiles:
             recentfiles.append( QString(path) )
 
+        settings = QtCore.QSettings()
         settings.setValue(self.key, recentfiles)
 
     def loadRecentFiles(self):
         settings = QtCore.QSettings()
-
         paths = settings.value(self.key).toStringList()
-        recentfiles = [ ]
-        for path in paths:
-            recentfiles.append( unicode(path) )
 
-        self.recentfiles = recentfiles
+        self.recentfiles = [ ]
+        for path in paths:
+            self.recentfiles.append( unicode(path) )
+
         self.hasChanged  = True

@@ -129,6 +129,10 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             menu = QMenu(self)
 
             for action in self.recentfiles.actions:
+                #self.connect(action,
+                             #QtCore.SIGNAL('triggered()'),
+                             #self.onOpenRecentFile2,
+                            #)
                 menu.addAction(action)
 
             menu.addSeparator()
@@ -149,6 +153,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.actionOpenRecents.setEnabled(False)
 
     def onOpenRecentFile(self, path):
+        print "[onOpenRecentFile]"
         self.openFile(path)
 
     def onFileOpened2(self, path):
