@@ -8,7 +8,6 @@
 # Description:
 #########################################################################
 import io
-import sys
 import hashlib
 from session import system_encoding
 
