@@ -63,7 +63,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
 
         self.url2item = PyChmTopicsView.URLDict()
 
-    def locateUrl(self, url):
+    def locateTopicByURL(self, url):
         '''
         this method is to locate the item who has the given url
         '''
