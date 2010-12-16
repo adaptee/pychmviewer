@@ -129,7 +129,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             menu = QMenu(self)
 
             for action in self.recentfiles.actions:
-               menu.addAction(action)
+                menu.addAction(action)
 
             menu.addSeparator()
 
