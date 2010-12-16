@@ -19,7 +19,6 @@ from PyQt4.QtNetwork import (QNetworkReply,
                              QNetworkRequest,
                              QNetworkAccessManager)
 
-from utils import remove_anchor
 from content_type import content_types
 
 def path2ChmURL(path, default):
@@ -85,7 +84,8 @@ class PyChmNetReply(QNetworkReply):
         if not chmfile:
             return ""
 
-        print "[Netreply] asked to load %s " % unicode(url.toString()).encode('utf-8')
+        print "[Netreply] asked to load %s " % \
+            unicode(url.toString()).encode('utf-8')
         path = unicode(url.path())
         path = urllib.unquote_plus(path)
 
