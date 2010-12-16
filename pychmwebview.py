@@ -260,15 +260,14 @@ class PyChmWebView(QWebView):
     def loadURL(self, url):
         assert isinstance(url, unicode) or isinstance(url, QUrl)
 
-        print ("[loadURL] origianl url:  %s" % unicode(url.toString()) )
-
         if isinstance(url, QUrl):
             finalurl = url
         else:
             qurl = QUrl(url)
             finalurl = self.normalizeChmURL(qurl)
 
-        print ("[loadURL] final url:  %s" % unicode(finalurl.toString()) )
+        #print ("[loadURL] final url:  %s" % \
+                #unicode(finalurl.toString()).encode('utf-8') )
 
         self.load(finalurl)
         self.show()
