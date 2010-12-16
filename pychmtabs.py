@@ -273,17 +273,11 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         #for key, value in db.iteritems():
         for value in db.values():
             path, url, pos = Pickle.loads(value)
-            try:
-                view = self.openChmFile(path)
-            except IOError:
-                # accumulated all failures paths
-                failures.append(path)
-            else:
+            view = self.openChmFile(path)
+            if view :
                 view.suggestedPos = pos
                 view.loadURL(url)
 
-        if failures:
-            raise StandardError(failures)
 
 if __name__ == '__main__':
     raise NotImplementedError()
