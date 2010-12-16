@@ -13,10 +13,11 @@ import urllib
 import cStringIO as StringIO
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
 from PyQt4.QtWebKit import QWebView, QWebPage
-from PyQt4.QtCore import QTimer, QString, QUrl, QVariant
-from PyQt4.QtCore import QIODevice
+from PyQt4.QtCore import QTimer, QString, QUrl, QVariant, QIODevice
+from PyQt4.QtNetwork import (QNetworkReply,
+                             QNetworkRequest,
+                             QNetworkAccessManager)
 
 from utils import remove_comment
 from content_type import content_types
