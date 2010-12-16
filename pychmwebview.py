@@ -87,8 +87,6 @@ class PyChmNetReply(QNetworkReply):
 
         print "[Netreply] asked to load %s " % unicode(url.toString()).encode('utf-8')
         path = unicode(url.path())
-        # FIXME; this is duplicated, because QUrl.part() only return parh
-        #path = remove_anchor(path)
         path = urllib.unquote_plus(path)
 
         data = chmfile.getContentsByURL(path)
@@ -96,7 +94,7 @@ class PyChmNetReply(QNetworkReply):
             self._setContentTypeHeader(path)
             return data
         else:
-            #print "[NetReply] failed to load %s" % path.encode('utf-8')
+            print "[NetReply] failed to load %s" % path.encode('utf-8')
             self.setError(QNetworkReply.ContentNotFoundError,
                           "%s not found." % path,
                          )
@@ -107,8 +105,6 @@ class PyChmNetReply(QNetworkReply):
         "provide necessary charset info, so that webkit can show it nicely"
         ext = os.path.splitext(path)[1].lower()
         if ext :
-            ext = ext[1:]
-
             content_type = content_types.get(ext, 'binary/octet').lower()
             if content_type.startswith('text') and self.qwebview.encoding :
                 content_type += ("; charset=%s" % self.qwebview.encoding)
