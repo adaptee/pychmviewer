@@ -74,11 +74,12 @@ class PyChmNetReply(QNetworkReply):
         if not chmfile:
             return ""
 
+        print "[Netreply] asked to load %s " % unicode(url.toString()).encode('utf-8')
         path = unicode(url.path())
+        #print "[Netreply] asked to load %s " % path.encode('utf-8')
         path = remove_anchor(path)
         path = urllib.unquote_plus(path)
 
-        #print "[Netreply] asked to load %s " % path.encode('utf-8')
         data = chmfile.getContentsByURL(path)
         if data:
             #print "[Netreply] data: \n %s " % data[:100]
@@ -222,10 +223,11 @@ class PyChmWebView(QWebView):
     def onLinkClicked(self, qurl):
         # toString() provides full info,
         # path() only provide the
+        print "[linkClicked] original url: %s" \
+                % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
-            return
 
         elif qurl.scheme() == 'ms-its':
 
@@ -233,10 +235,8 @@ class PyChmWebView(QWebView):
                     #% unicode(qurl.toString()).encode('utf-8')
             url = unicode(qurl.path())
 
-            chmfile = self.chmfile
-
             if url == u'/':
-                url = chmfile.home
+                url = self.chmfile.home
 
             url = os.path.normpath(url)
             #print "[linkClicked] url: %s" % url.encode('utf-8')
@@ -276,7 +276,7 @@ class PyChmWebView(QWebView):
 
             finalurl =  u"ms-its://" + url
 
-        #print ("[webview.loadURL] final url:  %s" % finalurl )
+        print ("[webview.loadURL] final url:  %s" % finalurl )
 
         self.load(QtCore.QUrl(finalurl))
         self.show()
@@ -377,10 +377,13 @@ class PyChmWebView(QWebView):
             print ("[loadFinished] failed to load page")
 
     def onLoadStarted(self):
+        return
         print "[onLoadStarted]"
 
     def onLoadProgress(self, percent):
+        return
         print "[onLoadProgress] %d" % percent
+
 
     def title(self):
         "override the QWebView.title() "
