@@ -279,7 +279,6 @@ class PyChmWebView(QWebView):
         #self.loadedURL = finalurl
 
     def anchorAt(self, pos):
-
         # Performs a hit test on the frame contents at the given position
         result = self.page().currentFrame().hitTestContent(pos)
         qurl   = result.linkUrl()
@@ -291,16 +290,9 @@ class PyChmWebView(QWebView):
             if qurl.scheme() in [ "http", "https"] :
                 return unicode(qurl.toString())
             elif qurl.scheme() == "ms-its":
-                url = unicode(qurl.path())
-
-                if url == u'/':
-                    url = self.chmfile.home
-
-                return  os.path.normpath(url)
-
+                return unicode( qurl.toString() )
             else:
                 return None
-
 
     def onCopy(self):
         self.triggerPageAction(QWebPage.Copy)
