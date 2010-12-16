@@ -47,6 +47,8 @@ class PyChmNetReply(QNetworkReply):
 
         QTimer.singleShot(0, self, QtCore.SIGNAL('metaDataChanged()'))
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
+        # [important] never remove this line
+        QTimer.singleShot(0, self, QtCore.SIGNAL('finished()'))
 
     def abort(self):
         pass
