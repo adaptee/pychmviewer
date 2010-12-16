@@ -10,6 +10,7 @@
 [x] start correctly when config file is missing(e.g, running for the first time)
 [ ] 'locate' is broken, because of the recent change of url format in PyChmWebView
 [x] suport 'open recent files'
+[ ] support anchor in page(hint: set the delegate policy of QWebPage to DontDelegetLinks)
 
 * low priority *
 
