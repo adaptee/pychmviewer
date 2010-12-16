@@ -185,7 +185,5 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         if item :
             webview = self._getCurrentView()
 
-            if webview.loadedURL != item.url:
-                webview.loadURL(item.url)
-
-            webview.setScrollPos(item.pos)
+            webview.loadURL(item.url)
+            webview.suggestedPos = item.pos
