@@ -34,8 +34,6 @@ def path2ChmURL(path, default):
         return QUrl(path)
 
 
-
-
 class PyChmNetReply(QNetworkReply):
     def __init__(self, parent, request,  qwebview ):
         QNetworkReply.__init__(self, parent)
@@ -89,7 +87,7 @@ class PyChmNetReply(QNetworkReply):
 
         print "[Netreply] asked to load %s " % unicode(url.toString()).encode('utf-8')
         path = unicode(url.path())
-        # this is duplicated, because QUrl.part() only return part
+        # FIXME; this is duplicated, because QUrl.part() only return parh
         #path = remove_anchor(path)
         path = urllib.unquote_plus(path)
 
@@ -246,8 +244,6 @@ class PyChmWebView(QWebView):
         return path2ChmURL(path, home)
 
     def onLinkClicked(self, qurl):
-        # toString() provides full info,
-        # path() only provide the
         print "[linkClicked] original url: %s" \
                 % unicode(qurl.toString()).encode('utf-8')
 
@@ -270,18 +266,11 @@ class PyChmWebView(QWebView):
             raise NotImplementedError("")
 
     # this method is only reponsible for loading url in itself
-    # whether creating new tab is not with its concern
-    # currently only support 4 scheme:
-    # http,
-    # https,
-    # ms-its://xxxx/yy
-    # /xxx/yyy (relative to currrent chmfile)
-
+    # creating new tab is not with its concern
     def loadURL(self, url):
         assert isinstance(url, unicode) or isinstance(url, QUrl)
 
-        #url = unicode(url)
-        #print ("[webview.loadURL] original url: %s" % url)
+        print ("[loadURL] origianl url:  %s" % unicode(url.toString()) )
 
         if isinstance(url, QUrl):
             finalurl = url
@@ -290,6 +279,7 @@ class PyChmWebView(QWebView):
             finalurl = self.normalizeChmURL(qurl)
 
 
+        #url = unicode(url)
         #if url == '/':
             #finalurl = self.chmfile.home
         #elif url.lower().startswith("http://") or \
@@ -346,9 +336,7 @@ class PyChmWebView(QWebView):
                           self.keepnewtaburl)
 
     def onCopy(self):
-        # which on is better?
         self.triggerPageAction(QWebPage.Copy)
-        #QtGui.QApplication.clipboard().setText(self.selectedText())
 
     def onSelectAll(self):
         self.triggerPageAction(QWebPage.SelectAll)
