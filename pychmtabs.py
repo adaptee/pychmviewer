@@ -20,7 +20,6 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
     def __init__(self, mainwin=None, parent=None):
         '''
         webviews: list of PyChmWebView
-        #signal 'newTabAdded' with parameter view(PyChmWebView) will be emited
         '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
@@ -159,15 +158,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                      self.onOpenURLatNewTab)
         self.connect(view.page(),
                      QtCore.SIGNAL('loadFinished(bool)'),
-                     self.onLoadFinished)
-
-        if self.config.openRemoteURL:
-            self.connect(view,
-                        QtCore.SIGNAL('openRemoteURL'),
-                        view.loadURL)
-            self.connect(view,
-                        QtCore.SIGNAL('openRemoteURLatNewTab'),
-                        self.onOpenURLatNewTab)
+                     self.enLoadFinished)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
@@ -251,7 +242,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         db.clear()
 
         def isRemoteURL(url):
-            return url.find(u"://") != -1
+            return url.find(u"http://") != -1
 
         for index, view in enumerate(self.webviews):
             if isRemoteURL(view.loadedURL) and not self.config.openRemoteURL:
