@@ -248,20 +248,10 @@ class PyChmWebView(QWebView):
                 % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
-            #self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
             self.emit(QtCore.SIGNAL('openRemoteURL'), qurl)
-
         elif qurl.scheme() == 'ms-its':
             url = self.normalizeChmURL(qurl)
-
-            #path = unicode(qurl.path())
-            #if path == u'/':
-                #path = self.chmfile.home
-            #path = os.path.normpath(path)
-            #print "[linkClicked] url: %s" % path.encode('utf-8')
-
             self.emit(QtCore.SIGNAL('openURL'), url)
-
         else:
             raise NotImplementedError("")
 
@@ -278,31 +268,14 @@ class PyChmWebView(QWebView):
             qurl = QUrl(url)
             finalurl = self.normalizeChmURL(qurl)
 
-
-        #url = unicode(url)
-        #if url == '/':
-            #finalurl = self.chmfile.home
-        #elif url.lower().startswith("http://") or \
-            #url.lower().startswith("ms-its://") :
-            #finalurl = url
-        #else:
-            #url = os.path.normpath(url)
-            #if url[0] != u'/':
-                #url = u'/' + url
-
-            #finalurl =  u"ms-its://" + url
-
-        #finalurl = QUrl(finalurl)
-
         print ("[loadURL] final url:  %s" % unicode(finalurl.toString()) )
 
-        #self.load(QtCore.QUrl(finalurl))
         self.load(finalurl)
         self.show()
         self.tabmanager.setTabName(self, self.title() )
 
-        #self.loadedURL = finalurl
         self.loadedURL = unicode(finalurl.toString())
+        #self.loadedURL = finalurl
 
     def anchorAt(self, pos):
 
