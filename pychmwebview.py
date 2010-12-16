@@ -86,7 +86,10 @@ class PyChmNetReply(QNetworkReply):
             return data
         else:
             print "[NetReply] failed to load %s" % path.encode('utf-8')
-            self.setError(404, "")
+            self.setError(QNetworkReply.ContentNotFoundError,
+                          "%s not found." % path,
+                         )
+
             return ""
 
     def _setContentTypeHeader(self, path):
