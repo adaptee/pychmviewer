@@ -10,7 +10,7 @@
 from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-from utils import remove_comment
+from utils import remove_anchor
 from treeview import AbstractTreeView
 from Ui_paneltopics import Ui_PanelTopics
 
@@ -19,7 +19,7 @@ def normalize_key(key):
     if key and key[0] != u'/':
         key = u'/' + key
 
-    return remove_comment(key)
+    return remove_anchor(key)
 
 
 class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):

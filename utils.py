@@ -3,7 +3,7 @@
 
 import re
 
-def remove_comment(text):
+def remove_anchor(text):
     " hello, world.#string ==> hello, world"
     if not text:
         return text
