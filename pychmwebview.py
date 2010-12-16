@@ -19,7 +19,7 @@ from PyQt4.QtNetwork import (QNetworkReply,
                              QNetworkRequest,
                              QNetworkAccessManager)
 
-from utils import remove_comment
+from utils import remove_anchor
 from content_type import content_types
 
 
@@ -75,7 +75,7 @@ class PyChmNetReply(QNetworkReply):
             return ""
 
         path = unicode(url.path())
-        path = remove_comment(path)
+        path = remove_anchor(path)
         path = urllib.unquote_plus(path)
 
         #print "[Netreply] asked to load %s " % path.encode('utf-8')

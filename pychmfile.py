@@ -17,7 +17,7 @@ from chm import chmlib
 
 import soup
 from md5sum import md5sum
-from utils import remove_comment, CachedProperty
+from utils import remove_anchor, CachedProperty
 from session import system_encoding
 
 # TODO: provide serious implementation
@@ -28,7 +28,7 @@ def normalize_url(url):
     if not url:
         return url
 
-    url = remove_comment(url)
+    url = remove_anchor(url)
 
     pattern = re.compile(u"^(\\w+):\\/\\/")
     if pattern.match(url):
