@@ -45,6 +45,10 @@ class PyChmNetReply(QNetworkReply):
                        QVariant(QtCore.QByteArray.number(self._length)),
                       )
 
+        # [Notes for using QTimer]
+        # We need to queue the signal rather than emit it directly,
+        # because when this reply is being created, the browser does not
+        # know about it yet
         QTimer.singleShot(0, self, QtCore.SIGNAL('metaDataChanged()'))
         QTimer.singleShot(0, self, QtCore.SIGNAL('readyRead()'))
         # [important] never remove this line
