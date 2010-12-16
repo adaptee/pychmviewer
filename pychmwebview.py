@@ -29,21 +29,10 @@ def path2ChmURL(path, default):
         path = '/' + path
 
     if not path.startswith("ms-its://"):
-        return QUrl( "mx-its://" + path )
+        return QUrl( "ms-its://" + path )
     else:
         return QUrl(path)
 
-def normalizeChmURL(qurl):
-    if qurl.hasFragment():
-        archor = u"#" + unicode( qurl.encodedFragment() )
-    else:
-        archor = ""
-
-    path = unicode(qurl.path() ) + archor
-
-    default = "/index.html"
-
-    return path2ChmURL(path, defautl)
 
 
 
@@ -100,17 +89,16 @@ class PyChmNetReply(QNetworkReply):
 
         print "[Netreply] asked to load %s " % unicode(url.toString()).encode('utf-8')
         path = unicode(url.path())
-        #print "[Netreply] asked to load %s " % path.encode('utf-8')
-        path = remove_anchor(path)
+        # this is duplicated, because QUrl.part() only return part
+        #path = remove_anchor(path)
         path = urllib.unquote_plus(path)
 
         data = chmfile.getContentsByURL(path)
         if data:
-            #print "[Netreply] data: \n %s " % data[:100]
             self._setContentTypeHeader(path)
             return data
         else:
-            print "[NetReply] failed to load %s" % path.encode('utf-8')
+            #print "[NetReply] failed to load %s" % path.encode('utf-8')
             self.setError(QNetworkReply.ContentNotFoundError,
                           "%s not found." % path,
                          )
@@ -138,6 +126,8 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 
     def createRequest(self, op, request, outgoingdata):
         # special case for links related with .CHM
+        print "[createRequest] %s" % unicode(request.url().toString()).encode('utf-8')
+
         if request.url().scheme() == QString("ms-its"):
             return PyChmNetReply(self,
                                  request,
@@ -244,6 +234,17 @@ class PyChmWebView(QWebView):
         else:
             QWebView.mousePressEvent(self, event)
 
+    def normalizeChmURL(self, chmurl):
+        if chmurl.hasFragment():
+            archor = u"#" + unicode( chmurl.encodedFragment() )
+        else:
+            archor = ""
+
+        path = unicode(chmurl.path() ) + archor
+        home = self.chmfile.home
+
+        return path2ChmURL(path, home)
+
     def onLinkClicked(self, qurl):
         # toString() provides full info,
         # path() only provide the
@@ -251,18 +252,19 @@ class PyChmWebView(QWebView):
                 % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
-            self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
+            #self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
+            self.emit(QtCore.SIGNAL('openRemoteURL'), qurl)
 
         elif qurl.scheme() == 'ms-its':
-            path = unicode(qurl.path())
+            url = self.normalizeChmURL(qurl)
 
-            if path == u'/':
-                path = self.chmfile.home
+            #path = unicode(qurl.path())
+            #if path == u'/':
+                #path = self.chmfile.home
+            #path = os.path.normpath(path)
+            #print "[linkClicked] url: %s" % path.encode('utf-8')
 
-            path = os.path.normpath(path)
-
-            #print "[linkClicked] url: %s" % url.encode('utf-8')
-            self.emit(QtCore.SIGNAL('openURL'), path)
+            self.emit(QtCore.SIGNAL('openURL'), url)
 
         else:
             raise NotImplementedError("")
@@ -276,35 +278,41 @@ class PyChmWebView(QWebView):
     # /xxx/yyy (relative to currrent chmfile)
 
     def loadURL(self, url):
-        '''
-        url: unicode or Qstring. must be absolute url
-        (ignore the first '/' is ok) in current chmfile
-        '''
-        assert isinstance(url, QtCore.QString) or isinstance(url, unicode)
-        url = unicode(url)
+        assert isinstance(url, unicode) or isinstance(url, QUrl)
+
+        #url = unicode(url)
         #print ("[webview.loadURL] original url: %s" % url)
 
-        finalurl = ""
-
-        if url == '/':
-            finalurl = self.chmfile.home
-        elif url.lower().startswith("http://") or \
-            url.lower().startswith("ms-its://") :
+        if isinstance(url, QUrl):
             finalurl = url
         else:
-            url = os.path.normpath(url)
-            if url[0] != u'/':
-                url = u'/' + url
+            qurl = QUrl(url)
+            finalurl = self.normalizeChmURL(qurl)
 
-            finalurl =  u"ms-its://" + url
 
-        print ("[webview.loadURL] final url:  %s" % finalurl )
+        #if url == '/':
+            #finalurl = self.chmfile.home
+        #elif url.lower().startswith("http://") or \
+            #url.lower().startswith("ms-its://") :
+            #finalurl = url
+        #else:
+            #url = os.path.normpath(url)
+            #if url[0] != u'/':
+                #url = u'/' + url
 
-        self.load(QtCore.QUrl(finalurl))
+            #finalurl =  u"ms-its://" + url
+
+        #finalurl = QUrl(finalurl)
+
+        print ("[loadURL] final url:  %s" % unicode(finalurl.toString()) )
+
+        #self.load(QtCore.QUrl(finalurl))
+        self.load(finalurl)
         self.show()
         self.tabmanager.setTabName(self, self.title() )
 
-        self.loadedURL = finalurl
+        #self.loadedURL = finalurl
+        self.loadedURL = unicode(finalurl.toString())
 
     def anchorAt(self, pos):
 
