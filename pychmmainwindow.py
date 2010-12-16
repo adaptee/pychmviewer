@@ -103,12 +103,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.connect(self.tabmanager,
                     QtCore.SIGNAL('fileOpened'),
-                    self.onFileOpened2 ,
+                    self.recentfiles.onFileOpened ,
                     )
 
         self.connect(self.tabmanager,
                     QtCore.SIGNAL('fileNotOpened'),
-                    self.onFileNotOpened2 ,
+                    self.recentfiles.onFileNotOpened ,
                     )
 
         self.connect(self.tabmanager,
@@ -138,7 +138,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
             self.connect(resetrecents,
                          QtCore.SIGNAL("triggered(bool)"),
-                         self.onClearRecentFiles2
+                         self.recentfiles.onClearRecentFiles
                         )
 
             menu.addAction(resetrecents)
@@ -151,16 +151,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def onOpenRecentFile(self, path):
         self.openFile(path)
 
-    # FIXME; should be connected to recentfiles directly
-    def onFileOpened2(self, path):
-        self.recentfiles.onFileOpened(path)
-
-    def onFileNotOpened2(self, path):
-        self.recentfiles.onFileNotOpened(path)
-
-    def onClearRecentFiles2(self):
-        self.recentfiles.onClearRecentFiles()
-
     def onFileOpened(self, path) :
         pass
 
@@ -169,6 +159,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                                    u"Failed to open file",
                                    u"%s does not exist" % path,
                                   )
+
 
     def _startUpWithPaths(self, paths):
         for path in paths:
