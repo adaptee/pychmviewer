@@ -78,6 +78,7 @@ class PyChmNetReply(QNetworkReply):
             self._setContentTypeHeader(path)
             return data
         else:
+            print "[NetReply] failed to load %s" % path.encode('utf-8')
             self.setError(404, "")
             return ""
 
@@ -143,6 +144,12 @@ class PyChmWebView(QWebView):
         self.connect(self,
                      QtCore.SIGNAL('loadFinished(bool)'),
                      self.onLoadFinished)
+        self.connect(self,
+                     QtCore.SIGNAL('loadStarted()'),
+                     self.onLoadStarted)
+        self.connect(self,
+                     QtCore.SIGNAL('loadProgress(int)'),
+                     self.onLoadProgress)
 
         self.tabmanager   = tabmanager
         self.session      = tabmanager.session
@@ -358,6 +365,12 @@ class PyChmWebView(QWebView):
             self.tabmanager.setTabName(self, self.title() )
         else:
             print ("[loadFinished] failed to load page")
+
+    def onLoadStarted(self):
+        print "[onLoadStarted]"
+
+    def onLoadProgress(self, percent):
+        print "[onLoadProgress] %d" % percent
 
     def title(self):
         "override the QWebView.title() "
