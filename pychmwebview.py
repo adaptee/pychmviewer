@@ -143,12 +143,8 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
         '''
-        zoom: zoom out times
-        loadedURL: current openedpage
         signal 'openURL' will be emited(with param url:unicode)
         signal 'openURLatNewTab' will be emited(with param url:unicode)
-        signal 'openRemoteURLatNewTab' will be emited(with param url:unicode)
-        signal 'openRemoteURL' will be emited(with param url:unicode)
         '''
         QWebView.__init__(self, parent)
 
@@ -209,7 +205,7 @@ class PyChmWebView(QWebView):
         link = self.anchorAt(event.pos())
         if link :
             self.keepnewtaburl = link
-            menu.addAction(u"Open in new tab", self.openAtNewPage)
+            menu.addAction(u"Open in new tab", self.openURLatNewTab)
 
             copyLink = self.pageAction(QWebPage.CopyLinkToClipboard)
             copyLink.setText(u"Copy link ")
@@ -225,18 +221,18 @@ class PyChmWebView(QWebView):
         menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
-        # special support for middle button
+        # open url at new tab, with middle button
         if event.button() == QtCore.Qt.MidButton:
-            # FIXME; is this really worthwhile?
-            self.keepnewtaburl = self.anchorAt(event.pos())
-            if self.keepnewtaburl :
-                if self.keepnewtaburl[0:4] == "http":
-                    self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'),
-                              self.keepnewtaburl)
-                else:
-                    self.emit(QtCore.SIGNAL('openAtNewTab'), self.keepnewtaburl)
+            url = self.anchorAt(event.pos())
+            if url:
+                self.keepnewtaburl =  url
+                self.openURLatNewTab()
         else:
             QWebView.mousePressEvent(self, event)
+
+    def openURLatNewTab(self):
+        if self.keepnewtaburl :
+            self.emit(QtCore.SIGNAL('openURLatNewTab'), self.keepnewtaburl)
 
     def normalizeChmURL(self, chmurl):
         if chmurl.hasFragment():
@@ -254,7 +250,7 @@ class PyChmWebView(QWebView):
                 % unicode(qurl.toString()).encode('utf-8')
 
         if qurl.scheme() in [ "http", "https"] :
-            self.emit(QtCore.SIGNAL('openRemoteURL'), qurl)
+            self.emit(QtCore.SIGNAL('openURL'), qurl)
         elif qurl.scheme() == 'ms-its':
             url = self.normalizeChmURL(qurl)
             self.emit(QtCore.SIGNAL('openURL'), url)
@@ -272,8 +268,8 @@ class PyChmWebView(QWebView):
             qurl = QUrl(url)
             finalurl = self.normalizeChmURL(qurl)
 
-        #print ("[loadURL] final url:  %s" % \
-                #unicode(finalurl.toString()).encode('utf-8') )
+        print ("[loadURL] final url:  %s" % \
+                unicode(finalurl.toString()).encode('utf-8') )
 
         self.load(finalurl)
         self.show()
@@ -291,6 +287,7 @@ class PyChmWebView(QWebView):
         if not qurl.isValid():
             return None
         else:
+            print "[contextLink] %s" % unicode(qurl.toString()).encode('utf-8')
             if qurl.scheme() in [ "http", "https"] :
                 return unicode(qurl.toString())
             elif qurl.scheme() == "ms-its":
@@ -304,14 +301,6 @@ class PyChmWebView(QWebView):
             else:
                 return None
 
-    def openAtNewPage(self):
-        if self.keepnewtaburl :
-            if self.keepnewtaburl[0:4] == 'http':
-                self.emit(QtCore.SIGNAL('openRemoteURLatNewTab'),
-                          self.keepnewtaburl)
-            else:
-                self.emit(QtCore.SIGNAL('openURLatNewTab'),
-                          self.keepnewtaburl)
 
     def onCopy(self):
         self.triggerPageAction(QWebPage.Copy)
