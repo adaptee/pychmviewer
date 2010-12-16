@@ -120,6 +120,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
         except StandardError :
             self.emit(QtCore.SIGNAL('fileNotOpened'), path)
+            return None
 
 
     def onOpenNewTab(self):
@@ -268,9 +269,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
     def loadFrom(self, db):
         "restore previously open views from snapshot"
-        failures = []
 
-        #for key, value in db.iteritems():
         for value in db.values():
             path, url, pos = Pickle.loads(value)
             view = self.openChmFile(path)
