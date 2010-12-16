@@ -186,9 +186,9 @@ class PyChmWebView(QWebView):
                             chmfile=self.chmfile,
                             parent=self.parent() )
 
-        view.enocding     = self.encoding
-        view.suggestedPos = self.currentPos()
+        view.encoding     = self.encoding
         view.loadedURL    = self.loadedURL
+        view.suggestedPos = self.currentPos()
 
         return view
 
@@ -209,10 +209,11 @@ class PyChmWebView(QWebView):
         if link :
             self.keepnewtaburl = link
             menu.addAction(u"Open in new tab", self.openAtNewPage)
-            menu.exec_(event.globalPos())
+
         if not self.selectedText().isEmpty():
             menu.addAction(u"Copy", self.onCopy)
-            menu.exec_(event.globalPos())
+
+        menu.exec_(event.globalPos())
 
     def mousePressEvent(self, event):
         # special support for middle button
@@ -346,7 +347,6 @@ class PyChmWebView(QWebView):
     def canGoForward(self):
         return self.history().canGoForward()
 
-
     def onEncodingChanged(self, encoding):
         self.encoding = encoding
         self.chmfile.loadFile(self.chmfile.path, encoding)
@@ -363,11 +363,9 @@ class PyChmWebView(QWebView):
             print ("[loadFinished] failed to load page")
 
     def onLoadStarted(self):
-        return
         print "[onLoadStarted]"
 
     def onLoadProgress(self, percent):
-        return
         print "[onLoadProgress] %d" % percent
 
 
