@@ -4,7 +4,7 @@
 [x] make encoding per document, not a global one.
 [x] git rid of the evil module: globalvalue
 [x] add more support for shortcuts
-[ ] support showing icon with tree item
+[ ] support showing icon with tree item(QTreeWidgetItem::setIcon)
 [ ] refine context menu
 [x] remember the size and position of window
 [x] start correctly when config file is missing(e.g, running for the first time)
