@@ -22,6 +22,30 @@ from PyQt4.QtNetwork import (QNetworkReply,
 from utils import remove_anchor
 from content_type import content_types
 
+def path2ChmURL(path, default):
+    if path == '/':
+        path = default
+    if path[0] != '/':
+        path = '/' + path
+
+    if not path.startswith("ms-its://"):
+        return QUrl( "mx-its://" + path )
+    else:
+        return QUrl(path)
+
+def normalizeChmURL(qurl):
+    if qurl.hasFragment():
+        archor = u"#" + unicode( qurl.encodedFragment() )
+    else:
+        archor = ""
+
+    path = unicode(qurl.path() ) + archor
+
+    default = "/index.html"
+
+    return path2ChmURL(path, defautl)
+
+
 
 class PyChmNetReply(QNetworkReply):
     def __init__(self, parent, request,  qwebview ):
@@ -230,17 +254,15 @@ class PyChmWebView(QWebView):
             self.emit(QtCore.SIGNAL('openRemoteURL'), unicode(qurl.toString()))
 
         elif qurl.scheme() == 'ms-its':
+            path = unicode(qurl.path())
 
-            #print "[linkClicked] original url: %s" \
-                    #% unicode(qurl.toString()).encode('utf-8')
-            url = unicode(qurl.path())
+            if path == u'/':
+                path = self.chmfile.home
 
-            if url == u'/':
-                url = self.chmfile.home
+            path = os.path.normpath(path)
 
-            url = os.path.normpath(url)
             #print "[linkClicked] url: %s" % url.encode('utf-8')
-            self.emit(QtCore.SIGNAL('openURL'), url)
+            self.emit(QtCore.SIGNAL('openURL'), path)
 
         else:
             raise NotImplementedError("")
