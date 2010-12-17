@@ -21,12 +21,11 @@ from pychmbookmarks import PyChmBookmarksView
 from pychmtabs import PyChmTabs
 
 from encodinglist import encodings
-from settingdlg import SettingDlg
-from htmldlg import HtmlDialog
-from about import AboutDialog
-from Ui_mainwindow import Ui_MainWindow
-
 from recentfiles import QtRecentFiles
+from about import AboutDialog
+from htmldlg import HtmlDialog
+from settingdlg import SettingDlg
+from Ui_mainwindow import Ui_MainWindow
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -377,10 +376,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             settings.setFontSize(QWebSettings.DefaultFixedFontSize, fontsize)
 
     def _setupPanelMenu(self):
+        self.actionTogglePanels.setCheckable(True)
+        self.actionTogglePanels.setChecked(False)
 
         self.connect(self.actionTogglePanels,
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onTogglePanels)
+
+
 
         self.actionIndex = self.dockIndex.toggleViewAction()
         self.actionIndex.setCheckable(True)
@@ -403,7 +406,16 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.menuPanels.addAction(self.actionBookmark)
 
     def onTogglePanels(self):
-        pass
+        if self.actionTogglePanels.isChecked():
+            self.dockIndex.hide()
+            self.dockTopics.hide()
+            self.dockSearch.hide()
+            self.dockBookmark.hide()
+        else:
+            self.dockIndex.show()
+            self.dockTopics.show()
+            self.dockSearch.show()
+            self.dockBookmark.show()
 
     def _setupPanelDock(self):
 

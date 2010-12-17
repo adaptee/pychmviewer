@@ -479,7 +479,10 @@
   </action>
   <action name="actionTogglePanels">
    <property name="text">
-    <string>Toggle &amp;Panels</string>
+    <string>&amp;Hide Panels</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
    </property>
   </action>
   <action name="actionCopy">
@@ -564,8 +567,8 @@
   <customwidget>
    <class>PyChmTabs</class>
    <extends>QWidget</extends>
-   <container>1</container>
    <header>pychmtabs.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
