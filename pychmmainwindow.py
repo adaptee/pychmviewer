@@ -288,7 +288,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
 
     def _setupEncodingsSubMenu(self):
-        encodings_menu = QMenu(self)
+        menuOfEncodings = QMenu(self)
         groupOfEncodings = QtGui.QActionGroup(self)
 
         for language, encoding in encodings:
@@ -297,9 +297,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             action.encoding = encoding
             action.setCheckable(True)
             groupOfEncodings.addAction(action)
-            encodings_menu.addAction(action)
+            menuOfEncodings.addAction(action)
 
-        self.actionChangeEncoding.setMenu(encodings_menu)
+        self.actionChangeEncoding.setMenu(menuOfEncodings)
 
         self.connect(groupOfEncodings,
                      QtCore.SIGNAL('triggered(QAction*)'),
