@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Dec 17 19:09:14 2010
+# Created: Fri Dec 17 19:15:14 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -158,6 +158,7 @@ class Ui_MainWindow(object):
         self.actionQuitApp = QtGui.QAction(MainWindow)
         self.actionQuitApp.setObjectName(_fromUtf8("actionQuitApp"))
         self.actionTogglePanels = QtGui.QAction(MainWindow)
+        self.actionTogglePanels.setCheckable(True)
         self.actionTogglePanels.setObjectName(_fromUtf8("actionTogglePanels"))
         self.actionCopy = QtGui.QAction(MainWindow)
         self.actionCopy.setObjectName(_fromUtf8("actionCopy"))
@@ -182,6 +183,7 @@ class Ui_MainWindow(object):
         self.actionDeleteBookmark = QtGui.QAction(MainWindow)
         self.actionDeleteBookmark.setObjectName(_fromUtf8("actionDeleteBookmark"))
         self.actionToggleFullScreen = QtGui.QAction(MainWindow)
+        self.actionToggleFullScreen.setCheckable(True)
         self.actionToggleFullScreen.setObjectName(_fromUtf8("actionToggleFullScreen"))
         self.menuSettings.addAction(self.actionOpenSettings)
         self.menuFile.addAction(self.actionOpenFile)
