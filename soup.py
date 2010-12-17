@@ -7,14 +7,17 @@ from BeautifulSoup import BeautifulSoup
 def parse_meta_tag(meta):
     info = { }
     if meta:
-        info[ meta["name"].lower() ] = meta["content"]
+        info[ meta["name"].lower().strip() ] = meta["content"]
 
     return info
 
 def parse_param_tag(param):
     info = { }
     if param:
-        info [ param["name"].lower() ] = param["value"]
+        # make it more tolerent with extra whitespaces
+        # [use case]
+        # <param name=" Name " value="4. Exception Handling">
+        info [ param["name"].lower().strip() ] = param["value"]
 
     return info
 
