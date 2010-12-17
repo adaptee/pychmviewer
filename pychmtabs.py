@@ -158,7 +158,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                      self.onOpenURLatNewTab)
         self.connect(view.page(),
                      QtCore.SIGNAL('loadFinished(bool)'),
-                     self.enLoadFinished)
+                     self.onLoadFinished)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
         self.updateCloseButton()
