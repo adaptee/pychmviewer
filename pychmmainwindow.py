@@ -383,33 +383,20 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onTogglePanels)
 
-
-        self.actionIndex = self.dockIndex.toggleViewAction()
-        self.actionIndex.setCheckable(True)
-        self.actionIndex.setChecked(True)
-        self.menuPanels.addAction(self.actionIndex)
-
-        self.actionTopics = self.dockTopics.toggleViewAction()
-        self.actionTopics.setCheckable(True)
-        self.actionTopics.setChecked(True)
-        self.menuPanels.addAction(self.actionTopics)
-
-        self.actionSearch = self.dockSearch.toggleViewAction()
-        self.actionSearch.setCheckable(True)
-        self.actionSearch.setChecked(True)
-        self.menuPanels.addAction(self.actionSearch)
-
-        self.actionBookmark = self.dockBookmark.toggleViewAction()
-        self.actionBookmark.setCheckable(True)
-        self.actionBookmark.setChecked(True)
-        self.menuPanels.addAction(self.actionBookmark)
-
         groupOfPanels = QtGui.QActionGroup(self)
         groupOfPanels.setExclusive(False)
-        groupOfPanels.addAction(self.actionIndex)
-        groupOfPanels.addAction(self.actionTopics)
-        groupOfPanels.addAction(self.actionSearch)
-        groupOfPanels.addAction(self.actionBookmark)
+
+        panels = ["Index", "Topics", "Search", "Bookmark"]
+        for panel in panels:
+            dock = getattr(self, "dock" + panel, )
+
+            action = dock.toggleViewAction()
+            action.setCheckable(True)
+            action.setChecked(True)
+            groupOfPanels.addAction(action)
+            self.menuPanels.addAction(action)
+
+            setattr(self, "action" + panel, action)
 
         self.connect(groupOfPanels,
                      QtCore.SIGNAL('triggered(QAction*)'),
