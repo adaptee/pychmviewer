@@ -295,9 +295,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 geometry = self.qsettings.value(key).toByteArray()
                 self.restoreGeometry(geometry)
 
-        self.actionToggleFullScreen.setCheckable(True)
-        self.actionToggleFullScreen.setChecked(False)
-
         self.connect( self.actionToggleFullScreen,
                       QtCore.SIGNAL('triggered(bool)'),
                       onToggleFullScreen)
@@ -413,10 +410,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         def onPanelToggled(action):
             if action.isChecked() :
                 self.actionTogglePanels.setChecked(False)
-
-
-        self.actionTogglePanels.setCheckable(True)
-        self.actionTogglePanels.setChecked(False)
 
         self.connect(self.actionTogglePanels,
                      QtCore.SIGNAL('triggered(bool)'),

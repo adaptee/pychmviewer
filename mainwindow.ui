@@ -480,6 +480,9 @@
    </property>
   </action>
   <action name="actionTogglePanels">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Hide Panels</string>
    </property>
@@ -564,6 +567,9 @@
    </property>
   </action>
   <action name="actionToggleFullScreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>&amp;Fullscreen mode</string>
    </property>
