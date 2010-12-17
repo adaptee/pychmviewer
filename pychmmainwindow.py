@@ -384,7 +384,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onTogglePanels)
 
 
-
         self.actionIndex = self.dockIndex.toggleViewAction()
         self.actionIndex.setCheckable(True)
         self.actionIndex.setChecked(True)
@@ -404,6 +403,21 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.actionBookmark.setCheckable(True)
         self.actionBookmark.setChecked(True)
         self.menuPanels.addAction(self.actionBookmark)
+
+        self.groupOfPanels = QtGui.QActionGroup(self)
+        self.groupOfPanels.setExclusive(False)
+        self.groupOfPanels.addAction(self.actionIndex)
+        self.groupOfPanels.addAction(self.actionTopics)
+        self.groupOfPanels.addAction(self.actionSearch)
+        self.groupOfPanels.addAction(self.actionBookmark)
+
+        self.connect(self.groupOfPanels,
+                     QtCore.SIGNAL('triggered(QAction*)'),
+                     self.onPanelToggled)
+
+    def onPanelToggled(self, action):
+        if action.isChecked() :
+            self.actionTogglePanels.setChecked(False)
 
     def onTogglePanels(self):
         if self.actionTogglePanels.isChecked():
