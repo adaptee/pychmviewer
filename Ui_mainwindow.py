@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Dec 17 18:10:21 2010
+# Created: Fri Dec 17 19:09:14 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -181,8 +181,8 @@ class Ui_MainWindow(object):
         self.actionEditBookmark.setObjectName(_fromUtf8("actionEditBookmark"))
         self.actionDeleteBookmark = QtGui.QAction(MainWindow)
         self.actionDeleteBookmark.setObjectName(_fromUtf8("actionDeleteBookmark"))
-        self.actionToggleFullscreen = QtGui.QAction(MainWindow)
-        self.actionToggleFullscreen.setObjectName(_fromUtf8("actionToggleFullscreen"))
+        self.actionToggleFullScreen = QtGui.QAction(MainWindow)
+        self.actionToggleFullScreen.setObjectName(_fromUtf8("actionToggleFullScreen"))
         self.menuSettings.addAction(self.actionOpenSettings)
         self.menuFile.addAction(self.actionOpenFile)
         self.menuFile.addAction(self.actionOpenRecents)
@@ -195,7 +195,7 @@ class Ui_MainWindow(object):
         self.menuView.addAction(self.actionZoomOut)
         self.menuView.addAction(self.actionZoomOff)
         self.menuView.addSeparator()
-        self.menuView.addAction(self.actionToggleFullscreen)
+        self.menuView.addAction(self.actionToggleFullScreen)
         self.menuView.addSeparator()
         self.menuView.addAction(self.actionChangeEncoding)
         self.menuView.addAction(self.actionViewHtmlSource)
@@ -340,8 +340,8 @@ class Ui_MainWindow(object):
         self.actionOpenRecents.setText(QtGui.QApplication.translate("MainWindow", "Open &Recents", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEditBookmark.setText(QtGui.QApplication.translate("MainWindow", "&Edit bookmark", None, QtGui.QApplication.UnicodeUTF8))
         self.actionDeleteBookmark.setText(QtGui.QApplication.translate("MainWindow", "&Delete bookmark", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionToggleFullscreen.setText(QtGui.QApplication.translate("MainWindow", "&Fullscreen mode", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionToggleFullscreen.setShortcut(QtGui.QApplication.translate("MainWindow", "F11", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionToggleFullScreen.setText(QtGui.QApplication.translate("MainWindow", "&Fullscreen mode", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionToggleFullScreen.setShortcut(QtGui.QApplication.translate("MainWindow", "F11", None, QtGui.QApplication.UnicodeUTF8))
 
 from pychmtabs import PyChmTabs
 import images_rc
