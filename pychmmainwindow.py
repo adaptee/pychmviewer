@@ -27,19 +27,6 @@ from htmldlg import HtmlDialog
 from settingdlg import SettingDlg
 from Ui_mainwindow import Ui_MainWindow
 
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    _fromUtf8 = lambda s: s
-
-
-#TODO
-# fullscreen mode:
-# void QWidget::showFullScreen ()
-# void QWidget::showNormal ()
-# bool  isFullScreen () const
-# Qt::WindowStates QWidget::windowState ()
-
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, session, paths=None, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
@@ -51,7 +38,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         # make using QSettings more easy
         QtCore.QCoreApplication.setOrganizationName(session.organization)
         QtCore.QCoreApplication.setApplicationName(session.application)
-        # You do not want to resize the mainwindow every time
+        self.qsettings = QtCore.QSettings()
+
+        # restore the layout of window on last exit
         self.restoreLayoutInfo()
 
         settings = QWebSettings.globalSettings()
@@ -61,7 +50,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         # FIXME; 3 lines should be put into Ui_xxxx.py, not here
         self.WebViewsWidget = PyChmTabs(mainwin=self, parent=self.widget)
-        self.WebViewsWidget.setObjectName(_fromUtf8("WebViewsWidget"))
+        self.WebViewsWidget.setObjectName(u"WebViewsWidget")
         self.horizontalLayout.addWidget(self.WebViewsWidget)
 
         self.tabmanager = self.WebViewsWidget
@@ -284,7 +273,34 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onLocateInTopics)
 
+        self._setupFullscreen()
+
         self._setupEncodingsSubMenu()
+
+
+    def _setupFullscreen(self):
+
+        key = "fullscreen/originalGeometry"
+        def onToggleFullscreen(checked):
+
+            if checked:
+                # if user has set app in fullscreen mode
+                # through WM, kwin for example, then do nothing
+                if self.isFullScreen():
+                    return
+                self.qsettings.setValue(key,  self.saveGeometry() )
+                self.showFullScreen()
+            else:
+                self.showNormal()
+                geometry = self.qsettings.value(key).toByteArray()
+                self.restoreGeometry(geometry)
+
+        self.actionToggleFullscreen.setCheckable(True)
+        self.actionToggleFullscreen.setChecked(False)
+
+        self.connect( self.actionToggleFullscreen,
+                      QtCore.SIGNAL('triggered(bool)'),
+                      onToggleFullscreen)
 
 
     def _setupEncodingsSubMenu(self):
@@ -585,14 +601,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.closeEvent(self, event)
 
     def storeLayoutInfo(self):
-        settings = QtCore.QSettings()
-        settings.setValue("mainwin/maximized", self.isMaximized() )
-        settings.setValue("mainwin/geometry",  self.saveGeometry() )
+        self.qsettings.setValue("mainwin/maximized", self.isMaximized() )
+        self.qsettings.setValue("mainwin/geometry",  self.saveGeometry() )
 
     def restoreLayoutInfo(self):
-        settings = QtCore.QSettings()
-        geometry = settings.value("mainwin/geometry").toByteArray()
-        maxmized = settings.value("mainwin/maximized").toBool()
+        geometry = self.qsettings.value("mainwin/geometry").toByteArray()
+        maxmized = self.qsettings.value("mainwin/maximized").toBool()
 
         if maxmized:
             self.showMaximized()
