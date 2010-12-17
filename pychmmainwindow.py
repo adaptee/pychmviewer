@@ -376,17 +376,39 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             settings.setFontSize(QWebSettings.DefaultFixedFontSize, fontsize)
 
     def _setupPanelMenu(self):
+        panels = [ "Index", "Topics", "Search", "Bookmark", ]
+        panel_visibilities = { panel:None for panel in panels }
+
+        def onTogglePanels():
+            if self.actionTogglePanels.isChecked():
+                for panel in panel_visibilities:
+                    dock = getattr(self, "dock" + panel)
+                    # hide all panels, but remember its visibility
+                    panel_visibilities[panel] = dock.isVisible()
+                    dock.hide()
+            else:
+                for panel in panel_visibilities:
+                    dock = getattr(self, "dock" + panel)
+                    # show it only if it is visible originally
+                    if panel_visibilities[panel]:
+                        dock.show()
+                    panel_visibilities[panel] = None
+
+        def onPanelToggled(action):
+            if action.isChecked() :
+                self.actionTogglePanels.setChecked(False)
+
+
         self.actionTogglePanels.setCheckable(True)
         self.actionTogglePanels.setChecked(False)
 
         self.connect(self.actionTogglePanels,
                      QtCore.SIGNAL('triggered(bool)'),
-                     self.onTogglePanels)
+                     onTogglePanels)
 
         groupOfPanels = QtGui.QActionGroup(self)
         groupOfPanels.setExclusive(False)
 
-        panels = ["Index", "Topics", "Search", "Bookmark"]
         for panel in panels:
             dock = getattr(self, "dock" + panel, )
 
@@ -400,23 +422,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.connect(groupOfPanels,
                      QtCore.SIGNAL('triggered(QAction*)'),
-                     self.onPanelToggled)
-
-    def onPanelToggled(self, action):
-        if action.isChecked() :
-            self.actionTogglePanels.setChecked(False)
-
-    def onTogglePanels(self):
-        if self.actionTogglePanels.isChecked():
-            self.dockIndex.hide()
-            self.dockTopics.hide()
-            self.dockSearch.hide()
-            self.dockBookmark.hide()
-        else:
-            self.dockIndex.show()
-            self.dockTopics.show()
-            self.dockSearch.show()
-            self.dockBookmark.show()
+                     onPanelToggled)
 
     def _setupPanelDock(self):
 
