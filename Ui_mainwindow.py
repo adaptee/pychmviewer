@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Dec 14 06:58:47 2010
+# Created: Fri Dec 17 14:59:07 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -316,7 +316,8 @@ class Ui_MainWindow(object):
         self.actionExtractFile.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+E", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuitApp.setText(QtGui.QApplication.translate("MainWindow", "&Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuitApp.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionTogglePanels.setText(QtGui.QApplication.translate("MainWindow", "Toggle &Panels", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionTogglePanels.setText(QtGui.QApplication.translate("MainWindow", "&Hide Panels", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionTogglePanels.setShortcut(QtGui.QApplication.translate("MainWindow", "F2", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCopy.setText(QtGui.QApplication.translate("MainWindow", "&Copy", None, QtGui.QApplication.UnicodeUTF8))
         self.actionCopy.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+C", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSelectAll.setText(QtGui.QApplication.translate("MainWindow", "&Select All", None, QtGui.QApplication.UnicodeUTF8))
