@@ -41,8 +41,6 @@ except AttributeError:
 # bool  isFullScreen () const
 # Qt::WindowStates QWidget::windowState ()
 
-
-
 class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, session, paths=None, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
@@ -56,6 +54,11 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtCore.QCoreApplication.setApplicationName(session.application)
         # You do not want to resize the mainwindow every time
         self.restoreLayoutInfo()
+
+        settings = QWebSettings.globalSettings()
+        settings.setAttribute(QWebSettings.JavascriptEnabled, True)
+        #settings.setAttribute(QWebSettings.PluginsEnabled, True)
+
 
         # FIXME; 3 lines should be put into Ui_xxxx.py, not here
         self.WebViewsWidget = PyChmTabs(mainwin=self, parent=self.widget)
@@ -76,11 +79,6 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self._setupNavigation()
         self._setupMiscActions()
         self._setWebFont()
-
-        settings = QWebSettings.globalSettings()
-        settings.setAttribute(QWebSettings.JavascriptEnabled, True)
-        #settings.setAttribute(QWebSettings.PluginsEnabled, True)
-
         self._setupRecentFiles()
 
         if paths:
