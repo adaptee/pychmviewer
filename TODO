@@ -17,8 +17,8 @@
 
 [ ] sort the search result in `natural` way
 [ ] sort index in `natural` way
-[ ] support fullscreen mode(like kchmviwer)
-[ ] support hiding side panel(kchmviewer)
+[x] support fullscreen mode
+[x] support hiding side panel
 [ ] support i18N and l10N
 [ ] add support for user-defined keybindings, with the help of kde platform
 [ ] support flash

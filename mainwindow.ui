@@ -62,6 +62,8 @@
     <addaction name="actionZoomOut"/>
     <addaction name="actionZoomOff"/>
     <addaction name="separator"/>
+    <addaction name="actionToggleFullscreen"/>
+    <addaction name="separator"/>
     <addaction name="actionChangeEncoding"/>
     <addaction name="actionViewHtmlSource"/>
     <addaction name="separator"/>
@@ -559,6 +561,14 @@
   <action name="actionDeleteBookmark">
    <property name="text">
     <string>&amp;Delete bookmark</string>
+   </property>
+  </action>
+  <action name="actionToggleFullscreen">
+   <property name="text">
+    <string>&amp;Fullscreen mode</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
  </widget>
