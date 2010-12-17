@@ -289,19 +289,19 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     def _setupEncodingsSubMenu(self):
         encodings_menu = QMenu(self)
-        self.groupOfEncodings = QtGui.QActionGroup(self)
+        groupOfEncodings = QtGui.QActionGroup(self)
 
         for language, encoding in encodings:
             action = QAction(self)
             action.setText( u"%s ( %s )" % (language, encoding) )
             action.encoding = encoding
             action.setCheckable(True)
-            self.groupOfEncodings.addAction(action)
+            groupOfEncodings.addAction(action)
             encodings_menu.addAction(action)
 
         self.actionChangeEncoding.setMenu(encodings_menu)
 
-        self.connect(self.groupOfEncodings,
+        self.connect(groupOfEncodings,
                      QtCore.SIGNAL('triggered(QAction*)'),
                      self.onEncodingChanged,
                     )
@@ -404,14 +404,14 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.actionBookmark.setChecked(True)
         self.menuPanels.addAction(self.actionBookmark)
 
-        self.groupOfPanels = QtGui.QActionGroup(self)
-        self.groupOfPanels.setExclusive(False)
-        self.groupOfPanels.addAction(self.actionIndex)
-        self.groupOfPanels.addAction(self.actionTopics)
-        self.groupOfPanels.addAction(self.actionSearch)
-        self.groupOfPanels.addAction(self.actionBookmark)
+        groupOfPanels = QtGui.QActionGroup(self)
+        groupOfPanels.setExclusive(False)
+        groupOfPanels.addAction(self.actionIndex)
+        groupOfPanels.addAction(self.actionTopics)
+        groupOfPanels.addAction(self.actionSearch)
+        groupOfPanels.addAction(self.actionBookmark)
 
-        self.connect(self.groupOfPanels,
+        self.connect(groupOfPanels,
                      QtCore.SIGNAL('triggered(QAction*)'),
                      self.onPanelToggled)
 
