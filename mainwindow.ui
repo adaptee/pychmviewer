@@ -62,7 +62,7 @@
     <addaction name="actionZoomOut"/>
     <addaction name="actionZoomOff"/>
     <addaction name="separator"/>
-    <addaction name="actionToggleFullscreen"/>
+    <addaction name="actionToggleFullScreen"/>
     <addaction name="separator"/>
     <addaction name="actionChangeEncoding"/>
     <addaction name="actionViewHtmlSource"/>
@@ -563,7 +563,7 @@
     <string>&amp;Delete bookmark</string>
    </property>
   </action>
-  <action name="actionToggleFullscreen">
+  <action name="actionToggleFullScreen">
    <property name="text">
     <string>&amp;Fullscreen mode</string>
    </property>

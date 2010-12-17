@@ -273,15 +273,15 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      QtCore.SIGNAL('triggered(bool)'),
                      self.onLocateInTopics)
 
-        self._setupFullscreen()
+        self._setupFullScreen()
 
         self._setupEncodingsSubMenu()
 
 
-    def _setupFullscreen(self):
+    def _setupFullScreen(self):
 
         key = "fullscreen/originalGeometry"
-        def onToggleFullscreen(checked):
+        def onToggleFullScreen(checked):
 
             if checked:
                 # if user has set app in fullscreen mode
@@ -295,12 +295,12 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 geometry = self.qsettings.value(key).toByteArray()
                 self.restoreGeometry(geometry)
 
-        self.actionToggleFullscreen.setCheckable(True)
-        self.actionToggleFullscreen.setChecked(False)
+        self.actionToggleFullScreen.setCheckable(True)
+        self.actionToggleFullScreen.setChecked(False)
 
-        self.connect( self.actionToggleFullscreen,
+        self.connect( self.actionToggleFullScreen,
                       QtCore.SIGNAL('triggered(bool)'),
-                      onToggleFullscreen)
+                      onToggleFullScreen)
 
 
     def _setupEncodingsSubMenu(self):
