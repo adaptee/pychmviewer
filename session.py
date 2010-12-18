@@ -9,11 +9,16 @@ from option import PyChmViewerConfig
 
 organization       = u"PyChmViewer"
 application        = u"PyChmViewer"
+description        = u"A CHM reader written in PyQt"
 version            = u"0.1.1"
 license            = u"GPLv2"
-author             = u"Jekyll Wu"
-email              = u"Adaptee@gmail.com"
-url                = u"http://www.github.com/adaptee/pychmviewer"
+homepage           = u"http://www.github.com/adaptee/pychmviewer"
+
+authors = [
+             (u"Xiuyu"    , u"someone@gmail.com", "2009 - 2009"),
+             (u"Jekyll Wu", u"Adaptee@gmail.com", "2010 - "),
+          ]
+
 
 class Session(object):
     def __init__(self):
@@ -24,11 +29,11 @@ class Session(object):
 
         self.organization    = organization
         self.application     = application
+        self.description     = description
         self.version         = version
         self.license         = license
-        self.author          = author
-        self.email           = email
-        self.url             = url
+        self.authors         = authors
+        self.homepage        = homepage
 
     def _getConfigDir(self):
         config_dir = os.path.join( os.environ["HOME"], ".pychmviewer")
