@@ -14,7 +14,7 @@
 [x] refine context menu
 [x] remember the size and position of window
 [x] start correctly when config file is missing(e.g, running for the first time)
-[ ] 'locate' is broken, because of the recent change of url format in PyChmWebView
+[x] 'locate' is broken, because of the recent change of url format in PyChmWebView
 [x] suport 'open recent files'
 [x] support anchor in page
 [ ] show useful info on statusbar, such as the link url under mouse
