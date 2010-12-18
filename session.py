@@ -23,7 +23,7 @@ class Session(object):
         self.config_dir      = self._getConfigDir()
         self.config          = self._getConfig()
         self.snapshot        = self._getSnapshot()
-        self.system_encoding = system_encoding
+        self.system_encoding = locale.getdefaultlocale()[1]
 
         self.organization    = organization
         self.application     = application
