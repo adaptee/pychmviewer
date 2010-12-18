@@ -282,22 +282,6 @@ class PyChmFile(object):
                     soup.parse(topics_data.decode(self.encoding))
             return tree
 
-    def checkURL(self, url):
-        '''
-        url: unicode
-        check if the url is available
-        return bool
-        '''
-        assert isinstance(url, unicode)
-
-        url = normalize_url(url)
-        if not url :
-            return False
-
-        fail, _ = self._chm.ResolveObject( url.encode('utf-8') )
-        return not bool(fail)
-
-
     def getContentsByURL(self, url):
         '''
         url must be unicode
