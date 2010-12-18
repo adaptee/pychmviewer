@@ -118,7 +118,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
 
         if self.mainwin.currentView:
             chmfile = self._getCurrentChmFile()
-            self.db = chmfile.bookmarkdb or { }
+            self.db = chmfile.bookmarkdb
             self.loadBookmarks()
 
     def loadBookmarks(self):
