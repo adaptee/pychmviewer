@@ -4,7 +4,7 @@
 import io
 import hashlib
 
-def md5sum2(filename):
+def md5sum(filename):
     hasher = hashlib.md5()
 
     with io.FileIO(filename, 'rb') as stream:
