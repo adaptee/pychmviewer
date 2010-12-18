@@ -120,7 +120,8 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
 
     def createRequest(self, op, request, outgoingdata):
         # special case for links related with .CHM
-        print "[createRequest] %s" % unicode(request.url().toString()).encode('utf-8')
+        print "[createRequest] %s" % \
+                unicode(request.url().toString()).encode('utf-8')
 
         if request.url().scheme() == QString("ms-its"):
             return PyChmNetReply(self,
