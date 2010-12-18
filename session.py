@@ -10,7 +10,7 @@ from option import PyChmViewerConfig
 organization       = u"PyChmViewer"
 application        = u"PyChmViewer"
 description        = u"A CHM reader written in PyQt"
-version            = u"0.1.1"
+version            = u"0.1.2"
 license            = u"GPLv2"
 homepage           = u"http://www.github.com/adaptee/pychmviewer"
 

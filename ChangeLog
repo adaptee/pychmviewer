@@ -1,11 +1,13 @@
+0.1.2
+    - refine the about dialog
     - implement "Fullscreen"
     - implement "Toggle Panels"
-    - support anchor in page
+    - support anchor within page
     - support 'recent opened files'
     - support restoring previous state from snapshot
 
 0.1.1
-    - Cleanup Code and Refactor.
     - initial support for real-multi-tabs-multi-docs browsing
+    - Cleanup Code and Refactor.
     - Import from SVN and start hacking
 
