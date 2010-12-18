@@ -4,16 +4,8 @@
 from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
-from utils import remove_anchor
 from treeview import AbstractTreeView
 from Ui_paneltopics import Ui_PanelTopics
-
-
-def normalize_key(key):
-    if key and key[0] != u'/':
-        key = u'/' + key
-
-    return remove_anchor(key)
 
 class URLDict(object):
     "map url to some item in the topicsview"
@@ -21,15 +13,12 @@ class URLDict(object):
         self.map = { }
 
     def get(self, key, default):
-        key = normalize_key(key)
         return self.map.get(key, default)
 
     def __getitem__(self, key):
-        key = normalize_key(key)
         return self.map[key]
 
     def __setitem__(self, key, value):
-        key = normalize_key(key)
         # this dict does not allow overwriting
         if not key in self.map:
             self.map[key] = value
