@@ -62,7 +62,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
                     )
 
     def _getNameFromUser(   self,
-                            title=u"add bookmar",
+                            title=u"add bookmark",
                             prompt=u"input the name of this bookmark",
                             default=u"new bookmark",
                         ):
