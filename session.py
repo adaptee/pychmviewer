@@ -15,9 +15,6 @@ author             = u"Jekyll Wu"
 email              = u"Adaptee@gmail.com"
 url                = u"http://www.github.com/adaptee/pychmviewer"
 
-_, system_encoding = locale.getdefaultlocale()
-
-
 class Session(object):
     def __init__(self):
         self.config_dir      = self._getConfigDir()

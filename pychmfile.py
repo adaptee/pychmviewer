@@ -11,7 +11,6 @@ from chm import chmlib
 import soup
 from md5sum import md5sum
 from utils import remove_anchor, CachedProperty
-from session import system_encoding
 
 # TODO: provide serious implementation
 def codepage2encoding(codepage):
@@ -73,6 +72,8 @@ class PyChmFile(object):
     def loadFile(self, filename, force_encoding=None):
         assert isinstance(filename, unicode)
 
+        system_encoding = self.session.system_encoding
+
         if force_encoding:
             self._force_encoding = force_encoding
 
@@ -105,7 +106,7 @@ class PyChmFile(object):
 
         self._fullpath = getFullPath(filename)
 
-        self._md5sum = md5sum(self.path.encode(self.session.system_encoding) )
+        self._md5sum = md5sum(self.path.encode(system_encoding) )
 
         self._bookmarkdb = getBookmarkdb(self.md5sum)
 
@@ -155,7 +156,7 @@ class PyChmFile(object):
             paths.append(ui.path)
             return chmlib.CHM_ENUMERATOR_CONTINUE
 
-        chmfile = chmlib.chm_open( self.path.encode(system_encoding) )
+        chmfile = chmlib.chm_open(self.path.encode(self.session.system_encoding))
 
         paths = []
         ok = chmlib.chm_enumerate(chmfile,
@@ -181,7 +182,8 @@ class PyChmFile(object):
             if not os.path.exists(dirname):
                 os.mkdir(dirname)
 
-        output_dir = output_dir.encode(self.session.system_encoding)
+        system_encoding = self.session.system_encoding
+        output_dir = output_dir.encode(system_encoding)
 
         urls = self.allURLs
         for url in urls:
