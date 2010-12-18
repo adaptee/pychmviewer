@@ -3,14 +3,12 @@
 [ ] when opening large file from cmdline, the main window do not showup
     until the file is done with loading.(should load file another thread)
 
-
 * high priority *
 
 [x] cleanup code and refactor, with the help of pylint
 [x] make encoding per document, not a global one.
 [x] git rid of the evil module: globalvalue
 [x] add more support for shortcuts
-[ ] support showing icon with tree item(QTreeWidgetItem::setIcon)
 [x] refine context menu
 [x] remember the size and position of window
 [x] start correctly when config file is missing(e.g, running for the first time)
@@ -18,6 +16,7 @@
 [x] suport 'open recent files'
 [x] support anchor in page
 [ ] show useful info on statusbar, such as the link url under mouse
+[ ] support showing icon with tree item(QTreeWidgetItem::setIcon)
 
 * low priority *
 
