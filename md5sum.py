@@ -9,11 +9,8 @@
 #########################################################################
 import io
 import hashlib
-from session import system_encoding
 
 def md5sum(filename):
-    assert isinstance(filename, unicode)
-    filename = filename.encode(system_encoding)
     md5 = hashlib.md5()
     fileobj = io.FileIO(filename,'rb')
     binaries = fileobj.read(51200)
