@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年06月01日 星期一 04时05分01秒
-# File Name: pychmtabs.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 import cPickle as Pickle
 

@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年06月02日 星期二 03时37分36秒
-# File Name: encodinglist.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 encodings = [
 	    (u'English', 'ASCII'),

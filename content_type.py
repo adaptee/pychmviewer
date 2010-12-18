@@ -1,12 +1,6 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月27日 星期三 02时04分40秒
-# File Name: content_type.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
+
 content_types = {
     ".rtf"       : "application/rtf",
     ".show"      : "application/x-showcase",

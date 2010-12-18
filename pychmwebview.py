@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月26日 星期二 01时17分03秒
-# File Name: pychmwebview.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 import os.path
 import urllib

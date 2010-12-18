@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月24日 星期日 21时38分10秒
-# File Name: pychmfile.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 import re
 import os.path

@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年06月02日 星期二 03时10分59秒
-# File Name: htmldlg.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 from PyQt4 import QtGui
 

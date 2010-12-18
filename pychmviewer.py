@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年06月01日 星期一 16时43分26秒
-# File Name: pychmviewer.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 import os
 import sys

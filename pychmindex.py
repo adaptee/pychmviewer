@@ -1,12 +1,6 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月30日 星期六 03时26分16秒
-# File Name: pychmindex.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
+
 from PyQt4 import QtCore, QtGui
 
 from treeview import AbstractTreeView

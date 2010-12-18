@@ -1,12 +1,5 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月30日 星期六 20时10分26秒
-# File Name: pychmsearch.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtGui import QTreeWidgetItem

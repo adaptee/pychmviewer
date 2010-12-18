@@ -1,12 +1,6 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月29日 星期五 23时52分15秒
-# File Name: pychmtopics.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
+
 from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 

@@ -1,12 +1,6 @@
 #!/usr/bin/python
-# coding: utf8
-#########################################################################
-# Author: Xinyu.Xiang(John)
-# email: zorrohunter@gmail.com
-# Created Time: 2009年05月31日 星期日 04时26分40秒
-# File Name: pychmbookmarks.py
-# Description:
-#########################################################################
+# vim: set fileencoding=utf-8 :
+
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
