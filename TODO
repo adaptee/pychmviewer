@@ -1,6 +1,7 @@
 * defect *
-[ ] when opening large file from cmdline, the main window do not showup until
-    the file is done with loading.
+
+[ ] when opening large file from cmdline, the main window do not showup
+    until the file is done with loading.(should load file another thread)
 
 
 * high priority *
