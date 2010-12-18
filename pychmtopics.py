@@ -15,8 +15,6 @@ def normalize_key(key):
 
     return remove_anchor(key)
 
-
-#class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
 class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
     '''
     signal 'openURL' will be emited(with param url:unicode)
