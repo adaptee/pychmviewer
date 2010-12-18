@@ -135,11 +135,6 @@ class PyChmNetworkAccessManager(QNetworkAccessManager):
                                                        )
 
 
-# [Note]
-# setHtml(htmldata)  an alternative to load()
-# loadProgress()
-# loadStarted()
-
 class PyChmWebView(QWebView):
     def __init__(self, tabmanager, chmfile, parent):
         '''
@@ -352,10 +347,12 @@ class PyChmWebView(QWebView):
             print ("[loadFinished] failed to load page")
 
     def onLoadStarted(self):
-        print "[onLoadStarted]"
+        #print "[onLoadStarted]"
+        pass
 
     def onLoadProgress(self, percent):
-        print "[onLoadProgress] %d" % percent
+        #print "[onLoadProgress] %d" % percent
+        pass
 
 
     def title(self):
