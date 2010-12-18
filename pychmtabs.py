@@ -11,6 +11,7 @@
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QUrl
 
 from pychmfile import PyChmFile
 from pychmwebview import PyChmWebView
@@ -242,7 +243,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         db.clear()
 
         def isRemoteURL(url):
-            return url.find(u"http://") != -1
+            return url.scheme() in ["http", "https"]
 
         for index, view in enumerate(self.webviews):
             if isRemoteURL(view.loadedURL) and not self.config.openRemoteURL:
@@ -250,7 +251,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
             key   = str(index + 1)  # avoid 0
             value = Pickle.dumps((view.chmfile.path,
-                                  view.loadedURL,
+                                  unicode(view.loadedURL.toString()),
                                   view.currentPos(),
                                   )
                                 )
@@ -266,7 +267,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             view = self.openChmFile(path)
             if view :
                 view.suggestedPos = pos
-                view.loadURL(url)
+                view.loadURL(QUrl(url) )
 
 
 if __name__ == '__main__':

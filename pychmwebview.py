@@ -275,8 +275,7 @@ class PyChmWebView(QWebView):
         self.show()
         self.tabmanager.setTabName(self, self.title() )
 
-        self.loadedURL = unicode(finalurl.toString())
-        #self.loadedURL = finalurl
+        self.loadedURL = finalurl
 
     def anchorAt(self, pos):
         # Performs a hit test on the frame contents at the given position

@@ -152,7 +152,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
     def onAddBookmark(self):
         webview = self._getCurrentView()
 
-        url   = webview.loadedURL
+        url   = unicode( webview.loadedURL.path() )
         title = webview.title()
         pos   = webview.currentPos()
 

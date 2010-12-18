@@ -63,11 +63,9 @@ class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
 
         self.url2item = PyChmTopicsView.URLDict()
 
-    def locateTopicByURL(self, url):
-        '''
-        this method is to locate the item who has the given url
-        '''
-        item = self.url2item.get(url, None)
+    def locateTopicByURL(self, qurl):
+        path = unicode(qurl.path() )
+        item = self.url2item.get(path, None)
         if item :
             self._updateParentStatus(item)
             self.tree.setCurrentItem(item)
