@@ -487,7 +487,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
                      self.onAboutQt)
 
     def onAboutApp(self):
-        dialog = AboutDialog(self)
+        dialog = AboutDialog(self.session, self)
         dialog.exec_()
 
     def onAboutQt(self):
