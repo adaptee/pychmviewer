@@ -15,8 +15,8 @@ license            = u"GPLv2"
 homepage           = u"http://www.github.com/adaptee/pychmviewer"
 
 authors = [
-             (u"Xiuyu"    , u"someone@gmail.com", "2009 - 2009"),
-             (u"Jekyll Wu", u"Adaptee@gmail.com", "2010 - "),
+             (u"Xinyu.Xiang(John)", u"zorrohunter@gmail.com", "2009 - 2009"),
+             (u"Jekyll Wu"        , u"adaptee@gmail.com"    , "2010 - ")    ,
           ]
 
 
