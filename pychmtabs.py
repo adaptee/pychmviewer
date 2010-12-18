@@ -31,8 +31,8 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
         self.webviews    = []
         self.currentView = None
 
-        self._setupCloseButton()
-        self._setupNewButton()
+        self._setupButtonClose()
+        self._setupButtonNew()
         self.frameFind.setVisible(False)
 
         self.connect(self.tabWidget,
@@ -58,21 +58,29 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
 
 
 
-    def _setupCloseButton(self):
+    def _setupButtonClose(self):
 
-        self.closeButton = self._createButton(pixmap=":/images/closetab.png",
-                                              tooltip=u"close current page",
-                                             )
-        self.closeButton.setEnabled(False)
-        self.connect(self.closeButton, QtCore.SIGNAL('clicked()'), self.onCloseCurrentTab)
-        self.tabWidget.setCornerWidget(self.closeButton, QtCore.Qt.TopRightCorner)
+        buttonClose = self._createButton(pixmap=":/images/closetab.png",
+                                         tooltip=u"close current page",
+                                         )
+        buttonClose.setEnabled(False)
+        self.tabWidget.setCornerWidget(buttonClose, QtCore.Qt.TopRightCorner)
+        self.connect(buttonClose,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onCloseCurrentTab)
 
-    def _setupNewButton(self):
-        self.newButton = self._createButton(pixmap=":/images/addtab.png",
-                                            tooltip=u"open new page",
-                                           )
-        self.connect(self.newButton, QtCore.SIGNAL('clicked()'), self.onOpenNewTab)
-        self.tabWidget.setCornerWidget(self.newButton, QtCore.Qt.TopLeftCorner)
+        self.buttonClose = buttonClose
+
+    def _setupButtonNew(self):
+        buttonNew = self._createButton(pixmap=":/images/addtab.png",
+                                       tooltip=u"open new page",
+                                      )
+        self.tabWidget.setCornerWidget(buttonNew, QtCore.Qt.TopLeftCorner)
+        self.connect(buttonNew,
+                     QtCore.SIGNAL('clicked()'),
+                     self.onOpenNewTab)
+
+        self.buttonNew = buttonNew
 
     def _createButton(self, pixmap, tooltip=u""):
 
@@ -81,13 +89,13 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             icon.addPixmap(QtGui.QPixmap(pixmap_path), QtGui.QIcon.Normal, QtGui.QIcon.Off)
             return icon
 
-        icon   = createIcon(pixmap)
         button = QtGui.QToolButton(self)
 
         button.setCursor(QtCore.Qt.ArrowCursor)
         button.setAutoRaise(True)
-        button.setIcon(icon)
+        button.setIcon(createIcon(pixmap))
         button.setToolTip(tooltip)
+
         return button
 
     def keyPressEvent(self, keyevent):
@@ -162,7 +170,7 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
                      self.onLoadFinished)
 
         self.emit(QtCore.SIGNAL('newTabAdded'), view)
-        self.updateCloseButton()
+        self.updateButtonClose()
 
         return view
 
@@ -181,12 +189,12 @@ class PyChmTabs(QtGui.QWidget, Ui_TabbedBrowser):
             raise ValueError("[Terrible] asked to close non-managed view! ")
 
         self.tabWidget.removeTab(self.tabWidget.indexOf(view))
-        self.updateCloseButton()
+        self.updateButtonClose()
 
 
-    def updateCloseButton(self):
+    def updateButtonClose(self):
         enable = len(self.webviews) > 0
-        self.closeButton.setEnabled(enable)
+        self.buttonClose.setEnabled(enable)
 
     def onCloseCurrentTab(self):
         self.closeTab(self.tabWidget.currentWidget())
