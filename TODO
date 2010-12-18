@@ -1,3 +1,8 @@
+* defect *
+[ ] when opening large file from cmdline, the main window do not showup until
+    the file is done with loading.
+
+
 * high priority *
 
 [x] cleanup code and refactor, with the help of pylint
