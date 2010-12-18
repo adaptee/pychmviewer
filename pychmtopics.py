@@ -16,7 +16,8 @@ def normalize_key(key):
     return remove_anchor(key)
 
 
-class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
+#class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
+class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
     '''
     signal 'openURL' will be emited(with param url:unicode)
     when the index item be doubleclicked
@@ -46,8 +47,7 @@ class PyChmTopicsView(QtGui.QWidget, Ui_PanelTopics, AbstractTreeView):
             self.map = { }
 
     def __init__(self, mainwin=None, parent=None):
-        QtGui.QWidget.__init__(self, parent)
-        AbstractTreeView.__init__(self)
+        AbstractTreeView.__init__(self, parent)
 
         self.mainwin = mainwin
         if mainwin.currentView:
