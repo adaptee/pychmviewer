@@ -49,8 +49,8 @@ def filterURLByExtension(urls, exts):
 
 class PyChmFile(object):
     def __init__(self, session, path, force_encoding=None):
-        self.initialize()
         self.session = session
+        self.initialize()
         self.loadFile(path, force_encoding)
 
     def initialize(self):
@@ -72,10 +72,10 @@ class PyChmFile(object):
     def loadFile(self, filename, force_encoding=None):
         assert isinstance(filename, unicode)
 
-        system_encoding = self.session.system_encoding
+        self.initialize()
+        self._force_encoding = force_encoding
 
-        if force_encoding:
-            self._force_encoding = force_encoding
+        system_encoding = self.session.system_encoding
 
         if not self._chm.LoadCHM(filename.encode(system_encoding)):
             raise IOError("Failed to load: %s" % filename)
