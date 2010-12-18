@@ -193,7 +193,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if not output_dir:
             return
 
-        output_dir = unicode(output_dir).encode(self.session.system_encoding)
+        output_dir = unicode(output_dir)
 
         chmfile = self.currentView.chmfile
         maximum = len( chmfile.allURLs )

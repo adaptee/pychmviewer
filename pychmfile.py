@@ -188,6 +188,7 @@ class PyChmFile(object):
             if not os.path.exists(dirname):
                 os.mkdir(dirname)
 
+        output_dir = output_dir.encode(self.session.system_encoding)
 
         urls = self.allURLs
         for url in urls:
