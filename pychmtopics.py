@@ -15,34 +15,35 @@ def normalize_key(key):
 
     return remove_anchor(key)
 
+class URLDict(object):
+    "map url to some item in the topicsview"
+    def __init__(self):
+        self.map = { }
+
+    def get(self, key, default):
+        key = normalize_key(key)
+        return self.map.get(key, default)
+
+    def __getitem__(self, key):
+        key = normalize_key(key)
+        return self.map[key]
+
+    def __setitem__(self, key, value):
+        key = normalize_key(key)
+        # this dict does not allow overwriting
+        if not key in self.map:
+            self.map[key] = value
+
+    def clear(self):
+        del self.map
+        self.map = { }
+
 class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
     '''
     signal 'openURL' will be emited(with param url:unicode)
     when the index item be doubleclicked
     '''
 
-    class URLDict(object):
-        "map url to some item in the topicsview"
-        def __init__(self):
-            self.map = { }
-
-        def get(self, key, default):
-            key = normalize_key(key)
-            return self.map.get(key, default)
-
-        def __getitem__(self, key):
-            key = normalize_key(key)
-            return self.map[key]
-
-        def __setitem__(self, key, value):
-            key = normalize_key(key)
-            # this dict does not allow overwriting
-            if not key in self.map:
-                self.map[key] = value
-
-        def clear(self):
-            del self.map
-            self.map = { }
 
     def __init__(self, mainwin=None, parent=None):
         AbstractTreeView.__init__(self, parent)
@@ -53,7 +54,7 @@ class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
             if chmfile and chmfile.index :
                 self.loadTopics(chmfile.index)
 
-        self.url2item = PyChmTopicsView.URLDict()
+        self.url2item = URLDict()
 
     def locateTopicByURL(self, qurl):
         path = unicode(qurl.path() )
