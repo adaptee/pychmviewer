@@ -2,6 +2,8 @@
 
 [ ] when opening large file from cmdline, the main window do not showup
     until the file is done with loading.(should load file another thread)
+[ ] when restoring from snapshot, make sure the same file is only onened once,
+    and is shared among multiple views.
 
 * high priority *
 
@@ -15,8 +17,6 @@
 [x] 'locate' is broken, because of the recent change of url format in PyChmWebView
 [x] suport 'open recent files'
 [x] support anchor in page
-[ ] when restoring from snapshot, make sure the same file is only onened once,
-    and is shared among multiple views.
 [ ] show useful info on statusbar, such as the link url under mouse
 [ ] support showing icon with tree item(QTreeWidgetItem::setIcon)
 
