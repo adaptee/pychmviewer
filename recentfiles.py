@@ -46,12 +46,12 @@ class RecentFiles():
 class QtRecentFiles(QtCore.QObject, RecentFiles ):
     key = "recents/recents"
 
-    def __init__(self, maxsize, parent=None):
+    def __init__(self, maxsize, qsettings, parent=None):
         QtCore.QObject.__init__(self, parent)
         RecentFiles.__init__(self, maxsize)
 
         self.actions = [ ]
-        self.qsettings = QtCore.QSettings()
+        self.qsettings = qsettings
 
         self.loadRecentFiles()
         self.updateActions()

@@ -6,6 +6,7 @@ import locale
 import bsddb
 
 import xdg.BaseDirectory
+from PyQt4 import QtCore
 
 from config import PyChmViewerConfig
 
@@ -39,6 +40,9 @@ class Session(object):
         self.snapshot        = self._getSnapshot()
         self.system_encoding = locale.getdefaultlocale()[1]
 
+        QtCore.QCoreApplication.setOrganizationName(self.organization)
+        QtCore.QCoreApplication.setApplicationName(self.application)
+        self.qsettings = QtCore.QSettings()
 
     def _getConfigDir(self):
         config_dir = os.path.join( xdg.BaseDirectory.xdg_config_home,

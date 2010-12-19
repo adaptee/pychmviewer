@@ -25,13 +25,9 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
-        self.session = session
-        self.config  = session.config
-
-        # make using QSettings more easy
-        QtCore.QCoreApplication.setOrganizationName(session.organization)
-        QtCore.QCoreApplication.setApplicationName(session.application)
-        self.qsettings = QtCore.QSettings()
+        self.session   = session
+        self.config    = session.config
+        self.qsettings = session.qsettings
 
         # restore the layout of window on last exit
         self.restoreLayoutInfo()
@@ -68,7 +64,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self._startUpWithNoPaths()
 
     def _setupRecentFiles(self):
-        self.recentfiles = QtRecentFiles(10, self)
+        self.recentfiles = QtRecentFiles(10, self.qsettings, self)
         self.connect(self.recentfiles,
                     QtCore.SIGNAL('recentFilesUpdated'),
                     self.onRecentFilesUpdated ,
