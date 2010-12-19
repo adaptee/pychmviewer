@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
-from PyQt4 import QtGui
 from PyQt4.QtGui import QTreeWidgetItem
 
 from treeview import AbstractTreeView
