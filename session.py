@@ -7,7 +7,7 @@ import bsddb
 
 import xdg.BaseDirectory
 
-from option import PyChmViewerConfig
+from config import PyChmViewerConfig
 
 organization       = u"PyChmViewer"
 application        = u"PyChmViewer"
