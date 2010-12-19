@@ -43,7 +43,7 @@ class RecentFiles():
 
         assert unique(self.recentfiles), "[Logic Error] duplication exist!"
 
-class QtRecentFiles(QtCore.QObject, RecentFiles ):
+class QRecentFiles(QtCore.QObject, RecentFiles ):
     key = "recents/recents"
 
     def __init__(self, maxsize, qsettings, parent=None):

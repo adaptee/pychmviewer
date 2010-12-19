@@ -14,7 +14,7 @@ from pychmbookmarks import PyChmBookmarksView
 from pychmtabs import PyChmTabs
 
 from encodinglist import encodings
-from recentfiles import QtRecentFiles
+from recentfiles import QRecentFiles
 from about import AboutDialog
 from htmldlg import HtmlDialog
 from settingdlg import SettingDlg
@@ -64,7 +64,7 @@ class PyChmMainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self._startUpWithNoPaths()
 
     def _setupRecentFiles(self):
-        self.recentfiles = QtRecentFiles(10, self.qsettings, self)
+        self.recentfiles = QRecentFiles(10, self.qsettings, self)
         self.connect(self.recentfiles,
                     QtCore.SIGNAL('recentFilesUpdated'),
                     self.onRecentFilesUpdated ,
