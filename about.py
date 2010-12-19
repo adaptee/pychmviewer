@@ -20,9 +20,9 @@ class AboutDialog(QtGui.QDialog, Ui_Dialog):
         detail += u"<br>"
 
         for author in session.authors:
-            name, email, range = author
+            name, email, period = author
             detail += "<a href='mailto:%s'>%s</a> Copyright (C) %s" % \
-                    (email, name, range)
+                    (email, name, period)
             detail += "<br>"
 
         detail += "<br>"
