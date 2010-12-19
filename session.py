@@ -5,6 +5,8 @@ import os
 import locale
 import bsddb
 
+import xdg.BaseDirectory
+
 from option import PyChmViewerConfig
 
 organization       = u"PyChmViewer"
@@ -22,10 +24,6 @@ authors = [
 
 class Session(object):
     def __init__(self):
-        self.config_dir      = self._getConfigDir()
-        self.config          = self._getConfig()
-        self.snapshot        = self._getSnapshot()
-        self.system_encoding = locale.getdefaultlocale()[1]
 
         self.organization    = organization
         self.application     = application
@@ -35,8 +33,16 @@ class Session(object):
         self.authors         = authors
         self.homepage        = homepage
 
+
+        self.config_dir      = self._getConfigDir()
+        self.config          = self._getConfig()
+        self.snapshot        = self._getSnapshot()
+        self.system_encoding = locale.getdefaultlocale()[1]
+
+
     def _getConfigDir(self):
-        config_dir = os.path.join( os.environ["HOME"], ".pychmviewer")
+        config_dir = os.path.join( xdg.BaseDirectory.xdg_config_home,
+                                   self.application)
 
         if not os.path.exists(config_dir):
             os.mkdir(config_dir)
