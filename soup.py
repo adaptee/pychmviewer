@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
+" Provides the facility of parsing Index and ToC. "
+
 from BeautifulSoup import BeautifulSoup
 
-
 def parse_meta_tag(meta):
+    " Parse <meta> tag"
     info = { }
     if meta:
         info[ meta["name"].lower().strip() ] = meta["content"]
@@ -12,6 +14,7 @@ def parse_meta_tag(meta):
     return info
 
 def parse_param_tag(param):
+    " Parse <param> tag"
     info = { }
     if param:
         # make it more tolerent with extra whitespaces
@@ -22,6 +25,7 @@ def parse_param_tag(param):
     return info
 
 def parse_object_tag(object):
+    " Parse <object> tag"
     info = { }
     if object:
         params = object.findAll(name='param', recursive=False)
@@ -31,6 +35,7 @@ def parse_object_tag(object):
     return info
 
 class Node(object):
+    " Represent one item in the Index/ToC "
     name_mappings = {
                         "name"        : "name" ,
                         "keyword"     : "keyword" ,
@@ -52,7 +57,9 @@ class Node(object):
             setattr(self, attr, self._info.get(key, u"") )
 
     def __unicode__(self):
+        " Unicode representation."
         def indent(text, level):
+            "Help function to display node fitting with its depth."
             return u"  " * level + text
 
         result = u"[%s] [%s]\n" % (self.name, self.url)
@@ -67,11 +74,13 @@ class Node(object):
         return self.__unicode__().encode('utf-8')
 
     def calcDepth(self):
+        " Calc the depth of this node within the tree."
         self.depth = self.parent.depth + 1
         for child in self.children:
             child.calcDepth()
 
 class Tree(Node):
+    " Sepcial Node representing the root of Index/ToC "
     def __init__(self, children=() ):
         super(Tree, self).__init__( children=children,  )
 
@@ -82,8 +91,9 @@ class Tree(Node):
         self.calcDepth()
 
 def createNode(li):
-
+    " Create one node representing one item of the Index/ToC."
     def get_sub_lis(li):
+        " Obtain all <li> tags below this <li> tag, non-recursively."
         results = []
 
         sub_uls = li.findAll(name='ul', recursive=False)
@@ -105,13 +115,14 @@ def createNode(li):
     return Node( children=children, **info)
 
 def createTree(root):
+    " Create one tree representing the Index/ToC."
     lis = root.findAll(name='li', recursive=False)
     children = [ createNode(li) for li in lis ]
 
     return Tree(children=children)
 
 def parse(data):
-
+    " Parse Index/ToC data."
     soup = BeautifulSoup(data)
 
     html = soup.html

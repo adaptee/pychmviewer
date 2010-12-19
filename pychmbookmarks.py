@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
+" Provides the bookmark panel. "
+
 import cPickle as Pickle
 
 from PyQt4 import QtCore, QtGui
@@ -9,6 +11,7 @@ from PyQt4.QtGui import QListWidgetItem
 from Ui_panelbookmarks import Ui_PanelBookmarks
 
 class PyChmBookmarkItem(QListWidgetItem):
+    " Represent one item of bookmark"
     def __init__(self, parent, name=None, url=None, pos=None):
         QListWidgetItem.__init__(self, parent)
         self.name = name
@@ -16,12 +19,14 @@ class PyChmBookmarkItem(QListWidgetItem):
         self.pos  = pos
 
     def saveTo(self, db):
+        " Save this item into external db."
         name  = self.name.encode('utf-8')
         value = Pickle.dumps((self.url, self.pos))
         db[name] = value
         db.sync()
 
     def delFrom(self, db):
+        " Delete this item from external db."
         name = self.name.encode('utf-8')
         try:
             del db[name]
@@ -30,15 +35,12 @@ class PyChmBookmarkItem(QListWidgetItem):
             pass
 
     def setValue(self, db_value):
+        " Update the value "
         self.url, self.pos = Pickle.loads(db_value)
 
 class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
-
+    " Implements the bookmark panel. "
     def __init__(self, mainwin=None, parent=None, ):
-        '''
-        attrs:
-           db: a small database storing bookmarks
-        '''
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
 
@@ -67,6 +69,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
                             default=u"new bookmark",
                         ):
 
+        " Prompt user to input name. "
         #FIXME ; the dialog maybe not wide enough to show title completely.
         name, ok = QtGui.QInputDialog.getText( self,
                                                title,
@@ -86,6 +89,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
                             prompt=u"input the name of this bookmark",
                             default=u"new bookmark",
                            ):
+        " Prompt user to specify name for bookmark item. "
 
         name = self._getNameFromUser( title=title,
                                       prompt=prompt,
@@ -108,6 +112,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         return name
 
     def onTabSwitched(self):
+        " update the contents to fit with current file."
         self.clear()
 
         if self.mainwin.currentView:
@@ -116,9 +121,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
             self.loadBookmarks()
 
     def loadBookmarks(self):
-        '''
-        load Bookmarks from db
-        '''
+        " Load bookmarks from external db. "
         self.clear()
 
         for key, value in self.db.iteritems():
@@ -131,19 +134,19 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
         self.list.update()
 
     def clear(self):
-        '''
-        clear the bookmark view
-        '''
+        " Clear current display. "
         self.list.clear()
 
-
     def _getCurrentView(self):
+        "Convenient method for getting current view. "
         return self.mainwin.currentView
 
     def _getCurrentChmFile(self):
+        "Convenient method for getting current file. "
         return self._getCurrentView().chmfile
 
     def onAddBookmark(self):
+        "Add new bookmark item. "
         webview = self._getCurrentView()
 
         url   = unicode( webview.loadedURL.path() )
@@ -160,6 +163,7 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
             item.saveTo(self.db)
 
     def onEditBookmark(self):
+        " Edit selected bookmark item. "
         item = self.list.currentItem()
         if item :
             name = self._getNameForBookmark( title=u"rename bookmark",
@@ -170,12 +174,14 @@ class PyChmBookmarksView(QtGui.QWidget, Ui_PanelBookmarks):
                 item.setText(name)
 
     def onDelBookmark(self):
+        " Delete selectd bookmark item. "
         item = self.list.currentItem()
         if item :
             item.delFrom(self.db)
             self.list.takeItem(self.list.row(item))
 
     def onOpenBookmark(self, item):
+        " Open selected bookmark item. "
         if item :
             webview = self._getCurrentView()
 

@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
+" Provides some helper functions. "
+
 import re
 
 def remove_anchor(text):
-    " hello, world.#string ==> hello, world"
+    " remove anchor from URL"
     if not text:
         return text
 
@@ -15,7 +17,7 @@ def remove_anchor(text):
         return text
 
 def CachedProperty(func):
-    """returns a cached property that is calculated by function func"""
+    """ Returns a cached property that is calculated by function func"""
     def get(self):
         try:
             return self._property_cache[func]

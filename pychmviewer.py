@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
+" Provides the entry point of the whole app.  "
+
 import os
 import sys
 from argparse import ArgumentParser

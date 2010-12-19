@@ -1,38 +1,37 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
+" Provides the topics panel. "
+
 from PyQt4.QtGui import QTreeWidgetItem
 
 from treeview import AbstractTreeView
 from Ui_paneltopics import Ui_PanelTopics
 
 class URLDict(object):
-    "map url to some item in the topicsview"
+    " Map url to item. "
     def __init__(self):
         self.map = { }
 
     def get(self, key, default):
+        " Similar to dict.get(). "
         return self.map.get(key, default)
 
     def __getitem__(self, key):
         return self.map[key]
 
     def __setitem__(self, key, value):
-        # this dict does not allow overwriting
+        " Overwriting is not allowed."
         if not key in self.map:
             self.map[key] = value
 
     def clear(self):
+        " Clear all mappings. "
         del self.map
         self.map = { }
 
 class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
-    '''
-    signal 'openURL' will be emited(with param url:unicode)
-    when the index item be doubleclicked
-    '''
-
-
+    " Implements the topics panel. "
     def __init__(self, mainwin=None, parent=None):
         AbstractTreeView.__init__(self, parent)
 
@@ -45,21 +44,24 @@ class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
         self.url2item = URLDict()
 
     def locateTopicByURL(self, qurl):
+        " Locate topic by associated page URL."
+
+        def updateParentStatus(item):
+            " Update the visual state of all ancestors."
+            parent = item.parent()
+            while parent :
+                parent.setExpanded(True)
+                parent = parent.parent()
+
         path = unicode(qurl.path() )
         item = self.url2item.get(path, None)
         if item :
-            self._updateParentStatus(item)
+            updateParentStatus(item)
             self.tree.setCurrentItem(item)
             self.tree.scrollToItem(item)
 
-    def _updateParentStatus(self, item):
-        parent = item.parent()
-        while parent :
-            parent.setExpanded(True)
-            parent = parent.parent()
-
     def onTabSwitched(self):
-        "update topics in correspondance with current chmfile "
+        " Update Topics to fit with current file. "
         self.clear()
 
         if self.mainwin.currentView:
@@ -67,13 +69,14 @@ class PyChmTopicsView(AbstractTreeView, Ui_PanelTopics):
             self.loadTopics(chmfile.topics)
 
     def clear(self):
-        "clear underlying data  "
+        " Clear current topics"
         AbstractTreeView.clear(self)
         self.url2item.clear()
 
     loadTopics = AbstractTreeView.loadData
 
     def loadNode(self, node, parent):
+        " Create one item ."
         # special case for the root of tree
         if not parent:
             parent = self.tree

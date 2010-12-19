@@ -1,12 +1,15 @@
 #!/usr/bin/python
 # vim: set fileencoding=utf-8 :
 
+" Provides the index panel. "
+
 from PyQt4 import QtCore
 
 from treeview import AbstractTreeView
 from Ui_panelindex import Ui_PanelIndex
 
 class PyChmIndexView(AbstractTreeView, Ui_PanelIndex ):
+    " Implements the index panel. "
     def __init__(self, mainwin=None, parent=None):
         AbstractTreeView.__init__(self, parent)
 
@@ -28,6 +31,7 @@ class PyChmIndexView(AbstractTreeView, Ui_PanelIndex ):
         self.lastitem = None
 
     def onTabSwitched(self):
+        " Update the index panel to fit with current file "
         self.clear()
 
         if self.mainwin.currentView:
@@ -35,16 +39,14 @@ class PyChmIndexView(AbstractTreeView, Ui_PanelIndex ):
             self.loadIndex(chmfile.index)
 
     def clear(self):
-        '''
-        clear the data in the index view
-        '''
+        " Clear current contents of index panel"
         AbstractTreeView.clear(self)
         self.text.clear()
 
     loadIndex = AbstractTreeView.loadData
 
     def onTextChanged(self, text):
-        "search index tree at real time"
+        " Search the index at real time"
         items = self.tree.findItems(text, QtCore.Qt.MatchStartsWith)
         if items:
             item = items[0]
@@ -52,10 +54,8 @@ class PyChmIndexView(AbstractTreeView, Ui_PanelIndex ):
             self.tree.scrollToItem(item)
 
     def onReturnPressed(self):
+        " What to do when user press Enter in the input field?"
         raise NotImplementedError("")
 
-
-if __name__  ==  "__main__":
-    raise NotImplementedError()
 
 
